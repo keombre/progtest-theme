@@ -6,25 +6,33 @@
     "content_scripts": [
         {
             "run_at": "document_start",
-            "css": [
-                "light-style.css"
-            ],
-            "matches": [
-                "*://progtest.fit.cvut.cz/*"
-            ],
+            "js": ["content.js"],
+            "matches": ["*://progtest.fit.cvut.cz/*"],
             "all_frames": true
         }
     ],
     "background": {
-        "scripts": ["script.js"],
+        "scripts": ["background.js"],
         "persistent": true
     },
     "permissions": [
         "webRequest",
         "webRequestBlocking",
-        "*://progtest.fit.cvut.cz/*"
+        "*://progtest.fit.cvut.cz/*",
+        "storage",
+        "declarativeContent"
     ],
     "icons": {
         "128": "icon.png"
+    },
+    "web_accessible_resources": [
+        "themes/*"
+    ],
+    "options_ui": {
+        "page": "options/options.html",
+        "open_in_tab": false
+    },
+    "page_action": {
+        "default_popup": "options/options.html"
     }
 }
