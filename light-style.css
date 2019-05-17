@@ -87,7 +87,7 @@ body > table td > span > *
     visibility: initial;
 }
 
-body > table td:nth-child(1) > span > a:nth-child(1)
+body > table td:nth-child(1) > span > a:nth-child(1), span.navLink b
 {
     font-size: 20px !important;
     color: #fff !important;
@@ -153,15 +153,11 @@ td[valign="top"]
     border-top-right-radius: var(--border-radius);
 }
 
-.lbCell, .rbCell, .bCell
-{
-    border-bottom: solid thin rgba(0, 0, 0, 0.125) !important;
-}
-
 .lrtbCell
 {
     background-color: #fff;
     border: none !important;
+    border-top: solid thin rgba(0, 0, 0, 0.125) !important;
     border-bottom: solid thin rgba(0, 0, 0, 0.125) !important;
     padding: 10px !important;
 }
@@ -171,7 +167,7 @@ td[valign="top"]
     vertical-align: top !important;
 }
 
-.ltbCell
+.ltbCell, .lrtbCell
 {
     max-width: 100px;
     overflow-x: auto;
@@ -259,12 +255,24 @@ body > center > table
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075) !important;
 }
 
+.menuList
+{
+    display: inline-block;
+    padding: 10px 0;
+}
+
 .lBox, .mBox, .mtBox, .mbBox, .rBox
 {
-    border-bottom: solid thin rgba(0, 0, 0, 0.175);
+    border-bottom: solid thin rgba(0, 0, 0, 0.1);
     padding: 4px 18px;
     height: 30px;
 }
+
+body > center > table > tbody > tr:nth-child(even)
+{
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
 body > center > table > tbody > tr:last-child > td
 {
     border: none;
@@ -340,6 +348,11 @@ tr.resStat td        { font-weight: normal; background-color: #989889; border-co
 
 /** buttons */
 
+input[type=radio]
+{
+    position: relative;
+    top: 2px;
+}
 
 input.std, input.stdDis, input.test, input.testDis, input.flt, input.fltDis, input.seek, input.seekDis, input.err
 {
@@ -484,6 +497,44 @@ a.butWarn
 	font-weight: bold;
 }
 
+/** boxes */
+
+.grayBox, .greenBox, .redBox, .yellowBox, .legendBox
+{
+    width: 12px;
+    height: 12px;
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.22);
+    position: relative;
+    left: 10px;
+}
+
+.grayBox
+{
+    background-color: #c0c0c0;
+}
+
+.greenBox
+{
+    background-color: #00ff00;
+}
+
+.redBox
+{
+    background-color: #ff0000;
+}
+
+.yellowBox
+{
+    background-color: #ffff00;
+}
+
+.legendBox
+{
+    margin: 3px;
+}
+
 /** old css */
 
 .menu                { cursor: default; background-color: #00CCFF; }
@@ -561,13 +612,7 @@ select.seek          { font-family: Courier; font-size: 10px }
 .dupG                { color: #ffff00; }
 .dupC                { color: #c00000; }
 
-.grayBox, .greenBox, .redBox, .yellowBox, .legendBox
-                     { width: 8px; height: 8px; display: block; border-color: #666666 #FFFFFF #FFFFFF #666666; border-style: solid; border-width: 1px; }
-.grayBox             { background-color: #c0c0c0; }
-.greenBox            { background-color: #00ff00; }
-.redBox              { background-color: #ff0000; }
-.yellowBox           { background-color: #ffff00; }
-.legendBox           { margin: 3px; }
+
 
 .nOk:before { content: "\2718"; color: red; float: left; }
 .wOk:before { content: "\2718"; color: #ff00ff; float: left; }
