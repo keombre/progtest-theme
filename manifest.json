@@ -1,0 +1,30 @@
+{
+    "name": "Progtest Themes",
+    "version": "1.0.0",
+    "description": "Theme manager for ProgTest",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "run_at": "document_start",
+            "css": [
+                "light-style.css"
+            ],
+            "matches": [
+                "*://progtest.fit.cvut.cz/*"
+            ],
+            "all_frames": true
+        }
+    ],
+    "background": {
+        "scripts": ["script.js"],
+        "persistent": true
+    },
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "*://progtest.fit.cvut.cz/*"
+    ],
+    "icons": {
+        "128": "icon.png"
+    }
+}
