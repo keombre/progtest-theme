@@ -7,17 +7,8 @@ chrome.runtime.onInstalled.addListener(function () {
         selectedTheme: 'light'
     }, (items) => {
         theme = items.selectedTheme;
-    });
-
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [new chrome.declarativeContent.PageStateMatcher({
-                pageUrl: { hostEquals: 'progtest.fit.cvut.cz' },
-            })],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-    });
-});
+    })
+})
 
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
@@ -31,9 +22,9 @@ chrome.storage.onChanged.addListener(
             selectedTheme: 'light'
         }, (items) => {
             theme = items.selectedTheme;
-        });
+        })
     }
-);
+)
 
 chrome.webRequest.onBeforeRequest.addListener(
     () => {
@@ -43,4 +34,4 @@ chrome.webRequest.onBeforeRequest.addListener(
     },
     { urls: ["*://progtest.fit.cvut.cz/css.css"] },
     ["blocking"]
-);
+)

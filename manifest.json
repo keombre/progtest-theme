@@ -20,7 +20,6 @@
         "webRequestBlocking",
         "*://progtest.fit.cvut.cz/*",
         "storage",
-        "declarativeContent",
         "tabs"
     ],
     "browser_action": {
