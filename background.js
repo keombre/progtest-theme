@@ -20,6 +20,12 @@ chrome.runtime.onInstalled.addListener(function () {
     });
 });
 
+chrome.runtime.onMessage.addListener(
+    (request, sender, sendResponse) => {
+      if (request.type == "theme")
+        sendResponse({theme: theme})
+})
+
 chrome.storage.onChanged.addListener(
     () => {
         chrome.storage.sync.get({
