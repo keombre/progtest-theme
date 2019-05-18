@@ -15,7 +15,7 @@ chrome.runtime.sendMessage({type: "theme"}, function(response) {
             c.pop()
             c.shift()
             c.forEach(e => {
-                styles += 'tr.resRow > td:nth-child('+ (e + 1) +') {border-left: thin solid #dfdfdf;font-weight: 500;}'
+                styles += 'tr.resRow > td:nth-child('+ (e + 1) +') {border-left: thin solid rgba(0, 0, 0, 0.125);font-weight: 500;}'
             })
     
             styles += 'tr.resRow > td:last-child {font-weight: 500;}'
