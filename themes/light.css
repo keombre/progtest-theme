@@ -258,7 +258,16 @@ body > center > table
 .menuList
 {
     display: inline-block;
-    padding: 10px 0;
+    padding: 7px 0;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.menuListDis
+{
+    display: inline-block;
+    padding: 7px 0;
+    color: #3c3c3c;
+    font-size: 12pt;
 }
 
 .lBox, .mBox, .mtBox, .mbBox, .rBox
@@ -270,7 +279,7 @@ body > center > table
 
 body > center > table > tbody > tr:nth-child(even)
 {
-    background-color: rgba(0, 0, 0, 0.025);
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 body > center > table > tbody > tr:last-child > td
@@ -283,7 +292,7 @@ body > center > table > tbody > tr:last-child > td
     border-bottom: solid thin rgba(0, 0, 0, 0.175);
     background-color: rgba(0, 0, 0, 0.075);
     padding: 8px 16px;
-    font-size: 14pt;
+    font-size: 13pt;
 }
 
 .hdrDis b
@@ -535,6 +544,16 @@ a.butWarn
     margin: 3px;
 }
 
+.dupC
+{
+    color: #a20000;
+    font-weight: 500;
+}
+
+.dupCpar {
+    background-color: #ff6262;
+}
+
 /** old css */
 
 .menu                { cursor: default; background-color: #00CCFF; }
@@ -573,9 +592,6 @@ a.butWarn
 
 .fntSmall            { font-size: 8px }
 
-.menuList            { font-size: 16px; font-weight: bold; }
-.menuListDis         { font-size: 16px; font-weight: bold; color: #606060; }
-
 
 .titleBox            { font-weight: bold; background-color: #0099CC; border-color: #007799 #00BBEE #00BBEE #007799; border-style: solid; border-width: 1px }
 .bigTitleBox         { font-weight: bold; font-size: 20px; text-align: center; background-color: #0099CC; border-color: #007799 #00BBEE #00BBEE #007799; border-style: solid; border-width: 1px }
@@ -610,7 +626,6 @@ select.seek          { font-family: Courier; font-size: 10px }
 .dupS                { color: #c000c0; }
 .dupA                { color: #c000c0; }
 .dupG                { color: #ffff00; }
-.dupC                { color: #c00000; }
 
 
 
