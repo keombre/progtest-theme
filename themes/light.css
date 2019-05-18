@@ -18,7 +18,8 @@ body
     font-family: var(--font);
     margin: 0;
     padding-bottom: 25px;
-    background-color: #f0f0f0;
+    background-color: #fff;
+    background-image: url("./background-light.PNG");
     background-attachment: fixed;
     background-size: cover;
     padding-top: 60px;
