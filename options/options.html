@@ -4,8 +4,8 @@
 <style>
 body
 {
-  width: 100px;
-  height: 90px;
+  width: 120px;
+  height: 110px;
   text-align: center;
 }
 
@@ -23,6 +23,11 @@ body
   padding: 1px 0;
   width: 55px;
 }
+#dropdown
+{
+  position: relative;
+  top: 2px;
+}
 </style>
 </head>
 <body>
@@ -33,6 +38,10 @@ Select your theme
   <option value="light">Light</option>
   <option value="dark">Dark</option>
 </select>
+<br />
+<div class="dropdown_c">
+  <input type="checkbox" id="dropdown"> Autohide results
+</div>
 
 <div id="status"></div>
 <button id="save">Save</button>

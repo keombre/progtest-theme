@@ -1,27 +1,32 @@
 
 var theme = 'light';
+var dropdown = true
 
 chrome.runtime.onInstalled.addListener(function () {
 
     chrome.storage.sync.get({
-        selectedTheme: 'light'
+        selectedTheme: 'light',
+        autoHide: true
     }, (items) => {
         theme = items.selectedTheme;
+        dropdown = items.autoHide;
     })
 })
 
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-        if (request.type == "theme")
-            sendResponse({ theme: theme })
+        if (request.type == "config")
+            sendResponse({ theme: theme, dropdown: dropdown })
     })
 
 chrome.storage.onChanged.addListener(
     () => {
         chrome.storage.sync.get({
-            selectedTheme: 'light'
+            selectedTheme: 'light',
+            autoHide: true
         }, (items) => {
             theme = items.selectedTheme;
+            dropdown = items.autoHide;
         })
     }
 )
