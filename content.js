@@ -51,7 +51,7 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
         if (response.dropdown) {
             ["rtbSepCell", "rtbOkSepCell", "rtbHalfSepCell", "rtbWaitSepCell", "rtbXSepCell", "rtbFailSepCell", "rtbEditSepCell"]
             .forEach(n => {
-                document.querySelectorAll("td."+n+" > div.but1").forEach(e => {
+                document.querySelectorAll("td."+n+" > div.but1.w120").forEach(e => {
                     e.parentNode.parentNode.className += " dropDownHeader"
                     e.parentNode.parentNode.addEventListener('click', toggleDropDown)
                     e.parentNode.parentNode.click()
