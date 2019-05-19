@@ -4,6 +4,17 @@
     --border-radius: 3px;
 }
 
+/** inverted shibooleth */
+
+#shib1 > td > img {
+    box-sizing: border-box;
+    background: url(./assets/shibboleth-inverted.png) no-repeat;
+    background-size: 200px auto;
+    width: 200px;
+    height: 70px;
+    padding-left: 200px;
+}
+
 /** global layout */
 
 html
@@ -14,11 +25,11 @@ html
 body
 {
     font-size: 10px;
-    color: #000000;
+    color: #fff;
     font-family: var(--font);
     margin: 0;
     padding-bottom: 25px;
-    background-color: #fff;
+    background-color: #000;
     background-image: url("./background-dark.PNG");
     background-attachment: fixed;
     background-size: cover;
@@ -27,7 +38,7 @@ body
 
 table
 {
-    background-color: #fff;
+    background-color: #000;
 }
 
 hr
@@ -166,7 +177,7 @@ td[valign="top"]
 
 .ltCell, .tCell, .rtCell, .lCell, .rCell, .lbCell, .rbCell, .bCell, .ltbCell, .rtbCell, .lrtCell, .lrbCell, .Cell, .tbCell
 {
-    background-color: rgba(0, 0, 0, 0.03) !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
     border: none !important;
     padding: 8px 10px !important;
 }
