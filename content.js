@@ -1,11 +1,19 @@
 chrome.runtime.sendMessage({ type: "config" }, function (response) {
     if (response.theme == 'orig')
         return
+
+    var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    favicon.type = 'image/x-icon';
+    favicon.rel = 'shortcut icon';
+    favicon.href = chrome.extension.getURL('./themes/assets/favicon.ico');
+    document.getElementsByTagName('head')[0].appendChild(favicon);
+    document.title = document.title.replace("@progtest.fit.cvut.cz -", " |").replace("progtest.fit.cvut.cz - ", "")
+
     window.onload = () => {
         let styles = ''
         
         // check for login screen
-        if (document.title.indexOf("progtest.fit.cvut.cz - ProgTest") == 0) {
+        if (document.querySelector('select[name=UID_UNIVERSITY]') != null) {
             let l_form = document.getElementsByTagName("form")[0]
             if (typeof l_form != "undefined") {
                 let title = document.createElement('DIV')
@@ -57,6 +65,21 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
                     e.parentNode.parentNode.click()
                 })
             })
+        }
+
+        // display 404
+        if (document.body.innerHTML == "") {
+            document.title = "404 | ProgTest";
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            link.setAttribute('type', 'text/css');
+            if (response.theme == 'light')
+                link.setAttribute('href', chrome.extension.getURL('./themes/404.light.css'));
+            else
+                link.setAttribute('href', chrome.extension.getURL('./themes/404.dark.css'));
+            document.getElementsByTagName('head')[0].appendChild(link);
+
+            document.body.innerHTML = '<div class="e404"><h1>HTTP/1.1 404 Not Found</h1><h2>Stránka nenalezena</h2><span>Zkuste se vrátit <a href="#" onclick="window.history.back()">zpátky</a></span></div>';
         }
     }
 })
