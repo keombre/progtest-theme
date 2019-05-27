@@ -1,12 +1,18 @@
 {
     "name": "ProgTest Themes",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Theme manager for ProgTest",
     "manifest_version": 2,
     "content_scripts": [
         {
             "run_at": "document_start",
-            "js": ["content.js"],
+            "js": ["content/start.js"],
+            "matches": ["*://progtest.fit.cvut.cz/*"],
+            "all_frames": true
+        },
+        {
+            "run_at": "document_end",
+            "js": ["content/end.js"],
             "matches": ["*://progtest.fit.cvut.cz/*"],
             "all_frames": true
         }
