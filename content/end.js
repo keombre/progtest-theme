@@ -75,7 +75,7 @@ var progress = document.getElementById('refProgress')
 if (progress) {
     var row = progress.parentNode.parentNode
     var table = row.parentNode
-    table.removeChild(row)
+    row.style.display = "none"
     table.innerHTML += `<tr>
     <td colspan="3" style="padding: 0; overflow: hidden; border-bottom-right-radius: var(--border-radius); border-bottom-left-radius: var(--border-radius); background-color: #f7f7f7;">
         <div id="refVal" style="color: #333333; height: 0; width: 100%; text-align: center; font-size: 14px; font-weight: 500; line-height: 22px;"></div>
@@ -83,7 +83,7 @@ if (progress) {
     </td>
 </tr>`;
 
-    var buttonRow = document.querySelector('input[type=file]').parentNode
+    var buttonRow = document.getElementsByName("S")[0].parentNode.parentNode.previousElementSibling
 
     buttonRow.style.position = "relative"
     buttonRow.innerHTML += `<div class="but1 w120" style="display: inline-block; position: absolute; right: 0;">
