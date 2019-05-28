@@ -84,8 +84,7 @@ input, button, select, tr
     font-size: 12px;
 }
 
-body > center table td,
-body > form > center table td {
+td.lrtbCell {
     font-size: 10pt;
 }
 
