@@ -1,9 +1,12 @@
 var theme
 var dropdown
+var settingsLoaded = true
 
 chrome.runtime.sendMessage({ type: "config" }, function (response) {
     theme = response.theme
     dropdown = response.dropdown
+    settingsLoaded = true
+    window.dispatchEvent('ptt-loaded')
 
     if (response.theme == 'orig')
         return
