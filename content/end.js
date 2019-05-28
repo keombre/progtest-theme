@@ -1,8 +1,23 @@
 let styles = ''
 
-document.body.innerHTML += '<div id="upTop">➜</div>'
+// display 404
+if (document.body.innerHTML == "") {
+    document.title = "404 | ProgTest";
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    if (theme == 'light')
+        link.setAttribute('href', chrome.extension.getURL('./themes/404.light.css'));
+    else
+        link.setAttribute('href', chrome.extension.getURL('./themes/404.dark.css'));
+    document.getElementsByTagName('head')[0].appendChild(link);
 
-document.getElementById('upTop').addEventListener('click', tScroll)
+    document.body.innerHTML = '<div class="e404"><h1>HTTP/1.1 404 Not Found</h1><h2>Stránka nenalezena</h2><span>Zkuste se vrátit <a href="#" onclick="window.history.back()">zpátky</a></span></div>';
+} else {
+    document.body.innerHTML += '<div id="upTop">➜</div>'
+
+    document.getElementById('upTop').addEventListener('click', tScroll)
+}
 
 // check for login screen
 if (document.querySelector('select[name=UID_UNIVERSITY]') != null) {
@@ -63,21 +78,6 @@ if (dropdown) {
                 e.parentNode.parentNode.click()
             })
         })
-}
-
-// display 404
-if (document.body.innerHTML == "") {
-    document.title = "404 | ProgTest";
-    var link = document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('type', 'text/css');
-    if (theme == 'light')
-        link.setAttribute('href', chrome.extension.getURL('./themes/404.light.css'));
-    else
-        link.setAttribute('href', chrome.extension.getURL('./themes/404.dark.css'));
-    document.getElementsByTagName('head')[0].appendChild(link);
-
-    document.body.innerHTML = '<div class="e404"><h1>HTTP/1.1 404 Not Found</h1><h2>Stránka nenalezena</h2><span>Zkuste se vrátit <a href="#" onclick="window.history.back()">zpátky</a></span></div>';
 }
 
 // nicer progress bar
