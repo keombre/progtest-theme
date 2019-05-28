@@ -291,6 +291,11 @@ td[valign="top"]
     padding: 10px !important;
 }
 
+.lrtbCell img
+{
+    background-color: #fff;
+}
+
 .rtbCell
 {
     vertical-align: top !important;
