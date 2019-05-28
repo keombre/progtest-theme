@@ -63,6 +63,10 @@ input, button, select, tr
     font-size: 12px;
 }
 
+td.lrtbCell {
+    font-size: 10pt;
+}
+
 /** header */
 
 .app_name
