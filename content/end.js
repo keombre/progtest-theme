@@ -39,6 +39,7 @@ const parsePage = () => {
         tButton = document.getElementById('upTop')
         if (tButton)
             tButton.addEventListener('click', (e) => {
+                e.target.removeAttribute('style')
                 document.body.scrollIntoView({ block: "start", behavior: "smooth" })
             })
     }
@@ -82,7 +83,7 @@ const parsePage = () => {
         if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) {
             if (header && !header.getAttribute('style'))
                 header.style.padding = "0px 16px";
-            if (tButton && !tButton.getAttribute('style'))
+            if (tButton && !tButton.getAttribute('style') && (this.oldScroll <= this.scrollY || !this.oldScroll))
                 tButton.style.transform = "scale(1)"
         } else {
             if (header && header.getAttribute('style'))
@@ -90,6 +91,7 @@ const parsePage = () => {
             if (tButton && tButton.getAttribute('style'))
                 tButton.removeAttribute('style')
         }
+        this.oldScroll = this.scrollY;
     }
 
     if (typeof header != "undefined" && header != null) {
