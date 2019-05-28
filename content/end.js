@@ -45,7 +45,7 @@ if (typeof header != "undefined" && header != null) {
 }
 
 if (dropdown) {
-    ["rtbSepCell", "rtbOkSepCell", "rtbHalfSepCell", "rtbWaitSepCell", "rtbXSepCell", "rtbFailSepCell", "rtbEditSepCell"]
+    ["rtbSepCell", "rtbOkSepCell", "rtbHalfSepCell", "rtbXSepCell", "rtbFailSepCell", "rtbEditSepCell"]
         .forEach(n => {
             document.querySelectorAll("td." + n + " > div.but1.w120").forEach(e => {
                 e.parentNode.parentNode.className += " dropDownHeader"
@@ -71,22 +71,8 @@ if (document.body.innerHTML == "") {
 }
 
 // nicer progress bar
-var progress = document.getElementById('refProgress')
+var progress = document.getElementById('refVal')
 if (progress) {
-    var row = progress.parentNode.parentNode
-    var table = row.parentNode
-    row.style.display = "none"
-    table.innerHTML += `<tr>
-    <td colspan="3" style="padding: 0; overflow: hidden; border-bottom-right-radius: var(--border-radius); border-bottom-left-radius: var(--border-radius); background-color: #f7f7f7;">
-        <div id="refVal" style="color: #333333; height: 0; width: 100%; text-align: center; font-size: 14px; font-weight: 500; line-height: 22px;"></div>
-        <div id="refProgress" style="width: 100%;height: 22px;background-color: #29b6f6;transition: width 1s linear 0s;"> </div>
-    </td>
-</tr>`;
-
-    var buttonRow = document.getElementsByName("S")[0].parentNode.parentNode.previousElementSibling
-
-    buttonRow.style.position = "relative"
-    buttonRow.innerHTML += `<div class="but1 w120" style="display: inline-block; position: absolute; right: 0;">
-        <div class="but2"><a class="butLink" href="#" onclick="window.location.reload(#refVal)">Načíst ihned</a></div>
-    </div>`
+    document.querySelector("td.header").innerHTML += "<small>Probíhá hodnocení</small>"
+    progress.scrollIntoView()
 }

@@ -153,6 +153,17 @@ body > table td:nth-child(1) > span > *:nth-child(1)
     width: 90%;
 }
 
+#refProgress
+{
+    height: 4px !important;
+    background-color: rgb(255, 193, 7) !important;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    transition: width 1s linear 0s;
+}
+
 /** item header */
 
 table.header
@@ -164,11 +175,25 @@ table.header
     margin-bottom: 20px;
 }
 
-td.header b
+td.header
+{
+    position: relative;
+}
+
+td.header > b
 {
     font-size: 3.5rem;
     font-weight: 300;
     line-height: 1.2;
+}
+
+td.header > small
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 2rem;
+    font-weight: 100;
 }
 
 td[valign="top"]
