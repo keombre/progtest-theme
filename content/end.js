@@ -84,5 +84,5 @@ if (dropdown) {
 var progress = document.getElementById('refVal')
 if (progress) {
     document.querySelector("td.header").innerHTML += "<small>Probíhá hodnocení</small>"
-    progress.scrollIntoView()
+    progress.scrollIntoView({block: "center"})
 }
