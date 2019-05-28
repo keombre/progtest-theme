@@ -63,6 +63,11 @@ input, button, select, tr
     font-size: 12px;
 }
 
+body > center table td,
+body > form > center table td {
+    font-size: 10pt;
+}
+
 /** header */
 
 .app_name
