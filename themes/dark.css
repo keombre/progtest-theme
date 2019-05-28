@@ -111,6 +111,7 @@ select.std.w200[name="UID_UNIVERSITY"]
 
 body > table
 {
+    z-index: 100;
     min-height: 38px !important;
     padding: 8px 16px;
     background-color: #1c1e1f !important;
