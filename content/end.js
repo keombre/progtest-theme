@@ -1,3 +1,18 @@
+const cont_404 = `
+<div class="e404">
+    <h1>HTTP/1.1 404 Not Found</h1>
+    <h2>Stránka nenalezena</h2>
+    <span>Zkuste se vrátit <a href="#" onclick="window.history.back()">zpátky</a></span>
+</div>`
+
+const cont_tButton = `
+<svg id="upTop" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -0.5 26 26">
+    <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path>
+</svg>
+`
+
+let tButton
+
 const parsePage = () => {
 
     let styles = ''
@@ -5,20 +20,27 @@ const parsePage = () => {
     // display 404
     if (document.body.innerHTML == "") {
         document.title = "404 | ProgTest";
-        var link = document.createElement('link');
+        
+        let link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
+
         if (theme == 'light')
-            link.setAttribute('href', chrome.extension.getURL('./themes/404.light.css'));
+            link.setAttribute('href', chrome.extension.getURL('./themes/404.light.css'))
         else
-            link.setAttribute('href', chrome.extension.getURL('./themes/404.dark.css'));
-        document.getElementsByTagName('head')[0].appendChild(link);
+            link.setAttribute('href', chrome.extension.getURL('./themes/404.dark.css'))
+        
+            document.getElementsByTagName('head')[0].appendChild(link)
 
-        document.body.innerHTML = '<div class="e404"><h1>HTTP/1.1 404 Not Found</h1><h2>Stránka nenalezena</h2><span>Zkuste se vrátit <a href="#" onclick="window.history.back()">zpátky</a></span></div>';
+        document.body.innerHTML = cont_404
     } else {
-        document.body.innerHTML += '<div id="upTop">➜</div>'
-
-        document.getElementById('upTop').addEventListener('click', tScroll)
+        // add scroll to top button
+        document.body.innerHTML += cont_tButton
+        tButton = document.getElementById('upTop')
+        if (tButton)
+            tButton.addEventListener('click', (e) => {
+                document.body.scrollIntoView({ block: "start", behavior: "smooth" })
+            })
     }
 
     // check for login screen
@@ -58,11 +80,15 @@ const parsePage = () => {
 
     const scrollCheck = () => {
         if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) {
-            header.style.padding = "0px 16px";
-            showUp()
+            if (header && !header.getAttribute('style'))
+                header.style.padding = "0px 16px";
+            if (tButton && !tButton.getAttribute('style'))
+                tButton.style.transform = "scale(1)"
         } else {
-            header.removeAttribute("style")
-            hideUp()
+            if (header && header.getAttribute('style'))
+                header.removeAttribute("style")
+            if (tButton && tButton.getAttribute('style'))
+                tButton.removeAttribute('style')
         }
     }
 
@@ -83,7 +109,7 @@ const parsePage = () => {
     }
 
     // nicer progress bar
-    var progress = document.getElementById('refVal')
+    let progress = document.getElementById('refVal')
     if (progress) {
         document.querySelector("td.header").innerHTML += "<small>Probíhá hodnocení</small>"
         progress.scrollIntoView({ block: "center" })

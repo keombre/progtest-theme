@@ -84,8 +84,9 @@ input, button, select, tr
     font-size: 12px;
 }
 
-td.lrtbCell {
-    font-size: 10pt;
+select.std.w200[name="UID_UNIVERSITY"]
+{
+    width: -webkit-fill-available;
 }
 
 /** header */
@@ -183,19 +184,16 @@ body > table td:nth-child(1) > span > *:nth-child(1)
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 50px;
-    height: 50px;
-    background: #616161;
+    width: 48px;
+    height: 48px;
+    background: #455A64;
     border-radius: 100%;
-    box-shadow: rgb(0, 0, 0) -1px 0px 4px -2px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 7px -2px;
     cursor: pointer;
-    transition: transform .3s ease;
-    font-size: 2rem;
-    line-height: 47px;
-    text-align: center;
-    transform: scale(0) rotate(-90deg);
-    color: #9E9E9E;
+    transition: transform .2s ease;
+    transform: scale(0);
     user-select: none;
+    fill: #ffffff;
 }
 
 #refProgress
@@ -285,6 +283,7 @@ td[valign="top"]
 
 .lrtbCell
 {
+    font-size: 10pt;
     background-color: #212121;
     border: none !important;
     border-top: solid thin rgba(0, 0, 0, 0.125) !important;
