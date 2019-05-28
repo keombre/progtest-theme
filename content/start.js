@@ -1,16 +1,18 @@
 var theme
 var dropdown
-var settingsLoaded = true
+var settingsLoaded = false
+var pttLoaded = new Event('ptt-loaded');
 
 chrome.runtime.sendMessage({ type: "config" }, function (response) {
     theme = response.theme
     dropdown = response.dropdown
-    settingsLoaded = true
-    window.dispatchEvent('ptt-loaded')
 
     if (response.theme == 'orig')
         return
 
+    settingsLoaded = true
+    window.dispatchEvent(pttLoaded)
+    
     var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
     favicon.type = 'image/x-icon';
     favicon.rel = 'shortcut icon';
