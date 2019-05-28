@@ -16,7 +16,7 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     document.title = document.title.replace("@progtest.fit.cvut.cz -", " |").replace("progtest.fit.cvut.cz - ", "")
 })
 
-function toggleDropDown(e) {
+const toggleDropDown = (e) => {
     if (e.button == 2)
         return
     if (e.target.nodeName == "A" || e.target.nodeName == "BUTTON")
@@ -31,3 +31,24 @@ function toggleDropDown(e) {
             node.className = node.className.replace(" dropDownHide", "")
     }
 }
+
+const hideUp = () => {
+    let elm = document.getElementById('upTop')
+    if (elm)
+        elm.style.transform = "scale(0) rotate(-90deg)"
+}
+
+const showUp = () => {
+    let elm = document.getElementById('upTop')
+    if (elm)
+        elm.style.transform = "scale(1) rotate(-90deg)"
+}
+
+const tScroll = () => {
+    hideUp()
+    const c = document.documentElement.scrollTop || document.body.scrollTop;
+    if (c > 0) {
+      window.requestAnimationFrame(tScroll);
+      window.scrollTo(0, c - c / 8);
+    }
+};

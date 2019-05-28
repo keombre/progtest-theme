@@ -1,5 +1,9 @@
 let styles = ''
 
+document.body.innerHTML += '<div id="upTop">➜</div>'
+
+document.getElementById('upTop').addEventListener('click', tScroll)
+
 // check for login screen
 if (document.querySelector('select[name=UID_UNIVERSITY]') != null) {
     let l_form = document.getElementsByTagName("form")[0]
@@ -35,13 +39,19 @@ document.head.appendChild(styleSheet)
 
 let header = document.querySelector("body > table")
 
-if (typeof header != "undefined" && header != null) {
-    window.onscroll = () => {
-        if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40)
-            header.style.padding = "0px 16px";
-        else
-            header.removeAttribute("style")
+const scrollCheck = () => {
+    if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) {
+        header.style.padding = "0px 16px";
+        showUp()
+    } else {
+        header.removeAttribute("style")
+        hideUp()
     }
+}
+
+if (typeof header != "undefined" && header != null) {
+    window.onscroll = scrollCheck
+    scrollCheck()
 }
 
 if (dropdown) {
