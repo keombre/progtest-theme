@@ -344,6 +344,11 @@ form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li
     font-size: 10pt;
 }
 
+form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li:first-child
+{
+    font-weight: 400;
+}
+
 form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li > div
 {
     grid-column-start: 1;
