@@ -360,6 +360,7 @@ li.testRes a
     display: inline-block;
     font-weight: 600;
     background-color: #fff;
+    margin-left: 14px;
 }
 
 li.testRes a:hover {
@@ -381,6 +382,7 @@ li.testRes > ul > li input[type="checkbox"]
     position: relative;
     top: 2px;
     margin: 0;
+    margin-right: 5px;
 }
 
 li.testRes

@@ -153,7 +153,6 @@ const parsePage = () => {
     })
 
     document.querySelectorAll('li.testRes a').forEach(e => {
-        e.previousSibling.textContent = ""
         e.innerHTML = e.innerHTML.slice(1, -1)
     })
 
