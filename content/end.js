@@ -136,6 +136,27 @@ const parsePage = () => {
         e.parentNode.className += " gridHelp"
     })
 
+    // add emoji before test results
+    document.querySelectorAll('form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child').forEach(e => {
+        let node = e.previousSibling
+        let text = node.textContent
+        if (text.includes('Úspěch')) {
+            if (e.firstElementChild.innerHTML.includes('Dosaženo: 100.00 %'))
+                node.parentElement.className += " testRes testOK"
+            else
+                node.parentElement.className += " testRes testAOK"
+        } else if (text.includes('Neúspěch')) {
+            node.parentElement.className += " testRes testFailed"
+        } else {
+            node.parentElement.className += " testRes testUnknown"
+        }
+    })
+
+    document.querySelectorAll('li.testRes a').forEach(e => {
+        e.previousSibling.textContent = ""
+        e.innerHTML = e.innerHTML.slice(1, -1)
+    })
+
     // nicer progress bar
     let progress = document.getElementById('refVal')
     if (progress) {

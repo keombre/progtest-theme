@@ -325,47 +325,119 @@ form > center > div:not(:nth-child(1)) .lrtbCell li:last-child
     font-size: 11pt;
 }
 
-form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child
+li.testRes > ul
 {
     display: grid;
     grid-template-columns: 33% 33% 33%;
-    grid-template-rows: minmax(25px, auto);
+    grid-auto-rows: minmax(25px, auto);
     padding-left: 10px;
-    border-top: thin solid rgba(0, 0, 0, 0.75);
 }
 
-form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li
+@media only screen and (max-width: 1000px)
+{
+    li.testRes > ul
+    {
+        grid-template-columns: 50% 50%;
+    }
+}
+
+li.testRes > ul > li
 {
     background: initial;
     border: none;
-    font-weight: 100;
-    letter-spacing: initial;
-    padding: 2px 0;
-    font-size: 10pt;
+    font-weight: 400 !important;
+    letter-spacing: initial !important;
+    padding: 2px 0 !important;
+    font-size: 10pt !important;
 }
 
-form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li:first-child
+li.testRes a
 {
-    font-weight: 400;
+    border: thin solid #283593;
+    border-radius: 3px;
+    color: #3949a2;
+    padding: 0px 6px 2px 6px;
+    display: inline-block;
+    font-weight: 600;
+    background-color: #fff;
 }
 
-form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li > div
+li.testRes a:hover {
+    box-shadow: 0 0 6px -1px #3F51B5;
+}
+
+li.testRes > ul > li:first-child
 {
-    grid-column-start: 1;
-    grid-column-end: 3;
+    font-weight: 500;
 }
 
 .gridHelp
 {
-    grid-row-start: 10000;
     grid-column: 1;
 }
 
-form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child li input[type="checkbox"]
+li.testRes > ul > li input[type="checkbox"]
 {
     position: relative;
     top: 2px;
     margin: 0;
+}
+
+li.testRes
+{
+    border-top: thin solid rgba(0, 0, 0, 0.75);
+}
+
+li.testRes:before
+{
+    width: 25px;
+    display: inline-block;
+    text-align: center;
+    line-height: 15pt;
+}
+
+li.testAOK:before
+{
+    content: "\26A0";
+    color: #aaa;
+}
+
+li.testAOK
+{
+    border-left: #FFC107 4px solid;
+}
+
+li.testOK:before
+{
+    content: "\2714";
+    color: #0f0;
+}
+
+li.testOK
+{
+    border-left: #5ed562 4px solid;
+}
+
+li.testFailed:before
+{
+    content: "\274C";
+    color: #f00;
+}
+
+li.testFailed
+{
+    border-left: #f44336 4px solid;
+}
+
+li.testUnknown:before
+{
+    content: "\2796";
+    color: #aaa;
+}
+
+li.testUnknown
+{
+    border-left: #BDBDBD 4px solid;
 }
 
 .ltbSepCell, .ltbOkSepCell, .ltbHalfSepCell, .ltbWaitSepCell, .ltbXSepCell, .ltbFailSepCell, .ltbEditSepCell
