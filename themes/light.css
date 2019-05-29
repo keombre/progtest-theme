@@ -306,6 +306,63 @@ td[valign="top"]
     cursor: pointer;
 }
 
+form > center > div:not(:nth-child(1)) .lrtbCell ul
+{
+    list-style: none;
+    padding-inline-start: 10px;
+}
+
+form > center > div:not(:nth-child(1)) .lrtbCell li
+{
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    padding: 5px 0;
+}
+
+form > center > div:not(:nth-child(1)) .lrtbCell li:last-child
+{
+    font-weight: 700;
+    font-size: 11pt;
+}
+
+form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child
+{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 25px;
+    padding-left: 10px;
+    border-top: thin solid rgba(0, 0, 0, 0.75);
+}
+
+form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li
+{
+    background: initial;
+    border: none;
+    font-weight: 100;
+    letter-spacing: initial;
+    padding: 2px 0;
+    font-size: 10pt;
+}
+
+form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child > li > div
+{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.gridHelp
+{
+    grid-row-start: 10000;
+    grid-column: 1;
+}
+
+form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child li input[type="checkbox"]
+{
+    position: relative;
+    top: 2px;
+    margin: 0;
+}
+
 .ltbSepCell, .ltbOkSepCell, .ltbHalfSepCell, .ltbWaitSepCell, .ltbXSepCell, .ltbFailSepCell, .ltbEditSepCell
 {
     border-top-left-radius: var(--border-radius);

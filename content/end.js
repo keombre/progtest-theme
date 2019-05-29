@@ -131,6 +131,11 @@ const parsePage = () => {
             })
     }
 
+    // mark help checkboxes for grid
+    document.querySelectorAll('input[type="checkbox"][name]').forEach(e => {
+        e.parentNode.className += " gridHelp"
+    })
+
     // nicer progress bar
     let progress = document.getElementById('refVal')
     if (progress) {
