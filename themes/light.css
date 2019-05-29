@@ -329,7 +329,7 @@ form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child
 {
     display: grid;
     grid-template-columns: 33% 33% 33%;
-    grid-template-rows: 25px;
+    grid-template-rows: minmax(25px, auto);
     padding-left: 10px;
     border-top: thin solid rgba(0, 0, 0, 0.75);
 }
