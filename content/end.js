@@ -99,13 +99,34 @@ const parsePage = () => {
         scrollCheck()
     }
 
+    // autohide result tables
     if (dropdown) {
+
+        // make ref solution clickable
+        let checkbox = document.querySelector('input[name="SHOW_REF"]')
+        if (checkbox) {
+            let refHead = checkbox.parentNode.parentNode
+            let refSib = refHead.nextElementSibling
+
+            while (refSib) {
+                refSib.removeAttribute('style')
+                refSib = refSib.nextElementSibling
+            }
+
+            refHead.className += " dropDownHeader"
+            refHead.addEventListener('click', toggleDropDown)
+            refHead.click()
+            checkbox.parentNode.removeChild(checkbox)
+        }
+
+        // hide the rest
         ["rtbSepCell", "rtbOkSepCell", "rtbHalfSepCell", "rtbXSepCell", "rtbFailSepCell", "rtbEditSepCell"]
             .forEach(n => {
                 document.querySelectorAll("td." + n + " > div.but1.w120").forEach(e => {
-                    e.parentNode.parentNode.className += " dropDownHeader"
-                    e.parentNode.parentNode.addEventListener('click', toggleDropDown)
-                    e.parentNode.parentNode.click()
+                    let resHead = e.parentNode.parentNode
+                    resHead.className += " dropDownHeader"
+                    resHead.addEventListener('click', toggleDropDown)
+                    resHead.click()
                 })
             })
     }
@@ -116,6 +137,7 @@ const parsePage = () => {
         document.querySelector("td.header").innerHTML += "<small>Probíhá hodnocení</small>"
         progress.scrollIntoView({ block: "center" })
     }
+    
 }
 
 if (!settingsLoaded)

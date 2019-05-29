@@ -4,6 +4,8 @@ var settingsLoaded = false
 var pttLoaded = new Event('ptt-loaded');
 
 chrome.runtime.sendMessage({ type: "config" }, function (response) {
+
+    // load user config and dispatch event when ready
     theme = response.theme
     dropdown = response.dropdown
 
@@ -13,11 +15,14 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     settingsLoaded = true
     window.dispatchEvent(pttLoaded)
     
+    // add favicon
     var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
     favicon.type = 'image/x-icon';
     favicon.rel = 'shortcut icon';
     favicon.href = chrome.extension.getURL('./themes/assets/favicon.ico');
     document.getElementsByTagName('head')[0].appendChild(favicon);
+
+    // change page title
     document.title = document.title.replace("@progtest.fit.cvut.cz -", " |").replace("progtest.fit.cvut.cz - ", "")
 })
 

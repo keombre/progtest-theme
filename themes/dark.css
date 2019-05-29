@@ -349,6 +349,11 @@ td[valign="top"]
     display: none;
 }
 
+.dropDownHeader
+{
+    cursor: pointer;
+}
+
 .ltbSepCell, .ltbOkSepCell, .ltbHalfSepCell, .ltbWaitSepCell, .ltbXSepCell, .ltbFailSepCell, .ltbEditSepCell
 {
     border-top-left-radius: var(--border-radius);
