@@ -15,6 +15,9 @@ let tButton
 
 const parsePage = () => {
 
+    if (theme == 'term')
+        return
+
     let styles = ''
 
     // display 404

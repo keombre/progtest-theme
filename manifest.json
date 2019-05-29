@@ -15,6 +15,12 @@
             "js": ["content/end.js"],
             "matches": ["*://progtest.fit.cvut.cz/*"],
             "all_frames": true
+        },
+        {
+            "run_at": "document_end",
+            "js": ["content/term.js"],
+            "matches": ["*://progtest.fit.cvut.cz/*"],
+            "all_frames": false
         }
     ],
     "background": {
