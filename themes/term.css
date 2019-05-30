@@ -1,12 +1,9 @@
-html {
-    height: 100%;
-}
-
 body {
+    overflow-y: scroll;
     background-color: #000;
     color: #0f0;
     font-family: 'Courier New', Courier, monospace;
-    height: 100%;
+    overflow-wrap: break-word;
 }
 
 #i {
@@ -15,11 +12,19 @@ body {
 
 .prompt {
     display: inline;
-    margin-right: 1ch;
 }
 
 .input {
     border: none;
     background: transparent;
     outline: none;
+}
+
+.caret {
+    width: 1ch;
+    height: 2px;
+    background: #0f0;
+    display: inline-block;
+    position: relative;
+    margin-bottom: -5px;
 }
