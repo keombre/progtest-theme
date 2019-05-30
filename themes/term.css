@@ -4,6 +4,8 @@ body {
     color: #0f0;
     font-family: 'Courier New', Courier, monospace;
     overflow-wrap: break-word;
+    font-size: 11pt;
+    white-space: pre-wrap;
 }
 
 #i {

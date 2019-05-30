@@ -5,7 +5,9 @@ class term {
         this.caretPos = 0
         this.cmd = ""
         this.commands = []
-        this.path = ""
+        this.path = "/"
+
+        this.username = document.title.slice(0, document.title.indexOf(' '))
 
         document.body.innerHTML = ""
 
@@ -39,14 +41,15 @@ class term {
         document.body.appendChild(this.iw)
 
         this.drawCaret()
+        this.blinker = setInterval(this.caretBlink.bind(this), 500)
     }
 
     key(event) {
+        if (event.ctrlKey || event.altKey)
+            return
+        
         const key = event.key
         switch (key) {
-            case "AltGraph":
-            case "Control":
-            case "Alt":
             case "Shift":
             case "Dead":
                 break
@@ -79,6 +82,13 @@ class term {
         }
     }
 
+    caretBlink() {
+        if (this.c.style.visibility == "hidden")
+            this.c.style.visibility = "initial"
+        else
+            this.c.style.visibility = "hidden"
+    }
+
     moveCaret(direction) {
         if (this.caretPos + direction <= this.cmd.length && this.caretPos + direction >= 0) {
             this.caretPos += direction
@@ -94,7 +104,7 @@ class term {
     }
 
     getPrompt() {
-        return "$" + this.path + ">"
+        return this.username + "@progtest:" + this.path + " >"
     }
 
     drawCaret() {
@@ -127,8 +137,14 @@ class term {
         this.i.scrollIntoView()
     }
 
-    print(text) {
-        text = this.getPrompt() + " " + this.cmd + "<br />" + text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />') + "<br />"
+    print(text, addNewLine = true) {
+        text = this.getPrompt() + 
+               " " + 
+               this.commands[this.commands.length-1] +
+               "<br />" +
+               text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />') + 
+               (addNewLine ? "<br />" : "")
+        
         this.o.innerHTML += text
     }
 
@@ -141,19 +157,24 @@ download [id] - download solution, empty id for sample data`
     }
 
     run() {
-        this.cmd = this.cmd.trim()
-        
         this.commands.push(this.cmd)
+
+        this.cmd = this.cmd.replace(/\s+/g, ' ').trim()
         // parse command
-        let spacePos = this.cmd.indexOf(' ')
-        let cmd = (spacePos == -1 ? this.cmd : this.cmd.slice(0, spacePos)).toLowerCase()
+        const spacePos = this.cmd.indexOf(' ')
+        const cmd = (spacePos == -1 ? this.cmd : this.cmd.slice(0, spacePos)).toLowerCase()
+        const args = spacePos == -1 ? [] : this.cmd.slice(spacePos+1).split(' ')
         console.log("exec", cmd)
+        console.log("args", args)
 
         this.hideInput()
 
         switch (cmd) {
             case "help":
                 this.print(this.getHelp())
+                break
+            case "":
+                this.print("", false)
                 break
             default:
                 this.print(cmd + ": Unknown command. See help")
