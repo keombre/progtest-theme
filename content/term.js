@@ -6,6 +6,7 @@ class term {
         this.commands = []
         this.path = "/"
         this.tSize = {x: 0, y: 0}
+        this.historyPos = -1
 
         this.username = document.title.slice(0, document.title.indexOf(' '))
 
@@ -56,11 +57,12 @@ class term {
     }
 
     key(event) {
-        if (event.ctrlKey || event.altKey)
+        if (event.altKey)
             return
         
         const key = event.key
         switch (key) {
+            case "Control":
             case "Shift":
             case "Dead":
                 break
@@ -83,14 +85,30 @@ class term {
                 this.moveCaret(1)
                 break
             case "ArrowUp":
+                this.prevInput()
                 break
             case "ArrowDown":
+                this.nextInput()
                 break
             default:
                 if (key.length > 1)
                     break
-                this.addInput(key)
+                if (event.ctrlKey) {
+                    event.preventDefault()
+                    if (key == 'c')
+                        this.clearInput()
+                    else if (key == 'l')
+                        this.wipe()
+                } else
+                    this.addInput(key)
+                
         }
+    }
+
+    wipe() {
+        this.o.innerHTML = ""
+        this.path = "/"
+        this.clearInput()
     }
 
     caretBlink() {
@@ -154,6 +172,28 @@ class term {
         this.i.innerHTML = this.cmd
     }
 
+    prevInput() {
+        const cLen = this.commands.length
+        
+        if (this.historyPos < cLen - 1)
+            this.historyPos++
+
+        this.clearInput()
+
+        this.cmd = this.commands[this.commands.length - 1 - this.historyPos]
+        this.i.innerHTML = this.cmd
+    }
+
+    nextInput() {
+        if (this.historyPos > 0)
+            this.historyPos--
+        
+        this.clearInput()
+        
+        this.cmd = this.commands[this.commands.length - 1 - this.historyPos]
+        this.i.innerHTML = this.cmd
+    }
+
     print(text, addNewLine = true, addCommand = true) {
         text = this.getPrompt().replace(/ /g, '&nbsp;') + 
                (addCommand ? this.commands[this.commands.length-1] : "") +
@@ -192,6 +232,10 @@ download [id] - download solution, empty id for sample data`
             case "exit":
                 window.close()
                 break
+            case "clear":
+            case "cls":
+                this.wipe()
+                break;
             case "help":
                 this.print(this.getHelp())
                 break
@@ -202,6 +246,7 @@ download [id] - download solution, empty id for sample data`
                 this.print(cmd + ": Unknown command. See help")
         }
 
+        this.historyPos = -1
         this.c.scrollIntoView()
     }
 }
