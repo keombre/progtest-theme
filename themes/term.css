@@ -5,7 +5,7 @@ body {
     font-family: 'Courier New', Courier, monospace;
     overflow-wrap: break-word;
     font-size: 11pt;
-    white-space: pre-wrap;
+    margin: 1ch;
 }
 
 #i {
@@ -14,19 +14,22 @@ body {
 
 .prompt {
     display: inline;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 .input {
-    border: none;
-    background: transparent;
-    outline: none;
+    white-space: pre-wrap;
+    display: inline;
+    overflow: hidden;
+    vertical-align: top;
 }
 
 .caret {
     width: 1ch;
-    height: 2px;
-    background: #0f0;
-    display: inline-block;
+    height: 2ch;
     position: relative;
-    margin-bottom: -5px;
+    border-bottom: 2px solid #0f0;
+    display: inline-block;
+    margin-right: -1ch;
 }

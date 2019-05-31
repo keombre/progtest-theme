@@ -2,10 +2,10 @@ class term {
 
     constructor() {
 
-        this.caretPos = 0
         this.cmd = ""
         this.commands = []
         this.path = "/"
+        this.tSize = {x: 0, y: 0}
 
         this.username = document.title.slice(0, document.title.indexOf(' '))
 
@@ -29,8 +29,8 @@ class term {
         this.iw = document.createElement('DIV')
         this.iw.className = "inputWrapper"
 
-        this.iw.appendChild(this.p)
         this.iw.appendChild(this.c)
+        this.iw.appendChild(this.p)
         this.iw.appendChild(this.i)
 
         this.o = document.createElement('DIV')
@@ -40,8 +40,19 @@ class term {
         document.body.appendChild(this.o)
         document.body.appendChild(this.iw)
 
+        this.setTermSize()
+        window.addEventListener('resize', this.setTermSize.bind(this))
+
+        this.caretPos = {x: this.getPrompt().length, y: 0, a: 0}
+
         this.drawCaret()
         this.blinker = setInterval(this.caretBlink.bind(this), 500)
+    }
+
+    setTermSize() {
+        const charS = this.c.getBoundingClientRect().width
+        this.tSize.x = Math.floor(document.documentElement.clientWidth / charS) - 2
+        this.tSize.y = Math.floor(document.documentElement.clientHeight / charS) - 2
     }
 
     key(event) {
@@ -90,8 +101,19 @@ class term {
     }
 
     moveCaret(direction) {
-        if (this.caretPos + direction <= this.cmd.length && this.caretPos + direction >= 0) {
-            this.caretPos += direction
+        if (this.caretPos.a + direction <= this.cmd.length && this.caretPos.a + direction >= 0) {
+            this.caretPos.a += direction
+
+            if (this.caretPos.x + direction > this.tSize.x) {
+                this.caretPos.y += 1
+                this.caretPos.x = 1
+            } else if (this.caretPos.x + direction <= 0) {
+                this.caretPos.y -= 1
+                this.caretPos.x = this.tSize.x
+            } else {
+                this.caretPos.x += direction
+            }
+
             this.drawCaret()
         }
     }
@@ -99,48 +121,42 @@ class term {
     clearInput() {
         this.cmd = ""
         this.i.innerHTML = this.cmd
-        this.caretPos = 0
+        this.caretPos.a = 0
+        this.caretPos.x = this.getPrompt().length
+        this.caretPos.y = 0
         this.drawCaret()
     }
 
     getPrompt() {
-        return this.username + "@progtest:" + this.path + " >"
+        return this.username + "@progtest:" + this.path + " > "
     }
 
     drawCaret() {
-        this.c.style.left = this.caretPos + 1 + "ch"
+        this.c.style.left = this.caretPos.x + "ch"
+        this.c.style.top = (this.caretPos.y * 2) + "ch"
+        this.c.scrollIntoView()
     }
 
     addInput(char) {
-        this.cmd = this.cmd.slice(0, this.caretPos) + char + this.cmd.slice(this.caretPos)
+        this.cmd = this.cmd.slice(0, this.caretPos.a) + char + this.cmd.slice(this.caretPos.a)
         this.i.innerHTML = this.cmd
         this.moveCaret(1)
     }
 
     removeInput() {
-        this.cmd = this.cmd.slice(0, this.caretPos-1) + this.cmd.slice(this.caretPos)
+        this.cmd = this.cmd.substr(0, this.caretPos.a-1) + this.cmd.substr(this.caretPos.a)
         this.i.innerHTML = this.cmd
         this.moveCaret(-1)
     }
 
     delInput() {
-        this.cmd = this.cmd.slice(0, this.caretPos) + this.cmd.slice(this.caretPos+1)
+        this.cmd = this.cmd.slice(0, this.caretPos.a) + this.cmd.slice(this.caretPos.a+1)
         this.i.innerHTML = this.cmd
     }
 
-    hideInput() {
-        this.i.style.visibility = "hidden"
-    }
-
-    showInput() {
-        this.i.style.visibility = "initial"
-        this.i.scrollIntoView()
-    }
-
-    print(text, addNewLine = true) {
-        text = this.getPrompt() + 
-               " " + 
-               this.commands[this.commands.length-1] +
+    print(text, addNewLine = true, addCommand = true) {
+        text = this.getPrompt().replace(/ /g, '&nbsp;') + 
+               (addCommand ? this.commands[this.commands.length-1] : "") +
                "<br />" +
                text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />') + 
                (addNewLine ? "<br />" : "")
@@ -157,31 +173,36 @@ download [id] - download solution, empty id for sample data`
     }
 
     run() {
-        this.commands.push(this.cmd)
+        const tCmd = this.cmd.replace(/\s+/g, ' ').trim()
 
-        this.cmd = this.cmd.replace(/\s+/g, ' ').trim()
+        if (tCmd != "")
+            this.commands.push(this.cmd)
+
         // parse command
-        const spacePos = this.cmd.indexOf(' ')
-        const cmd = (spacePos == -1 ? this.cmd : this.cmd.slice(0, spacePos)).toLowerCase()
-        const args = spacePos == -1 ? [] : this.cmd.slice(spacePos+1).split(' ')
+        const spacePos = tCmd.indexOf(' ')
+        const cmd = (spacePos == -1 ? tCmd : tCmd.slice(0, spacePos)).toLowerCase()
+        const args = spacePos == -1 ? [] : tCmd.slice(spacePos+1).split(' ')
         console.log("exec", cmd)
         console.log("args", args)
 
-        this.hideInput()
+        this.clearInput()
 
         switch (cmd) {
+            case "quit":
+            case "exit":
+                window.close()
+                break
             case "help":
                 this.print(this.getHelp())
                 break
             case "":
-                this.print("", false)
+                this.print("", false, false)
                 break
             default:
                 this.print(cmd + ": Unknown command. See help")
         }
 
-        this.clearInput()
-        this.showInput()
+        this.c.scrollIntoView()
     }
 }
 
