@@ -7,9 +7,25 @@ class term {
         this.path = "/"
         this.tSize = {x: 0, y: 0}
         this.historyPos = -1
+        this.logged = this.isLogged()
 
         this.username = document.title.slice(0, document.title.indexOf(' '))
 
+        this.createDOM()
+
+        this.setTermSize()
+        window.addEventListener('resize', this.setTermSize.bind(this))
+
+        if (!this.logged)
+            this.print("Welcome to ProgTest\nPlease select login method (use help)", {prompt: false, command: false})
+
+        this.caretPos = {x: this.getPrompt().length, y: 0, a: 0}
+
+        this.drawCaret()
+        this.blinker = setInterval(this.caretBlink.bind(this), 500)
+    }
+
+    createDOM() {
         document.body.innerHTML = ""
 
         this.f = document.createElement('IFRAME')
@@ -40,14 +56,10 @@ class term {
         document.body.appendChild(this.f)
         document.body.appendChild(this.o)
         document.body.appendChild(this.iw)
+    }
 
-        this.setTermSize()
-        window.addEventListener('resize', this.setTermSize.bind(this))
-
-        this.caretPos = {x: this.getPrompt().length, y: 0, a: 0}
-
-        this.drawCaret()
-        this.blinker = setInterval(this.caretBlink.bind(this), 500)
+    isLogged() {
+        return document.title.includes('|')
     }
 
     setTermSize() {
@@ -94,11 +106,13 @@ class term {
                 if (key.length > 1)
                     break
                 if (event.ctrlKey) {
-                    event.preventDefault()
-                    if (key == 'c')
+                    if (key == 'c') {
                         this.clearInput()
-                    else if (key == 'l')
+                        event.preventDefault()
+                    } else if (key == 'l') {
                         this.wipe()
+                        event.preventDefault()
+                    }
                 } else
                     this.addInput(key)
                 
@@ -146,7 +160,11 @@ class term {
     }
 
     getPrompt() {
-        return this.username + "@progtest:" + this.path + " > "
+        if (this.logged) {
+            return this.username + "@progtest:" + this.path + " > "
+        } else {
+            return "> "
+        }
     }
 
     drawCaret() {
@@ -194,12 +212,13 @@ class term {
         this.i.innerHTML = this.cmd
     }
 
-    print(text, addNewLine = true, addCommand = true) {
-        text = this.getPrompt().replace(/ /g, '&nbsp;') + 
-               (addCommand ? this.commands[this.commands.length-1] : "") +
-               "<br />" +
+    print(text, config = {newline: true, command: true, prompt: true}) {
+        const {newline = true, command = true, prompt = true} = config
+        text = (prompt ? this.getPrompt().replace(/ /g, '&nbsp;') : "") + 
+               (command ? this.commands[this.commands.length-1] : "") +
+               (command || prompt ? "<br />" : "") +
                text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />') + 
-               (addNewLine ? "<br />" : "")
+               (newline ? "<br />" : "")
         
         this.o.innerHTML += text
     }
@@ -210,6 +229,14 @@ ls     - list current directory
 cd     - change directory
 upload - upload solution
 download [id] - download solution, empty id for sample data`
+    }
+
+    getLoginHelp() {
+        return `help     - this text
+Shib     - login using Shibboleth SSO
+Username - login with username and password
+clear    - clear terminal
+exit     - leave`
     }
 
     run() {
@@ -227,6 +254,7 @@ download [id] - download solution, empty id for sample data`
 
         this.clearInput()
 
+        if (this.logged)
         switch (cmd) {
             case "quit":
             case "exit":
@@ -239,8 +267,38 @@ download [id] - download solution, empty id for sample data`
             case "help":
                 this.print(this.getHelp())
                 break
+            case "logout":
+                this.logout()
+                break
             case "":
-                this.print("", false, false)
+                this.print("", {command: false, newline: false})
+                break
+            default:
+                this.print(cmd + ": Unknown command. See help")
+        }
+        else
+        switch (cmd) {
+            case "quit":
+            case "exit":
+                window.close()
+                break
+            case "clear":
+            case "cls":
+                this.wipe()
+                break;
+            case "help":
+                this.print(this.getLoginHelp())
+                break
+            case "":
+                this.print("", {command: false, newline: false})
+                break
+            case "s":
+            case "shib":
+                this.loginShib()
+                break
+            case "u":
+            case "username":
+                this.loginUname()
                 break
             default:
                 this.print(cmd + ": Unknown command. See help")
@@ -248,6 +306,20 @@ download [id] - download solution, empty id for sample data`
 
         this.historyPos = -1
         this.c.scrollIntoView()
+    }
+
+    logout() {
+        this.print("Logging out..")
+        window.location.href = "/index.php?X=Logout"
+    }
+
+    loginShib() {
+        this.print("Redirecting to Shibboleth SSO..")
+        window.location.href = "/shibboleth-fit.php"
+    }
+
+    loginUname() {
+        this.print("Sorry, not implemented yet, use shib")
     }
 }
 
