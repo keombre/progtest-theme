@@ -6,6 +6,7 @@ body {
     overflow-wrap: break-word;
     font-size: 11pt;
     margin: 1ch;
+    visibility: hidden;
 }
 
 #i {

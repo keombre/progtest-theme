@@ -5,6 +5,7 @@ class term {
         this.cmd = ""
         this.commands = []
         this.path = "/"
+        this.pathTree = []
         this.tSize = {x: 0, y: 0}
         this.historyPos = -1
         this.logged = this.isLogged()
@@ -56,6 +57,8 @@ class term {
         document.body.appendChild(this.f)
         document.body.appendChild(this.o)
         document.body.appendChild(this.iw)
+
+        document.body.style.visibility = "initial"
     }
 
     isLogged() {
@@ -214,11 +217,11 @@ class term {
 
     print(text, config = {newline: true, command: true, prompt: true}) {
         const {newline = true, command = true, prompt = true} = config
-        text = (prompt ? this.getPrompt().replace(/ /g, '&nbsp;') : "") + 
+        text = (prompt ? this.p.innerHTML.replace(/ /g, '&nbsp;') : "") + 
                (command ? this.commands[this.commands.length-1] : "") +
                (command || prompt ? "<br />" : "") +
-               text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />') + 
-               (newline ? "<br />" : "")
+               (typeof text == "string" ? text.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />') + 
+               (newline ? "<br />" : "") : "")
         
         this.o.innerHTML += text
     }
@@ -252,8 +255,6 @@ exit     - leave`
         console.log("exec", cmd)
         console.log("args", args)
 
-        this.clearInput()
-
         if (this.logged)
         switch (cmd) {
             case "quit":
@@ -272,6 +273,12 @@ exit     - leave`
                 break
             case "":
                 this.print("", {command: false, newline: false})
+                break
+            case "ls":
+                this.print(this.ls())
+                break
+            case "cd":
+                this.print(this.cd(args[0]))
                 break
             default:
                 this.print(cmd + ": Unknown command. See help")
@@ -303,11 +310,15 @@ exit     - leave`
             default:
                 this.print(cmd + ": Unknown command. See help")
         }
-
+        
+        this.clearInput()
+        this.p.innerHTML = this.getPrompt()
         this.historyPos = -1
         this.c.scrollIntoView()
     }
 
+
+    // build-in functions
     logout() {
         this.print("Logging out..")
         window.location.href = "/index.php?X=Logout"
@@ -320,6 +331,41 @@ exit     - leave`
 
     loginUname() {
         this.print("Sorry, not implemented yet, use shib")
+    }
+
+    getPaths() {
+        let ret = {}
+        this.f.contentDocument.querySelectorAll('a.butLink').forEach(e => {
+            if (e.innerHTML == "Zobrazit") {
+                ret[e.parentNode.parentNode.parentNode.parentNode.firstElementChild.firstElementChild.innerText] = e.href
+            } else
+                ret[e.innerHTML] = e.href
+        })
+        return ret
+    }
+
+    ls() {
+        return Object.keys(this.getPaths()).join("\n")
+    }
+
+    cd(path) {
+        if (path == '.')
+            return
+        else if (path == '..') {
+            if (!this.pathTree.length)
+                return
+            this.path = this.path.substr(0, this.path.slice(0, -1).lastIndexOf('/') + 1)
+            this.f.contentWindow.location.replace(this.pathTree.pop())
+            return
+        }
+
+        const paths = this.getPaths()
+        if (!paths.hasOwnProperty(path))
+            return "cd: no such file or directory: " + path
+        
+        this.pathTree.push(this.f.contentWindow.location.href)
+        this.f.contentWindow.location.replace(paths[path])
+        this.path += path + "/"
     }
 }
 
