@@ -41,3 +41,25 @@ const toggleDropDown = (e) => {
             node.className = node.className.replace(" dropDownHide", "")
     }
 }
+
+const uniChange = (event) => {
+    let c = 0, i
+    document.getElementById('uniSel').childNodes.forEach(e => {
+        e.removeAttribute('active')
+        if (e == event.target)
+            i = c
+        c++
+    })
+
+    event.target.setAttribute('active', 'true')
+
+    let select = document.querySelector('select[name="UID_UNIVERSITY"]')
+    select.selectedIndex = i
+    let trigger = new Event('change');
+    select.dispatchEvent(trigger);
+}
+
+const moveInputLabel = (event) => {
+    event.target.setAttribute('moved', true)
+    event.target.parentNode.parentNode.children[1].children[0].focus()
+}

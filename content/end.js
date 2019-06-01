@@ -17,6 +17,9 @@ const parsePage = () => {
 
     let styles = ''
 
+    document.body.removeAttribute('bgcolor')
+    document.body.removeAttribute('text')
+
     // display 404
     if (document.body.innerHTML == "") {
         document.title = "404 | ProgTest";
@@ -25,12 +28,8 @@ const parsePage = () => {
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
 
-        if (theme == 'light')
-            link.setAttribute('href', chrome.extension.getURL('./themes/404.light.css'))
-        else
-            link.setAttribute('href', chrome.extension.getURL('./themes/404.dark.css'))
-        
-            document.getElementsByTagName('head')[0].appendChild(link)
+        link.setAttribute('href', chrome.extension.getURL('./themes/404/' + theme + '.css'))
+        document.getElementsByTagName('head')[0].appendChild(link)
 
         document.body.innerHTML = cont_404
     } else {
@@ -52,7 +51,31 @@ const parsePage = () => {
             title.className = "app_name"
             title.innerHTML = "FIT: <b>ProgTest</b>"
             l_form.parentElement.insertBefore(title, l_form)
+            l_form.className += " loginForm"
+
+            let uniselect = document.createElement('DIV')
+            uniselect.id = "uniSel"
+
+            document.querySelector("#main > tbody > tr:nth-child(2) > td.rtbCell > select").childNodes.forEach(e => {
+                let uni = document.createElement('DIV')
+                uni.innerText = e.innerText
+                uni.setAttribute('uni', e.value)
+                uni.className = "uniVal"
+                uni.addEventListener('click', uniChange)
+                uniselect.appendChild(uni)
+            })
+
+            uniselect.children[0].setAttribute('active', 'true')
+            
+            l_form.appendChild(uniselect)
+
+            // add title mover
+            document.querySelector("#ldap1 > td.ltCell.al > b").addEventListener('click', moveInputLabel)
+            document.querySelector("#ldap2 > td.al.lbCell > b").addEventListener('click', moveInputLabel)
+
         }
+    } else {
+        document.querySelector("body > table").className += " navbar"
     }
 
     // add selector to duplicate parrent elements

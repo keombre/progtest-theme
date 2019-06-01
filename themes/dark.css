@@ -30,7 +30,7 @@ body
     margin: 0;
     padding-bottom: 25px;
     background-color: #000;
-    background-image: url("./background-dark.PNG");
+    background-image: url("./assets/background-dark.PNG");
     background-attachment: fixed;
     background-size: cover;
     padding-top: 60px;
@@ -89,7 +89,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     width: -webkit-fill-available;
 }
 
-/** header */
+/* Login page */
 
 .app_name
 {
@@ -98,7 +98,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     font-weight: 300;
     line-height: 0.6;
     text-shadow: 0 0 2px rgba(255, 255, 255, 0.25);
-    margin-bottom: 65px;
+    margin-top: -38px;
     letter-spacing: 2px;
     color: #cacaca;
 }
@@ -108,6 +108,196 @@ select.std.w200[name="UID_UNIVERSITY"]
     font-weight: 500;
     color: #F5F5F5;
 }
+
+.loginForm > center > div > div > table:before {
+    content: "";
+    width: 260px;
+    height: 90%;
+    background: #263238;
+    position: absolute;
+    top: 5%;
+    left: -250px;
+    box-shadow: 0px 5px 23px 0 rgba(0, 0, 0, 0.45);
+    z-index: -1;
+    border-radius: 7px;
+}
+
+#uniSel {
+    position: absolute;
+    top: 260px;
+    left: calc(50% - 300px);
+    width: 250px;
+    font-size: 12pt;
+}
+
+.uniVal[active] {
+    padding-left: 13px;
+    border-left: 2px solid #FFEB3B;
+    font-weight: 500;
+}
+
+.uniVal {
+    padding: 5px 0 5px 15px;
+    cursor: pointer;
+}
+
+.uniVal:hover {
+    background: rgba(0, 0, 0, 0.125);
+}
+
+.loginForm td {
+    background: transparent !important;
+    border: none !important;
+}
+
+.loginForm table {
+    border: none !important;
+    box-shadow: none !important;
+    background-color: #252525 !important;
+}
+
+.loginForm .insBox {
+    position: absolute;
+    width: 350px;
+    margin: 0;
+    height: 380px;
+    background: #252525;
+    border-radius: 7px;
+    box-shadow: 0px 2px 42px 0 rgba(0, 0, 0, 0.28);
+    left: calc(50% - 50px);
+    top: 160px;
+}
+
+
+.loginForm div.outButton.w120 input,
+.loginForm a.butLink {
+    position: absolute;
+    width: 120px;
+    color: #fff;
+    background: #009688;
+    padding: 10px 0;
+    border-radius: 3px;
+    box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.25);
+    border: none;
+    outline: none;
+    font-size: 12pt;
+    left: calc(50% - 60px);
+    bottom: 80px;
+    cursor: pointer;
+}
+
+.loginForm td:nth-child(2) > div.outButton.w120 input {
+    bottom: 25px;
+    font-size: 10pt;
+    width: 100px;
+    left: calc(50% - 50px);
+    padding: 7px 0;
+}
+
+.loginForm div.outButton.w120 input:hover,
+.loginForm a.butLink:hover {
+    background: #26A69A;
+}
+
+.loginForm div.outButton.w120 input:active,
+.loginForm a.butLink:active {
+    background: #00796b;
+}
+
+.loginForm .outBox > table {
+    padding: 25px;
+    text-align: center;
+}
+
+.loginForm .outBox > table > tbody > tr:nth-child(1):before {
+    content: "Language";
+    position: absolute;
+    left: -150px;
+    font-weight: 100;
+    top: 4px;
+    text-shadow: 0px 1px 2px rgba(255, 255, 255, 0.125);
+    font-size: 12pt;
+}
+
+.loginForm #shib2 > td {
+    padding-top: 40px;
+    font-size: 12pt;
+}
+
+.loginForm #ldap2 > td:nth-child(1) > b,
+.loginForm #ldap1 > td:nth-child(1) > b {
+    font-weight: 100;
+    position: absolute;
+    left: 50px;
+    font-size: 16pt;
+    color: #cdcdcd;
+    cursor: pointer;
+    z-index: 2;
+    width: 250px;
+    text-align: left;
+    transition: font-size 0.2s ease, top 0.2s ease;
+    background: #252525;
+    border-bottom: thin solid rgba(255, 255, 255, 0.3);
+    padding: 1px 0;
+}
+
+.loginForm #ldap1 > td:nth-child(1) > b {
+    top: 70px;
+}
+
+.loginForm #ldap1 > td:nth-child(1) > b[moved] {
+    top: 50px;
+    font-size: 10pt;
+    cursor: default;
+    background: transparent;
+    border: none;
+}
+
+.loginForm #ldap2 > td:nth-child(1) > b {
+    top: 130px;
+}
+
+.loginForm #ldap2 > td:nth-child(1) > b[moved] {
+    top: 110px;
+    font-size: 10pt;
+    cursor: default;
+    background: transparent;
+    border: none;
+}
+
+.loginForm input.std.w200 {
+    border: none;
+    border-bottom: thin solid rgba(255, 255, 255, 0.3);
+    outline: none;
+    font-size: 16pt;
+    position: absolute;
+    left: 50px;
+    width: 250px;
+    background: transparent !important;
+    font-weight: 400 !important;
+    padding: 1px 0 !important;
+    min-width: 250px !important;
+}
+
+.loginForm #ldap1 > td:nth-child(2) > input {
+    top: 70px;
+}
+
+.loginForm #ldap2 > td:nth-child(2) > input {
+    top: 130px;
+}
+
+.loginForm .outBox > table > tbody > tr:nth-child(1) {
+    position: absolute;
+    left: -82px;
+    top: 32px;
+}
+
+.loginForm .outBox > table > tbody > tr:nth-child(2) {
+    display: none;
+}
+
+/** header */
 
 body > table
 {
@@ -247,8 +437,8 @@ td[valign="top"]
 
 .outBox > table:not(.header)
 {
-    background-color: #0e0e0e !important;
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+    background-color: #0e0e0e;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) /*!important*/;
     border: solid thin rgba(0, 0, 0, 0.125);
     border-radius: var(--border-radius);
 }
