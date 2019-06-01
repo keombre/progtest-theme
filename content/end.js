@@ -145,7 +145,7 @@ const parsePage = () => {
                 node.parentElement.className += " testRes testOK"
             else
                 node.parentElement.className += " testRes testAOK"
-        } else if (text.includes('Neúspěch')) {
+        } else if (text.includes('Neúspěch') || text.includes('Program provedl neplatnou operaci a byl ukončen')) {
             node.parentElement.className += " testRes testFailed"
         } else {
             node.parentElement.className += " testRes testUnknown"
