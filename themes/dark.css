@@ -154,6 +154,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     border: none !important;
     box-shadow: none !important;
     background-color: #252525 !important;
+    border-radius: 7px !important;
 }
 
 .loginForm .insBox {

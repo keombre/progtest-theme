@@ -133,6 +133,7 @@ select.std.w200[name="UID_UNIVERSITY"]
 .loginForm table {
     border: none !important;
     box-shadow: none !important;
+    border-radius: 7px !important;
 }
 
 .loginForm .insBox {
