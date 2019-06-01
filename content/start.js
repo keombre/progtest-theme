@@ -63,3 +63,7 @@ const moveInputLabel = (event) => {
     event.target.setAttribute('moved', true)
     event.target.parentNode.parentNode.children[1].children[0].focus()
 }
+
+const moveLabelInput = (event) => {
+    event.target.parentNode.parentNode.children[0].children[0].click()
+}

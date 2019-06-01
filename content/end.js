@@ -72,6 +72,9 @@ const parsePage = () => {
             // add title mover
             document.querySelector("#ldap1 > td.ltCell.al > b").addEventListener('click', moveInputLabel)
             document.querySelector("#ldap2 > td.al.lbCell > b").addEventListener('click', moveInputLabel)
+            const inputs = document.getElementsByTagName('input')
+            inputs[0].addEventListener('focus', moveLabelInput)
+            inputs[1].addEventListener('focus', moveLabelInput)
 
         }
     } else {
