@@ -64,6 +64,11 @@ const moveInputLabel = (event) => {
     event.target.parentNode.parentNode.children[1].children[0].focus()
 }
 
-const moveLabelInput = (event) => {
+const loginFocusOut = (event) => {
+    if (event.target.value == "")
+        event.target.parentNode.parentNode.children[0].children[0].removeAttribute('moved')
+}
+
+const loginFocus = (event) => {
     event.target.parentNode.parentNode.children[0].children[0].click()
 }
