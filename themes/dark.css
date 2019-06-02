@@ -232,6 +232,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     padding-right: 26px;
     font-weight: 600;
     padding-bottom: 4px;
+    cursor: pointer;
 }
 
 #langGlobe {
@@ -1036,10 +1037,6 @@ a.butWarn
 	font-weight: bold;
 }
 
-select.std, select.stdDis, select.test, select.flt {
-    font-size: 10pt;
-}
-
 /** boxes */
 
 .grayBox, .greenBox, .redBox, .yellowBox, .legendBox
@@ -1086,6 +1083,39 @@ select.std, select.stdDis, select.test, select.flt {
 
 .dupCpar {
     background-color: #ff6262;
+}
+
+.nOk:before
+{
+    content: "\2718";
+    color: #f00;
+}
+
+.wOk:before
+{
+    content: "\2718";
+    color: #ff00ff;
+}
+.yOk:before
+{
+    content: "\2714";
+    color: #0f0;
+}
+.oOk:before
+{
+    content: "\2714";
+    color: #ff0;
+}
+
+.nOk:before, .wOk:before, .yOk:before, .oOk:before
+{
+    float: left;
+    width: 1.5em;
+    text-align: center;
+}
+
+select.std, select.stdDis, select.test, select.flt {
+    font-size: 10pt;
 }
 
 /** old css */
@@ -1155,13 +1185,6 @@ select.seek          { font-family: Courier; font-size: 10px }
 .dupS                { color: #c000c0; }
 .dupA                { color: #c000c0; }
 .dupG                { color: #ffff00; }
-
-
-
-.nOk:before { content: "\2718"; color: red; float: left; }
-.wOk:before { content: "\2718"; color: #ff00ff; float: left; }
-.yOk:before { content: "\2714"; color: green; float: left; }
-.oOk:before { content: "\2714"; color: yellow; float: left; }
 
 .flatButton          { background-color: #AAAAAA; border-color: #CCCCCC #666666 #666666 #CCCCCC; border-style: solid; border-width: 1px; text-align: center}
 .hdrUp               { height: 15px; background-color: #989889; border-color: #cccccc #666666 #666666 #cccccc; border-style: solid; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; padding-left: 3px; padding-right: 3px; padding-top: 3px }

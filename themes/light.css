@@ -121,6 +121,7 @@ select.std.w200[name="UID_UNIVERSITY"]
 .uniVal {
     padding: 5px 0 5px 15px;
     cursor: pointer;
+    color: #2e2e2e;
 }
 
 .uniVal:hover {
@@ -206,6 +207,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     padding-right: 26px;
     font-weight: 600;
     padding-bottom: 4px;
+    cursor: pointer;
 }
 
 #langGlobe {
