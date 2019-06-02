@@ -47,7 +47,7 @@ select
     border: thin solid #464646;
     border-radius: 3px;
     padding: 2px 6px;
-    outline-color: #a5a5a5;
+    outline-color: #2e2e2e;
     border: thin solid #b9b9b9;
 }
 
@@ -111,11 +111,11 @@ select.std.w200[name="UID_UNIVERSITY"]
 }
 
 .uniVal[active] {
-    padding-left: 13px;
-    border-left: 2px solid #FFEB3B;
+    padding-left: 12px;
+    border-left: 3px solid #FFEB3B;
     font-weight: 500;
     background: rgba(255, 255, 255, 0.075);
-    box-shadow: 0px 1px 4px -2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 1px 4px -3px rgba(0, 0, 0, 0.5);
 }
 
 .uniVal {
@@ -149,7 +149,6 @@ select.std.w200[name="UID_UNIVERSITY"]
     left: calc(50% - 50px);
     top: 160px;
 }
-
 
 .loginForm div.outButton.w120 input,
 .loginForm a.butLink {
@@ -197,14 +196,24 @@ select.std.w200[name="UID_UNIVERSITY"]
     text-align: center;
 }
 
-.loginForm .outBox > table > tbody > tr:nth-child(1):before {
-    content: "Language";
+.loginForm select[name="lang"] {
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: thin solid rgba(0, 0, 0, 0.25);
+    border-radius: 0;
+    color: #353535;
+    padding-right: 26px;
+    font-weight: 600;
+    padding-bottom: 4px;
+}
+
+#langGlobe {
     position: absolute;
-    left: -150px;
-    font-weight: 100;
-    top: 6px;
-    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.125);
-    font-size: 14pt;
+    top: 9px;
+    right: 25px;
+    fill: #424242;
+    z-index: -1;
 }
 
 .loginForm #shib2 > td {
@@ -276,7 +285,7 @@ select.std.w200[name="UID_UNIVERSITY"]
 
 .loginForm .outBox > table > tbody > tr:nth-child(1) {
     position: absolute;
-    left: -82px;
+    left: -115px;
     top: 25px;
 }
 
