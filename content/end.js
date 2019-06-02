@@ -70,12 +70,23 @@ const parsePage = () => {
             l_form.appendChild(uniselect)
 
             // add title mover
-            document.querySelector("#ldap1 > td.ltCell.al > b").addEventListener('click', moveInputLabel)
-            document.querySelector("#ldap2 > td.al.lbCell > b").addEventListener('click', moveInputLabel)
+            var usernameInput = document.querySelector("#ldap1 > td.ltCell.al > b")
+            var passwordInput = document.querySelector("#ldap2 > td.al.lbCell > b")
+            usernameInput.addEventListener('click', moveInputLabel)
+            passwordInput.addEventListener('click', moveInputLabel)
             const inputs = document.getElementsByTagName('input')
             inputs[0].addEventListener('focus', moveLabelInput)
             inputs[1].addEventListener('focus', moveLabelInput)
-
+            window.addEventListener('click', function(e) {
+                if (!document.getElementById('ldap1').parentNode.contains(e.target)
+                && document.getElementById('ldap1').children[1].children[0].value.length == 0) {
+                    usernameInput.removeAttribute('moved')
+                }
+                if (!document.getElementById('ldap2').parentNode.contains(e.target)
+                && document.getElementById('ldap2').children[1].children[0].value.length == 0) {
+                    passwordInput.removeAttribute('moved')
+                }
+            })
         }
     } else {
         document.querySelector("body > table").className += " navbar"
