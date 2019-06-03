@@ -296,7 +296,11 @@ const preload = () => {
         parser = new Login()
         loc = locations.login
     // subject select
-    } else if (window.location.href.includes('X=Main') || !window.location.href.includes('X=')) {
+    } else if (
+        window.location.href.includes('X=Main') ||
+        !window.location.href.includes('X=') ||
+        window.location.href.slice(-2) == 'X='
+    ) {
         parser = new SubjectSelect()
         loc = locations.subjectSelect
     // other pages
