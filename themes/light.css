@@ -397,6 +397,119 @@ body > table td:nth-child(1) > span > *:nth-child(1)
     transition: width 1s linear 0s;
 }
 
+/** subject select */
+div.subjectSelect {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 4% 2%;
+    place-content: center;
+    margin: 0 50px;
+}
+
+div.subjectSelect > a {
+    border: thin solid #d1d1d1;
+    border-radius: 7px;
+    padding: 16px 12pt;
+    min-height: 140px;
+    position: relative;
+    width: 240px;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.25);
+}
+
+div.subjectSelect > a:nth-last-child(1),
+div.subjectSelect > a:nth-last-child(2),
+div.subjectSelect > a:nth-last-child(3) {
+    margin: 25px 0;
+    min-height: 90px;
+}
+
+@media only screen and (max-width: 1000px)
+{
+    div.subjectSelect
+    {
+        grid-template-columns: auto auto;
+    }
+}
+
+@media only screen and (max-width: 650px)
+{
+    div.subjectSelect
+    {
+        grid-template-columns: auto;
+        grid-gap: 1% 2%;
+    }
+}
+
+div.subjectSelect > a:hover {
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+div.subjectSelect > a > div.subject-title {
+    color: #000;
+    font-size: 16pt;
+    width: calc(100% - 80px);
+}
+
+div.subjectSelect > a > div.subject-body {
+    color: #414141;
+    font-size: 12pt;
+    width: calc(100% - 85px);
+    margin-top: 5px;
+}
+
+div.subjectSelect > a >div.subject-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 12pt;
+    background-color: #f0f0f0;
+    padding: 7px 0;
+    border-top: thin solid #d5d5d5;
+    color: #000;
+}
+
+.icon {
+    width: 70px;
+    height: 70px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 14px;
+    top: 14px;
+}
+
+.icon-pa2 {
+    background-image: url('./assets/icons/pa2.svg')
+}
+
+.icon-pa1 {
+    background-image: url('./assets/icons/pa1.svg')
+}
+
+.icon-ps1 {
+    background-image: url('./assets/icons/ps1.svg')
+}
+
+.icon-setting {
+    background-image: url('./assets/icons/settings.svg');
+}
+
+.icon-faq {
+    background-image: url('./assets/icons/faq.svg')
+}
+
+.icon-compile {
+    background-image: url('./assets/icons/compile.svg'); 
+}
+
+.icon-osy {
+    background-image: url('./assets/icons/osy.svg');
+}
+
 /** item header */
 
 table.header
