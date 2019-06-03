@@ -195,7 +195,7 @@ class Logged {
         if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) {
             if (this.header && !this.header.getAttribute('style'))
                 this.header.style.padding = "0px 16px";
-            if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= this.scrollY || !this.oldScroll))
+            if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll))
                 this.tButton.style.transform = "scale(1)"
         } else {
             if (this.header && this.header.getAttribute('style'))
@@ -203,10 +203,9 @@ class Logged {
             if (this.tButton && this.tButton.getAttribute('style'))
                 this.tButton.removeAttribute('style')
         }
-        this.oldScroll = this.scrollY;
+        this.oldScroll = window.scrollY;
     }
 }
-    
 
 class SubjectSelect extends Logged {
     constructor() {
