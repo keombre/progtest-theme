@@ -3,6 +3,15 @@ var dropdown
 var settingsLoaded = false
 var pttLoaded = new Event('ptt-loaded');
 
+const loader = `
+<div id="loadWrapper">
+    <div class="anim-load anim-1"></div>
+    <div class="anim-load anim-2"></div>
+    <div class="anim-load anim-3"></div>
+    <div class="anim-logo">P</div>
+</div>`
+
+
 chrome.runtime.sendMessage({ type: "config" }, function (response) {
 
     // load user config and dispatch event when ready
@@ -24,7 +33,25 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
 
     // change page title
     document.title = document.title.replace("@progtest.fit.cvut.cz -", " |").replace("progtest.fit.cvut.cz - ", "")
+
+    addLoader()
 })
+
+const addLoader = () => {
+    let ld = document.createElement('pttloader')
+    ld.innerHTML = loader
+    document.children[0].appendChild(ld)
+    window.addEventListener('load', () => {
+        document.getElementById('loadWrapper').style.opacity = '0'
+        setTimeout(() => document.getElementById('loadWrapper').style.visibility = 'hidden', 200)
+    })
+
+    window.addEventListener('beforeunload', () => {
+        document.getElementById('loadWrapper').style.visibility = 'visible'
+        document.getElementById('loadWrapper').style.opacity = '1'
+    })
+    
+}
 
 const toggleDropDown = (e) => {
     if (e.button == 2)
