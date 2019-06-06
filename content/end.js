@@ -88,7 +88,6 @@ const parsePage = () => {
     // nicer progress bar
     let progress = document.getElementById('refVal')
     if (progress) {
-        document.querySelector("td.header").innerHTML += "<small>Probíhá hodnocení</small>"
         progress.scrollIntoView({ block: "center" })
     }
     
@@ -217,23 +216,27 @@ class SubjectSelect extends Logged {
             elems.push([e.children[0].innerText, e.children[1].children[0].children[0].children[0].href])
         )
 
-        document.querySelector('center').outerHTML = '<div class="subjectSelect"></div>'
-        let push = document.querySelector('div.subjectSelect')
+        document.querySelector('center').outerHTML = '<div class="subjectSelect"></div><div class="subjectSelect mainInfo"></div>'
+        let sels = document.querySelectorAll('div.subjectSelect')
+        let push
 
         elems.forEach(e => {
             let title = e[0], order, text = "", icon, footer, orderC = 100
             if (title.includes('Nastavení')) {
                 order = 10001
                 icon = 'icon-setting'
+                push = sels[1]
             } else if (title.includes('Kompilátory')) {
                 text = title
                 title = "Cloud compute"
                 order = 10000
                 icon = 'icon-compile'
+                push = sels[1]
             } else if (title.includes('FAQ')) {
                 order = 10002
                 icon = 'icon-faq'
                 text = 'Často kladené dotazy'
+                push = sels[1]
             } else {
                 // determine order
                 let bracketPos = title.lastIndexOf('(')
@@ -266,6 +269,7 @@ class SubjectSelect extends Logged {
                             icon = "icon-unknown"
                     }
                 }
+                push = sels[0]
             }
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}">
