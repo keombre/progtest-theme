@@ -1,9 +1,73 @@
-@import "./common.css";
-
 :root
 {
     --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     --border-radius: 3px;
+}
+
+/** page loader */
+
+#loadWrapper {
+    font-family: var(--font);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    user-select: none;
+    transition: opacity .2s ease;
+    opacity: 1;
+    z-index: 100;
+}
+
+.anim-load {
+    position: absolute;
+    height: 30px;
+    background: #565f7c;
+    width: 30px;
+    border-radius: 7px;
+    left: calc(50% - 34px);
+}
+
+@keyframes width {
+    0% {
+        width: 30px;
+        left: calc(50% - 34px);
+    }
+    50% {
+        width: 80px;
+        left: calc(50% - 84px);
+    }
+    100% {
+        width: 30px;
+        left: calc(50% - 34px);
+    }
+}
+
+.anim-1 {
+    top: calc(50% - 93px);
+    animation: 1s width infinite;
+    animation-delay: .66s;
+}
+
+.anim-2 {
+    top: calc(50% - 55px);
+    animation: 1s width infinite;
+}
+
+.anim-3 {
+    top: calc(50% - 18px);
+    animation: 1s width infinite;
+    animation-delay: .33s;
+}
+
+.anim-logo {
+    color: #565f7c;
+    font-weight: 500;
+    font-size: 150px;
+    position: absolute;
+    top: calc(50% - 150px);
+    left: calc(50% - 7px);
 }
 
 /** global layout */
@@ -17,20 +81,12 @@ body
 {
     overflow-y: scroll;
     font-size: 10px;
-    color: #000000;
     font-family: var(--font);
     margin: 0;
     padding-bottom: 25px;
-    background-color: #fff;
-    background-image: url("./assets/background-light.PNG");
     background-attachment: fixed;
     background-size: cover;
     padding-top: 60px;
-}
-
-table
-{
-    background-color: #fff;
 }
 
 hr
@@ -50,7 +106,6 @@ select
     border: thin solid #464646;
     border-radius: 3px;
     padding: 2px 6px;
-    outline-color: #2e2e2e;
     border: thin solid #b9b9b9;
 }
 
@@ -80,23 +135,19 @@ select.std.w200[name="UID_UNIVERSITY"]
     font-size: 4.5rem;
     font-weight: 300;
     line-height: 0.6;
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
     margin-top: -38px;
     letter-spacing: 2px;
-    color: #464646;
 }
 
 .app_name > b
 {
     font-weight: 500;
-    color: #212121;
 }
 
 .loginForm > center > div > div > table:before {
     content: "";
     width: 260px;
     height: 90%;
-    background: #26A69A;
     position: absolute;
     top: 5%;
     left: -250px;
@@ -147,7 +198,6 @@ select.std.w200[name="UID_UNIVERSITY"]
     width: 350px;
     margin: 0;
     height: 380px;
-    background: #fff;
     border-radius: 7px;
     box-shadow: 0px 2px 42px 0 rgba(0, 0, 0, 0.28);
     left: calc(50% - 50px);
@@ -159,7 +209,6 @@ select.std.w200[name="UID_UNIVERSITY"]
     position: absolute;
     width: 120px;
     color: #fff;
-    background: #009688;
     padding: 10px 0;
     border-radius: 3px;
     box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.25);
@@ -204,9 +253,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     background: none;
     outline: none;
     border: none;
-    border-bottom: thin solid rgba(0, 0, 0, 0.25);
     border-radius: 0;
-    color: #353535;
     padding-right: 26px;
     font-weight: 600;
     padding-bottom: 4px;
@@ -217,7 +264,6 @@ select.std.w200[name="UID_UNIVERSITY"]
     position: absolute;
     top: 9px;
     right: 25px;
-    fill: #424242;
     z-index: -1;
 }
 
@@ -232,13 +278,11 @@ select.std.w200[name="UID_UNIVERSITY"]
     position: absolute;
     left: 50px;
     font-size: 16pt;
-    color: #585858;
     cursor: pointer;
     z-index: 2;
     width: 250px;
     text-align: left;
     transition: font-size 0.2s ease, top 0.2s ease;
-    background: #fff;
     padding: 1px 0;
 }
 
@@ -268,7 +312,6 @@ select.std.w200[name="UID_UNIVERSITY"]
 
 .loginForm input.std.w200 {
     border: none;
-    border-bottom: thin solid rgba(0, 0, 0, 0.3);
     outline: none;
     font-size: 16pt;
     position: absolute;
@@ -306,7 +349,6 @@ body > table
     z-index: 100;
     min-height: 38px !important;
     padding: 8px 16px;
-    background-color: #343a40 !important;
     position: fixed;
     top: 0;
     transition: padding 0.1s ease;
@@ -316,11 +358,6 @@ body > table
 tr[height="25"]
 {
     height: initial;
-}
-
-body > table td
-{
-    background-color: #343a40 !important;
 }
 
 body > table td
@@ -392,7 +429,6 @@ body > table td:nth-child(1) > span > *:nth-child(1)
 #refProgress
 {
     height: 4px !important;
-    background-color: rgb(255, 193, 7) !important;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -414,13 +450,11 @@ div.subjectSelect {
 }
 
 div.subjectSelect > a {
-    border: thin solid #d1d1d1;
     border-radius: 7px;
     padding: 16px 12pt;
     min-height: 140px;
     position: relative;
     width: 240px;
-    background-color: #fff;
     overflow: hidden;
     box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.25);
 }
@@ -442,7 +476,6 @@ div.subjectSelect.mainInfo > a {
     div.subjectSelect
     {
         grid-template-columns: auto;
-        grid-gap: 1% 2%;
     }
 }
 
@@ -451,13 +484,11 @@ div.subjectSelect > a:hover {
 }
 
 div.subjectSelect > a > div.subject-title {
-    color: #000;
     font-size: 16pt;
     width: calc(100% - 80px);
 }
 
 div.subjectSelect > a > div.subject-body {
-    color: #414141;
     font-size: 12pt;
     width: calc(100% - 85px);
     margin-top: 5px;
@@ -470,10 +501,7 @@ div.subjectSelect > a >div.subject-footer {
     width: 100%;
     text-align: center;
     font-size: 12pt;
-    background-color: #f0f0f0;
     padding: 7px 0;
-    border-top: thin solid #d5d5d5;
-    color: #000;
 }
 
 .icon {
@@ -524,7 +552,6 @@ table.header
 {
     background: none !important;
     background-color: #fff;
-    border-bottom: solid thin rgba(0,0,0,.175);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -557,7 +584,6 @@ td[valign="top"]
 
 .outBox > table:not(.header)
 {
-    background-color: #fff !important;
     box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) /*!important*/;
     border: solid thin rgba(0, 0, 0, 0.125);
     border-radius: var(--border-radius);
@@ -570,9 +596,21 @@ td[valign="top"]
     background-color: transparent;
 }
 
-.ltCell, .tCell, .rtCell, .lCell, .rCell, .lbCell, .rbCell, .bCell, .ltbCell, .rtbCell, .lrtCell, .lrbCell, .Cell, .tbCell
+.ltCell,
+.tCell,
+.rtCell,
+.lCell,
+.rCell,
+.lbCell,
+.rbCell,
+.bCell,
+.ltbCell,
+.rtbCell,
+.lrtCell,
+.lrbCell,
+.Cell,
+.tbCell
 {
-    background-color: rgba(0, 0, 0, 0.03) !important;
     border: none !important;
     padding: 8px 10px !important;
 }
@@ -595,7 +633,6 @@ td[valign="top"]
 .lrtbCell
 {
     font-size: 10pt;
-    background-color: #fff;
     border: none !important;
     border-top: solid thin rgba(0, 0, 0, 0.125) !important;
     border-bottom: solid thin rgba(0, 0, 0, 0.125) !important;
@@ -716,11 +753,6 @@ li.testRes > ul > li input[type="checkbox"]
     margin-right: 5px;
 }
 
-li.testRes
-{
-    border-top: thin solid rgba(0, 0, 0, 0.75);
-}
-
 li.testRes:before
 {
     width: 25px;
@@ -773,12 +805,24 @@ li.testUnknown
     border-left: #BDBDBD 4px solid;
 }
 
-.ltbSepCell, .ltbOkSepCell, .ltbHalfSepCell, .ltbWaitSepCell, .ltbXSepCell, .ltbFailSepCell, .ltbEditSepCell
+.ltbSepCell,
+.ltbOkSepCell,
+.ltbHalfSepCell,
+.ltbWaitSepCell,
+.ltbXSepCell,
+.ltbFailSepCell,
+.ltbEditSepCell
 {
     border-top-left-radius: var(--border-radius);
 }
 
-.tbSepCell, .tbOkSepCell, .tbHalfSepCell, .tbWaitSepCell, .tbXSepCell, .tbFailSepCell, .tbEditSepCell
+.tbSepCell,
+.tbOkSepCell,
+.tbHalfSepCell,
+.tbWaitSepCell,
+.tbXSepCell,
+.tbFailSepCell,
+.tbEditSepCell
 {
     padding-left: 5px;
 }
@@ -789,12 +833,6 @@ li.testUnknown
 }
 
 /** item colored header */
-
-.lrtbSepCell, .ltbSepCell, .rtbSepCell, .tbSepCell
-{
-    background-color: #e8e8e8;
-    color: #000;
-}
 
 .lrtbOkSepCell, .ltbOkSepCell, .rtbOkSepCell, .tbOkSepCell
 {
@@ -852,7 +890,6 @@ body > center > table
 {
     display: inline-block;
     padding: 7px 0;
-    color: #3c3c3c;
     font-size: 12pt;
 }
 
@@ -861,11 +898,6 @@ body > center > table
     border-bottom: solid thin rgba(0, 0, 0, 0.1);
     padding: 4px 18px;
     height: 30px;
-}
-
-body > center > table > tbody > tr:nth-child(even)
-{
-    background-color: rgba(0, 0, 0, 0.03);
 }
 
 body > center > table > tbody > tr:last-child > td
@@ -895,15 +927,7 @@ body > center > table > thead > tr > td:nth-child(3) > div > div
 
 tr.resRow td
 {
-    /*border-top: thin solid rgba(0, 0, 0, 0.125);*/
-    border-top: thin solid #eee;
     padding: 2px 8px;
-}
-
-tr.resRow:nth-child(even)
-{
-    /*background-color: rgba(0, 0, 0, 0.025);*/
-    background-color: #f8f8f8;
 }
 
 tr.resRow:hover
@@ -921,14 +945,12 @@ tr.resHdr td
 {
     background-color: rgba(0, 0, 0, 0.075);
     height: 20px;
-    color: #000000;
     padding: 2px 0;
     text-indent: 8px;
 }
 
 tr.resHdr td > a
 {
-    color: #000000;
     padding: 2px 0;
     text-indent: 8px;
     width: 100%;
@@ -941,7 +963,18 @@ tr.resHdr td > a:hover
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-tr.resStat td        { font-weight: normal; background-color: #989889; border-color: #cccccc #666666 #666666 #cccccc; border-style: solid; border-width: 1px; padding-left: 3px; padding-right: 3px; padding-top: 3px; text-align: right; }
+/*
+tr.resStat td {
+    font-weight: normal;
+    background-color: #989889;
+    border-color: #cccccc #666666 #666666 #cccccc;
+    border-style: solid;
+    border-width: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    text-align: right;
+}*/
 
 /** buttons */
 
@@ -951,30 +984,34 @@ input[type=radio]
     top: 2px;
 }
 
-input.std, input.stdDis, input.test, input.testDis, input.flt, input.fltDis, input.seek, input.seekDis, input.err
-{
-    color: #1e1e1e;
+input.std,
+input.stdDis,
+input.test,
+input.testDis,
+input.flt,
+input.fltDis,
+input.seek,
+input.seekDis,
+input.err {
     font-weight: bold;
     font-size: 12px;
-    border: thin solid rgba(0, 0, 0, 0.125);
     padding: 5px;
     min-width: 280px;
     border-radius: 2px;
 }
 
-input.std, input.test
-{
-    background-color: rgba(0, 0, 0, 0.075);
-}
-
 input.err
 {
-    background-color: #f13636;
     color: #fff;
 }
 
-.updButton, .disButton, .delButton, .insButton, .fltButton, .seekButton, div.but2 > a
-{
+.updButton,
+.disButton,
+.delButton,
+.insButton,
+.fltButton,
+.seekButton,
+div.but2 > a {
 	box-shadow: 0px 2px 3px -2px rgba(0, 0, 0, 0.175) !important;
 	border-radius: 4px;
 	border: 1px solid;
@@ -991,9 +1028,6 @@ input.err
 
 .updButton, a.butLink
 {
-	background-color: #607D8B;
-	border-color: #455A64 !important;
-	text-shadow: 0px 1px 0px #455A64;
 	outline-color: #263238;
 }
 
