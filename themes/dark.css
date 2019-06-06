@@ -2,6 +2,10 @@
 
 /** inverted shibooleth */
 
+#loadWrapper {
+    background: #2a2a2a;
+}
+
 #shib1 > td > img {
     box-sizing: border-box;
     background: url(./assets/shibboleth-inverted.png) no-repeat;
@@ -56,7 +60,6 @@ select > option {
     background: #263238;
 }
 
-
 .loginForm table {
     background-color: #252525 !important;
 }
@@ -89,6 +92,8 @@ select > option {
     border-bottom: thin solid rgba(255, 255, 255, 0.3);
 }
 
+/** header */
+
 body > table {
     background-color: #1c1e1f !important;
 }
@@ -117,7 +122,6 @@ div.subjectSelect > a > div.subject-body {
 }
 
 div.subjectSelect > a > div.subject-footer {
-
     background-color: #3b3b3b;
     border-top: thin solid #505050;
     color: #fff;
@@ -127,15 +131,17 @@ div.subjectSelect > a > div.subject-footer {
     filter: invert(95%);
 }
 
+/** item header */
+
 table.header {
     border-bottom: solid thin rgba(255, 255, 255, .175);
 }
-
 
 .outBox > table:not(.header) {
     background-color: #0e0e0e;
 }
 
+/** item body */
 
 .ltCell,
 .tCell,
@@ -156,7 +162,6 @@ table.header {
 
 .lrtbCell {
     background-color: #212121;
-    
 }
 
 .lrtbCell img {
@@ -202,6 +207,8 @@ li.testRes {
     border-top: thin solid rgba(255, 255, 255, 0.75);
 }
 
+/** item colored header */
+
 .lrtbSepCell,
 .ltbSepCell,
 .rtbSepCell,
@@ -210,6 +217,8 @@ li.testRes {
     color: #fff;
 }
 
+/** list box */
+
 .menuListDis {
     color: #a5a5a5;
 }
@@ -217,6 +226,8 @@ li.testRes {
 body > center > table > tbody > tr:nth-child(even) {
     background-color: rgba(255, 255, 255, 0.03);
 }
+
+/** results table */
 
 tr.resRow td {
     /*border-top: thin solid rgba(0, 0, 0, 0.125);*/
@@ -235,6 +246,8 @@ tr.resRow:nth-child(even) {
 tr.resHdr td > a {
     color: #fff;
 }
+
+/** buttons */
 
 input.std,
 input.stdDis,
