@@ -37,6 +37,6 @@ chrome.webRequest.onBeforeRequest.addListener(
             return { cancel: false };
         return { redirectUrl: chrome.runtime.getURL('themes/' + theme + '.css') };
     },
-    { urls: ["*://progtest.fit.cvut.cz/css.css"] },
+    { urls: ["*://progtest.fit.cvut.cz/css.css", "*://ptmock.localhost/css.css"] },
     ["blocking"]
 )
