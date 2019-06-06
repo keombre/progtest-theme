@@ -267,6 +267,7 @@ class SubjectSelect extends Logged {
                             break
                         default:
                             icon = "icon-unknown"
+                            text = ""
                     }
                 }
                 push = sels[0]
