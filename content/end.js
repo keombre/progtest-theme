@@ -1,98 +1,3 @@
-
-
-let tButton
-
-const parsePage = () => {
-
-    let styles = ''
-
-    // add selector to duplicate parrent elements
-    document.querySelectorAll("span.dupC").forEach(e => { e.parentNode.className += " dupCpar" })
-
-    // mark number of columns
-    let c = [], i = 0
-    let qsel = document.querySelector("tr.resHdr:nth-child(1)")
-    if (typeof qsel != undefined && qsel != null) {
-        qsel.childNodes.forEach(e => { c.push(i += parseInt(e.getAttribute("colspan") || 1)) })
-        c.pop()
-        c.shift()
-        c.forEach(e => {
-            styles += 'tr.resRow > td:nth-child(' + (e + 1) + ') {border-left: thin solid rgba(0, 0, 0, 0.125);font-weight: 500;}'
-        })
-
-        styles += 'tr.resRow > td:last-child {font-weight: 500;}'
-    }
-
-    let styleSheet = document.createElement("style")
-    styleSheet.type = "text/css"
-    styleSheet.innerText = styles
-    document.head.appendChild(styleSheet)
-
-    // autohide result tables
-    if (dropdown) {
-
-        // make ref solution clickable
-        let checkbox = document.querySelector('input[name="SHOW_REF"]')
-        if (checkbox) {
-            let refHead = checkbox.parentNode.parentNode
-            let refSib = refHead.nextElementSibling
-
-            while (refSib) {
-                refSib.removeAttribute('style')
-                refSib = refSib.nextElementSibling
-            }
-
-            refHead.className += " dropDownHeader"
-            refHead.addEventListener('click', toggleDropDown)
-            refHead.click()
-            checkbox.parentNode.removeChild(checkbox)
-        }
-
-        // hide the rest
-        ["rtbSepCell", "rtbOkSepCell", "rtbHalfSepCell", "rtbXSepCell", "rtbFailSepCell", "rtbEditSepCell"]
-            .forEach(n => {
-                document.querySelectorAll("td." + n + " > div.but1.w120").forEach(e => {
-                    let resHead = e.parentNode.parentNode
-                    resHead.className += " dropDownHeader"
-                    resHead.addEventListener('click', toggleDropDown)
-                    resHead.click()
-                })
-            })
-    }
-
-    // mark help checkboxes for grid
-    document.querySelectorAll('input[type="checkbox"][name]').forEach(e => {
-        e.parentNode.className += " gridHelp"
-    })
-
-    // add emoji before test results
-    document.querySelectorAll('form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child').forEach(e => {
-        let node = e.previousSibling
-        let text = node.textContent
-        if (text.includes('Úspěch')) {
-            if (e.firstElementChild.innerHTML.includes('Dosaženo: 100.00 %'))
-                node.parentElement.className += " testRes testOK"
-            else
-                node.parentElement.className += " testRes testAOK"
-        } else if (text.includes('Neúspěch') || text.includes('Program provedl neplatnou operaci a byl ukončen')) {
-            node.parentElement.className += " testRes testFailed"
-        } else {
-            node.parentElement.className += " testRes testUnknown"
-        }
-    })
-
-    document.querySelectorAll('li.testRes a').forEach(e => {
-        e.innerHTML = e.innerHTML.slice(1, -1)
-    })
-
-    // nicer progress bar
-    let progress = document.getElementById('refVal')
-    if (progress) {
-        progress.scrollIntoView({ block: "center" })
-    }
-    
-}
-
 class Err404 {
     site_body = `
 <div class="e404">
@@ -177,7 +82,7 @@ class Logged {
         this.tButton = document.getElementById('upTop')
         if (this.tButton) {
             this.tButton.addEventListener('click', (e) => {
-                e.target.removeAttribute('style')
+                this.tButton.removeAttribute('style')
                 document.body.scrollIntoView({ block: "start", behavior: "smooth" })
             })
         }
@@ -206,7 +111,7 @@ class Logged {
     }
 }
 
-class SubjectSelect extends Logged {
+class Main extends Logged {
     constructor() {
         super()
         
@@ -267,6 +172,7 @@ class SubjectSelect extends Logged {
                             break
                         default:
                             icon = "icon-unknown"
+                            title = text
                             text = ""
                     }
                 }
@@ -283,9 +189,123 @@ class SubjectSelect extends Logged {
     }
 }
 
+class Task extends Logged {
+    constructor() {
+        super()
+
+        // autohide result tables
+        if (dropdown)
+            this.autoHideResults()
+
+        // mark help checkboxes for grid
+        document.querySelectorAll('input[type="checkbox"][name]').forEach(e => {
+            e.parentNode.className += " gridHelp"
+        })
+
+        this.markResultsTable()
+
+        // nicer progress bar
+        let progress = document.getElementById('refVal')
+        if (progress) {
+            progress.scrollIntoView({ block: "center" })
+        }
+    }
+
+    markResultsTable() {
+        document.querySelectorAll('form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child').forEach(e => {
+            let node = e.previousSibling
+            let text = node.textContent
+            if (text.includes('Úspěch')) {
+                if (e.firstElementChild.innerHTML.includes('Dosaženo: 100.00 %'))
+                    node.parentElement.className += " testRes testOK"
+                else
+                    node.parentElement.className += " testRes testAOK"
+            } else if (text.includes('Neúspěch') || text.includes('Program provedl neplatnou operaci a byl ukončen')) {
+                node.parentElement.className += " testRes testFailed"
+            } else {
+                node.parentElement.className += " testRes testUnknown"
+            }
+        })
+
+        document.querySelectorAll('li.testRes a').forEach(e => {
+            e.innerHTML = e.innerHTML.slice(1, -1)
+        })
+    }
+
+    autoHideResults() {
+        // make ref solution clickable
+        let checkbox = document.querySelector('input[name="SHOW_REF"]')
+        if (checkbox) {
+            let refHead = checkbox.parentNode.parentNode
+            let refSib = refHead.nextElementSibling
+
+            while (refSib) {
+                refSib.removeAttribute('style')
+                refSib = refSib.nextElementSibling
+            }
+
+            refHead.className += " dropDownHeader"
+            refHead.addEventListener('click', toggleDropDown)
+            refHead.click()
+            checkbox.parentNode.removeChild(checkbox)
+        }
+
+        // hide the rest
+        [
+            "rtbSepCell",
+            "rtbOkSepCell",
+            "rtbHalfSepCell",
+            "rtbXSepCell",
+            "rtbFailSepCell",
+            "rtbEditSepCell"
+        ].forEach(n => {
+            document.querySelectorAll("td." + n + " > div.but1.w120").forEach(e => {
+                let resHead = e.parentNode.parentNode
+                resHead.className += " dropDownHeader"
+                resHead.addEventListener('click', toggleDropDown)
+                resHead.click()
+            })
+        })
+    }
+}
+
+class Results extends Logged {
+    constructor() {
+        super()
+
+        let styles = ''
+
+        // add selector to duplicate parrent elements
+        document.querySelectorAll("span.dupC").forEach(e => { e.parentNode.className += " dupCpar" })
+
+        // mark number of columns
+        let c = [], i = 0
+        let qsel = document.querySelector("tr.resHdr:nth-child(1)")
+        if (typeof qsel != undefined && qsel != null) {
+            qsel.childNodes.forEach(e => { c.push(i += parseInt(e.getAttribute("colspan") || 1)) })
+            c.pop()
+            c.shift()
+            c.forEach(e => {
+                styles += 'tr.resRow > td:nth-child(' + (e + 1) + ') {border-left: thin solid rgba(0, 0, 0, 0.125);font-weight: 500;}'
+            })
+
+            styles += 'tr.resRow > td:last-child {font-weight: 500;}'
+        }
+
+        let styleSheet = document.createElement("style")
+        styleSheet.type = "text/css"
+        styleSheet.innerText = styles
+        document.head.appendChild(styleSheet)
+    }
+}
+
+const args = window.location.search.substr(1).split("&").reduce((f, e) => {
+    let k = e.split("=")
+    f[k[0]] = k[1]
+    return f
+}, {})
+
 let parser
-const locations = {"unknown": -1, "err404": 0, "login": 1, "subjectSelect": 2, "subjectInfo": 3}
-let loc
 
 const preload = () => {
 
@@ -293,29 +313,33 @@ const preload = () => {
     document.body.removeAttribute('text')
 
     // 404
-    if (document.body.innerHTML == "") {
+    if (document.body.innerHTML == "")
         parser = new Err404()
-        loc = locations.err404
     // login
-    } else if (document.querySelector('select[name=UID_UNIVERSITY]') != null) {
+    else if (document.querySelector('select[name=UID_UNIVERSITY]') != null)
         parser = new Login()
-        loc = locations.login
-    // subject select
-    } else if (
-        window.location.href.includes('X=Main') ||
-        !window.location.href.includes('X=') ||
-        window.location.href.slice(-2) == 'X='
-    ) {
-        parser = new SubjectSelect()
-        loc = locations.subjectSelect
-    // other pages
-    } else {
-        parser = new Logged()
-        loc = locations.unknown
-
-        // fallback to old JS
-        parsePage()
-    }
+    else if ('X' in args)
+        switch (args['X']) {
+            case "FAQ":
+            case "Preset":
+            case "CompilersDryRuns":
+            case "Extra":
+            case "KNT":
+            case "Course":
+            case "TaskGrp":
+                parser = new Logged()
+                break
+            case "Results":
+                parser = new Results()
+            case "Task":
+                parser = new Task()
+                break
+            case "Main":
+            default:
+                parser = new Main()
+        }
+    else
+        parser = new Main()
 }
 
 if (!settingsLoaded)

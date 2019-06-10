@@ -20,7 +20,9 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
 
     if (response.theme == 'orig')
         return
-
+    
+    errorReporter()
+    
     settingsLoaded = true
     window.dispatchEvent(pttLoaded)
     
@@ -37,18 +39,32 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     addLoader()
 })
 
+const errorReporter = () => {
+    window.onerror = (event, source, lineno) => {
+        if (document.body == null)
+            return true
+        if (!source.includes('chrome-extension:'))
+            return true
+        let err = document.createElement('div')
+        err.innerHTML = event + " at " + source.substr(source.lastIndexOf('/') + 1) + ":" + lineno
+        err.classList.add('errorReporter')
+        document.body.appendChild(err)
+        return false
+    }
+}
+
 const addLoader = () => {
     let ld = document.createElement('pttloader')
     ld.innerHTML = loader
     document.children[0].appendChild(ld)
     window.addEventListener('load', () => {
-        document.getElementById('loadWrapper').style.opacity = '0'
+        document.getElementById('loadWrapper').classList.add('loadWrapperHide')
         setTimeout(() => document.getElementById('loadWrapper').style.visibility = 'hidden', 200)
     })
 
     window.addEventListener('beforeunload', () => {
         document.getElementById('loadWrapper').style.visibility = 'visible'
-        document.getElementById('loadWrapper').style.opacity = '1'
+        document.getElementById('loadWrapper').classList.remove('loadWrapperHide')
     })
     
 }

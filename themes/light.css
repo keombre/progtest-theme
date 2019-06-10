@@ -1,5 +1,9 @@
 @import "./common.css";
 
+.uniVal {
+    color: #2e2e2e;
+}
+
 #loadWrapper {
     background: #fff;
 }

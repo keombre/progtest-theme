@@ -4,6 +4,24 @@
     --border-radius: 3px;
 }
 
+.errorReporter {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: #D32F2F;
+    border: thin solid #B71C1C;
+    color: #fff;
+    padding: 1px 6px;
+    white-space: pre;
+    box-shadow: 0 0 2px 0 #707070;
+    font-size: 8pt;
+}
+
+.errorReporter:before {
+    content: "ProgTest Themes Error Reporter\A";
+    font-size: 9pt;
+}
+
 /** page loader */
 
 #loadWrapper {
@@ -19,45 +37,52 @@
     z-index: 100;
 }
 
+.loadWrapperHide {
+    opacity: 0 !important;
+}
+
+.loadWrapperHide > .anim-load {
+    animation-play-state: paused !important;
+}
+
 .anim-load {
+    animation-play-state: running;
     position: absolute;
     height: 30px;
     background: #565f7c;
     width: 30px;
-    border-radius: 7px;
+    border-radius: 3px;
     left: calc(50% - 34px);
+    transform-origin: right center;
 }
 
 @keyframes width {
     0% {
-        width: 30px;
-        left: calc(50% - 34px);
+        transform: scale(1, 1);
     }
     50% {
-        width: 80px;
-        left: calc(50% - 84px);
+        transform: scale(2.5, 1);
     }
     100% {
-        width: 30px;
-        left: calc(50% - 34px);
+        transform: scale(1, 1);
     }
 }
 
 .anim-1 {
     top: calc(50% - 93px);
     animation: 1s width infinite;
-    animation-delay: .66s;
 }
 
 .anim-2 {
     top: calc(50% - 55px);
     animation: 1s width infinite;
+    animation-delay: .33s;
 }
 
 .anim-3 {
     top: calc(50% - 18px);
     animation: 1s width infinite;
-    animation-delay: .33s;
+    animation-delay: .66s;
 }
 
 .anim-logo {
@@ -174,7 +199,6 @@ select.std.w200[name="UID_UNIVERSITY"]
 .uniVal {
     padding: 5px 0 5px 15px;
     cursor: pointer;
-    color: #2e2e2e;
 }
 
 .uniVal:hover {
@@ -217,6 +241,7 @@ select.std.w200[name="UID_UNIVERSITY"]
     left: calc(50% - 60px);
     bottom: 80px;
     cursor: pointer;
+    background-color: #009688;
 }
 
 .loginForm a.butLink:focus {
@@ -1019,10 +1044,14 @@ div.but2 > a {
 	color: #ffffff;
 	font-size: 14px;
 	font-weight: bold;
-	padding: 4px 0px;
+	padding: 4px 2px;
 	text-decoration: none;
 	width: 100%;
 	text-align: center;
+}
+
+div.but2 {
+    margin: 0 4px;
 }
 
 .updButton, a.butLink

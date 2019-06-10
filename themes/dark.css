@@ -1,5 +1,9 @@
 @import "./common.css";
 
+.uniVal {
+    color: #d6d6d6;
+}
+
 /** inverted shibooleth */
 
 #loadWrapper {
