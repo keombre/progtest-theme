@@ -18,7 +18,7 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     theme = response.theme
     dropdown = response.dropdown
 
-    if (response.theme == 'orig')
+    if (response.theme == 'orig' || response.theme == 'orig-dark')
         return
     
     errorReporter()

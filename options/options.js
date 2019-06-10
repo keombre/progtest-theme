@@ -29,5 +29,17 @@ function restore_options() {
     document.getElementById('dropdown').checked = items.autoHide;
   });
 }
+
+function hideDropdown() {
+  var dd = document.getElementById('dropdown').parentNode
+  if (document.getElementById('theme').value.includes('orig')) {
+    dd.style.visibility = "hidden";
+  } else {
+    dd.style.visibility = "initial";
+  }
+}
+
+hideDropdown()
+document.getElementById('theme').addEventListener('change', hideDropdown)
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);

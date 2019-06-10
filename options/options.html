@@ -2,39 +2,62 @@
 <html>
 <head>
 <style>
-body
-{
-  width: 120px;
-  height: 110px;
-  text-align: center;
+body {
+  width: 150px;
+    height: 175px;
+    text-align: center;
+    margin: 0;
 }
 
-#theme
-{
-  margin-top: 8px;
-  width: 70px;
+.header {
+  height: 35px;
+  text-align: left;
+  background-color: #eee;
+  user-select: none;
 }
-#status
-{
+
+.header > img {
+  height: 25px;
+  padding: 5px 10px;
+  vertical-align: bottom;
+}
+
+.header > span {
+  font-size: 26px;
+  font-weight: 100;
+}
+
+#status {
   min-height: 23px;
 }
-#save
-{
+
+#save {
   padding: 1px 0;
   width: 55px;
 }
-#dropdown
-{
+
+#dropdown {
   position: relative;
   top: 2px;
 }
+
+.dropdown_c {
+  margin-top: 5px;
+}
+
 </style>
 </head>
 <body>
-
+  <div class="header">
+    <img src="../themes/assets/favicon.ico">
+    <span>Themes</span>
+  </div>
+<p>
 Select your theme
+</p>
 <select id="theme">
   <option value="orig">Original</option> 
+  <option value="orig-dark">Original Dark</option> 
   <option value="light">Light</option>
   <option value="dark">Dark</option>
 </select>
