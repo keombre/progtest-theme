@@ -1,3 +1,5 @@
+'use strict';
+
 class Err404 {
     site_body = `
 <div class="e404">
@@ -112,50 +114,80 @@ class Logged {
 }
 
 class Main extends Logged {
+    
     constructor() {
         super()
+
+        const subjects = document.createElement('div')
+        subjects.classList.add('subjectSelect')
         
+        const settings = document.createElement('div')
+        settings.classList.add('subjectSelect')
+        settings.classList.add('mainInfo');
+
+        this.orderC = 100
+
         // collect all elements
-        let elems = []
-        document.querySelectorAll("body > center > table > tbody > tr").forEach(e => {
-            let ch = e.children[1].children[0].children[0].children[0]
-            elems.push([e.children[0].innerText, ch.href, ch.innerText])
-        })
+        this.getSubjects().forEach(e => {
 
-        document.querySelector('center').outerHTML = '<div class="subjectSelect"></div><div class="subjectSelect mainInfo"></div>'
-        let sels = document.querySelectorAll('div.subjectSelect')
-
-        elems.forEach(e => {
-            let title = e[2], orderC = 100
-
-            let [order, icon, text = e[0], footer = "", push = sels[1]] = ({
-                "Nastavení": [10001, 'icon-setting', ""],
-                "Překladače": [10000, 'icon-compile'],
-                "FAQ": [10002, 'icon-faq', "Často kladené dotazy"]
-            })[title] || (() => {
-                let bracketPos = e[0].lastIndexOf('(')
-                if (bracketPos == -1) return [orderC++, 'icon-unknown', e[0], ""]
-                else return [
-                    100 - (e[0].substr(bracketPos+1, 2) * 2) - e[0].includes('LS)'),
-                    ({
-                        "BI-PA1": "icon-pa1",
-                        "BI-PA2": "icon-pa2",
-                        "BI-PS1": "icon-ps1",
-                        "BI-OSY": "icon-osy"
-                    })[title] || "icon-unknown",
-                    e[0].substr(0, bracketPos-1),
-                    e[0].slice(bracketPos+1, -1)
-                ]
-            })().concat(sels[0])
+            const [
+                order,
+                icon,
+                text = e[0],
+                footer = "",
+                push = settings
+            ] = this.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
             
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}">
-    <div class="subject-title">${title}</div>
+    <div class="subject-title">${e[2]}</div>
     <div class="icon ${icon}"></div>
     <div class="subject-body">${text}</div>
     ${footer ? `<div class="subject-footer">${footer}</div>` : ''}
 </a>`
         })
+
+        document.querySelector('center').outerHTML = subjects.outerHTML + settings.outerHTML
+    }
+
+    parseSettings(title) {
+        return ({
+            "Nastavení": [10001, 'icon-setting', ""],
+            "Překladače": [10000, 'icon-compile'],
+            "FAQ": [10002, 'icon-faq', "Často kladené dotazy"]
+        })[title]
+    }
+
+    parseSubject(title, text) {
+
+        const bracketPos = text.lastIndexOf('(')
+        if (bracketPos == -1)
+            return [this.orderC++, 'icon-unknown', text, ""]
+        else
+            return [
+                100 - (text.substr(bracketPos+1, 2) * 2) - text.includes('LS)'),
+                this.getSubjectIcon(title),
+                text.substr(0, bracketPos-1),
+                text.slice(bracketPos+1, -1)
+            ]
+    }
+
+    getSubjectIcon(title) {
+        return ({
+            "BI-PA1": "icon-pa1",
+            "BI-PA2": "icon-pa2",
+            "BI-PS1": "icon-ps1",
+            "BI-OSY": "icon-osy"
+        })[title] || "icon-unknown"
+    }
+
+    getSubjects() {
+        return [...document.querySelectorAll("body > center > table > tbody > tr")].map(this.getSubjectNames)
+    }
+
+    getSubjectNames(e) {
+        const ch = e.children[1].children[0].children[0].children[0]
+        return [e.children[0].innerText, ch.href, ch.innerText]
     }
 }
 
