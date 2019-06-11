@@ -27,6 +27,7 @@ function restore_options() {
   }, function (items) {
     document.getElementById('theme').value = items.selectedTheme;
     document.getElementById('dropdown').checked = items.autoHide;
+    hideDropdown()
   });
 }
 
@@ -39,7 +40,6 @@ function hideDropdown() {
   }
 }
 
-hideDropdown()
 document.getElementById('theme').addEventListener('change', hideDropdown)
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);

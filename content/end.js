@@ -335,8 +335,16 @@ const preload = () => {
                 parser = new Task()
                 break
             case "Main":
-            default:
                 parser = new Main()
+                break
+            default:
+                // determine if site is really main
+                if (document.querySelector('span.navLink > a.navLink[href="?X=Main"]'))
+                    parser = new Logged()
+                else
+                    parser = new Main()
+                
+                
         }
     else
         parser = new Main()
