@@ -117,67 +117,37 @@ class Main extends Logged {
         
         // collect all elements
         let elems = []
-        document.querySelectorAll("body > center > table > tbody > tr").forEach(e =>
-            elems.push([e.children[0].innerText, e.children[1].children[0].children[0].children[0].href])
-        )
+        document.querySelectorAll("body > center > table > tbody > tr").forEach(e => {
+            let ch = e.children[1].children[0].children[0].children[0]
+            elems.push([e.children[0].innerText, ch.href, ch.innerText])
+        })
 
         document.querySelector('center').outerHTML = '<div class="subjectSelect"></div><div class="subjectSelect mainInfo"></div>'
         let sels = document.querySelectorAll('div.subjectSelect')
-        let push
 
         elems.forEach(e => {
-            let title = e[0], order, text = "", icon, footer, orderC = 100
-            if (title.includes('Nastavení')) {
-                order = 10001
-                icon = 'icon-setting'
-                push = sels[1]
-            } else if (title.includes('Kompilátory')) {
-                text = title
-                title = "Cloud compute"
-                order = 10000
-                icon = 'icon-compile'
-                push = sels[1]
-            } else if (title.includes('FAQ')) {
-                order = 10002
-                icon = 'icon-faq'
-                text = 'Často kladené dotazy'
-                push = sels[1]
-            } else {
-                // determine order
-                let bracketPos = title.lastIndexOf('(')
-                
-                if (bracketPos == -1) {
-                    order = orderC++
-                    icon = 'icon-unknown'
-                } else {
-                    order = 100 - (title.substr(bracketPos+1, 2) * 2) - title.includes('LS)')
-                    text = title.substr(0, bracketPos-1)
-                    footer = title.slice(bracketPos+1, -1)
-                    switch (text) {
-                        case "Programování a algoritmizace I":
-                            title = "BI-PA1"
-                            icon = "icon-pa1"
-                            break
-                        case "Programování a algoritmizace II":
-                            title = "BI-PA2"
-                            icon = "icon-pa2"
-                            break
-                        case "Programování v shellu 1":
-                            title = "BI-PS1"
-                            icon = "icon-ps1"
-                            break
-                        case "Operační systémy":
-                            title = "BI-OSY"
-                            icon = "icon-osy"
-                            break
-                        default:
-                            icon = "icon-unknown"
-                            title = text
-                            text = ""
-                    }
-                }
-                push = sels[0]
-            }
+            let title = e[2], orderC = 100
+
+            let [order, icon, text = e[0], footer = "", push = sels[1]] = ({
+                "Nastavení": [10001, 'icon-setting', ""],
+                "Překladače": [10000, 'icon-compile'],
+                "FAQ": [10002, 'icon-faq', "Často kladené dotazy"]
+            })[title] || (() => {
+                let bracketPos = e[0].lastIndexOf('(')
+                if (bracketPos == -1) return [orderC++, 'icon-unknown', e[0], ""]
+                else return [
+                    100 - (e[0].substr(bracketPos+1, 2) * 2) - e[0].includes('LS)'),
+                    ({
+                        "BI-PA1": "icon-pa1",
+                        "BI-PA2": "icon-pa2",
+                        "BI-PS1": "icon-ps1",
+                        "BI-OSY": "icon-osy"
+                    })[title] || "icon-unknown",
+                    e[0].substr(0, bracketPos-1),
+                    e[0].slice(bracketPos+1, -1)
+                ]
+            })().concat(sels[0])
+            
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}">
     <div class="subject-title">${title}</div>
