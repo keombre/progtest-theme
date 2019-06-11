@@ -956,7 +956,7 @@ tr.resRow td
 
 tr.resRow:hover
 {
-    background-color: rgba(0, 0, 0, 0.125);
+    background-color: rgba(0, 0, 0, 0.125) !important;
 }
 
 tr.resHdr td

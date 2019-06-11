@@ -206,9 +206,8 @@ class Task extends Logged {
 
         // nicer progress bar
         let progress = document.getElementById('refVal')
-        if (progress) {
-            progress.scrollIntoView({ block: "center" })
-        }
+        if (progress)
+            setTimeout(() => progress.scrollIntoView({ block: "center" }), 10)
     }
 
     markResultsTable() {
@@ -331,7 +330,10 @@ const preload = () => {
                 break
             case "Results":
                 parser = new Results()
+            case "Compiler":
+            case "DryRun":
             case "Task":
+            case "TaskU":
                 parser = new Task()
                 break
             case "Main":
