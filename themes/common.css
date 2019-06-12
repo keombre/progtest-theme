@@ -606,12 +606,16 @@ div.subjectSelect > a >div.subject-footer {
     overflow: hidden;
 }
 
+.course_grp > *:nth-child(even) {
+    background: rgba(0, 0, 0, 0.025) !important;
+}
+
 span.course_title {
     display: block;
-    font-size: 20pt;
+    font-size: 18pt;
     font-weight: 100;
-    border-bottom: 1px solid #afafaf;
-    padding: 9px 15px 9px 14px;
+    border-bottom: 1px solid;
+    padding: 7px 0 7px 11px;
     color: #fff;
     text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
 }
@@ -711,7 +715,7 @@ span.course_link_deadline {
 }
 
 span.course_title::before {
-    font-size: 17pt;
+    font-size: 15pt;
     margin-right: 7px;
     position: relative;
     top: -2px;
@@ -730,7 +734,7 @@ span.course_title::before {
 }
 
 .course_tasks_extra_grp span.course_title::before {
-    content: "💻";
+    content: "☘️";
 }
 
 .course_sem_grp span.course_title::before {
