@@ -575,9 +575,26 @@ div.subjectSelect > a >div.subject-footer {
 .course_container {
     display: grid;
     grid-gap: 20px 35px;
-    grid-template-columns: repeat(auto-fill, 330px);
+    grid-template-columns: repeat(4, 330px);
     justify-content: center;
-    padding: 0 2%;
+}
+
+@media only screen and (max-width: 1500px) {
+    .course_container {
+        grid-template-columns: repeat(3, 330px);
+    }
+}
+
+@media only screen and (max-width: 1150px) {
+    .course_container {
+        grid-template-columns: repeat(2, 330px);
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .course_container {
+        grid-template-columns: repeat(1, 330px);
+    }
 }
 
 .course_grp {
@@ -697,7 +714,7 @@ span.course_title::before {
     font-size: 17pt;
     margin-right: 7px;
     position: relative;
-    top: -3px;
+    top: -2px;
 }
 
 .course_tasks_grp span.course_title::before {
