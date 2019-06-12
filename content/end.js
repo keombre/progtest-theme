@@ -300,6 +300,143 @@ class Results extends Logged {
     }
 }
 
+class Course extends Logged {
+    constructor() {
+        super()
+
+        this.createContainers()
+
+        this.getTasks().forEach(e =>
+            eval(`this.${e.type}`).innerHTML += this.createLink(e)
+        )
+        
+        let container = document.createElement('div')
+        container.classList.add('course_container')
+
+        this.writeContainers(container)
+        document.body.replaceChild(container, document.querySelector('center'))
+
+        let styleSheet = document.createElement("style")
+        styleSheet.type = "text/css"
+        styleSheet.innerText = this.createSpanningStylesheet(container)
+        document.head.appendChild(styleSheet)
+    }
+
+    createSpanningStylesheet(container) {
+        let stylesheet = ""
+        for (let elm of container.children)
+            if (elm.classList.item(0) != "course_results_grp")
+                stylesheet += `.${elm.classList.item(0)} {grid-row: span ${elm.childElementCount};}`
+        return stylesheet
+    }
+
+    getContainerNames() {
+        return ["tasks", "tasks_extra", "exams", "sem", "tests", "results", "extras", "unknown"]
+    }
+
+    createContainers() {
+        this.getContainerNames().forEach(e => {
+            eval(`this.${e} = document.createElement('div')`)
+            eval(`this.${e}`).classList.add(`course_${e}_grp`)
+            eval(`this.${e}`).classList.add(`course_grp`)
+            eval(`this.${e}`).innerHTML += this.createTitle(e)
+        })
+    }
+
+    createTitle(name) {
+        const text = ({
+            "tasks": "Domácí úlohy",
+            "tasks_extra": "Soutěžní úlohy",
+            "exams": "Zkouška",
+            "sem": "Semestrální práce",
+            "tests": "Znalostní testy",
+            "extras": "Extra",
+            "unknown": "Neznámá kategorie"
+        })[name]
+        if (text)
+            return `<span class="course_title">${text}</span>`
+        else
+            return "<span></span>"
+    }
+
+    writeContainers(elem) {
+        this.getContainerNames().forEach(e => {
+            const text = eval(`this.${e}`)
+            if (text.childElementCount > 1)
+                elem.innerHTML += text.outerHTML
+        })
+    }
+
+    createLink(entry) {
+        let ret = ""
+        ret += entry.link ? 
+            `<a href="${entry.link}" class="course_link${entry.active ? '' : ' course_disabled'}">` :
+            `<span class="course_link${entry.active ? '' : ' course_disabled'}">`
+        ret += `<span class="course_link_name">${entry.name}</span>`
+        ret += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
+        ret += entry.deadline ? `<span class="course_link_deadline">${entry.deadline}</span>` : ''
+        ret += entry.link ? `</a>` : `</span>`
+        return ret
+    }
+
+    getTasks() {
+        return [...document.querySelectorAll("table.topLayout > tbody > tr")].map(e => {
+            const name = e.children[0].innerText
+            let type = ({
+                "Zahřívací": "tasks",
+                "Domácí": "tasks",
+                "Soutěžní": "tasks_extra",
+                "Semestrální": "sem",
+                "Znalostní": "tests",
+                "Zkouška": "exams",
+                "Cvičení": "extras",
+                "Práce": "extras",
+                "Checkpoint": "extras",
+                "Code": "extras",
+                "Výsledky": "results"
+            })[name.replace(/ .*/,'')] || "unknown"
+
+            if (name.includes('Teorie') || name.includes('Test'))
+                type = "exams"
+            
+            // PS1 naming scheme
+            else if (name.includes('. test'))
+                type = "tests"
+            else if (name.includes('domácí cvičení'))
+                type = "tasks"
+            else if (name.includes('Checkpoint'))
+                type = "sem"
+
+            const active = !e.children[0].children[0].classList.contains('menuListDis')
+            if (e.childElementCount == 4) {
+                let link = e.children[3].querySelector('a.butLink')
+                let deadline = e.children[2].innerText
+                if (deadline.includes(' 23:59:59'))
+                    deadline = deadline.substr(0, deadline.lastIndexOf(' '))
+
+                return {
+                    type,
+                    name,
+                    active,
+                    "score": e.children[1].innerText,
+                    deadline,
+                    "link": link && link.href
+                }
+            } else if (e.childElementCount == 2) {
+                let link = e.children[1].querySelector('a.butLink')
+                return {
+                    type,
+                    name,
+                    active,
+                    "score": null,
+                    "deadline": null,
+                    "link": link && link.href
+                }
+            }
+        })
+    }
+}
+
 const args = window.location.search.substr(1).split("&").reduce((f, e) => {
     let k = e.split("=")
     f[k[0]] = k[1]
@@ -326,9 +463,11 @@ const preload = () => {
             case "CompilersDryRuns":
             case "Extra":
             case "KNT":
-            case "Course":
             case "TaskGrp":
                 parser = new Logged()
+                break
+            case "Course":
+                parser = new Course()
                 break
             case "Results":
                 parser = new Results()
