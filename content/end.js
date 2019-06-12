@@ -93,23 +93,33 @@ class Logged {
         
         if (typeof this.header != "undefined" && this.header != null) {
             window.onscroll = this.scrollCheck.bind(this)
-            this.scrollCheck()
+            window.addEventListener('load', this.scrollCheck.bind(this))
         }
+
+        window.addEventListener('beforeunload', this.scrollHigh.bind(this))
     }
 
     scrollCheck() {
-        if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) {
-            if (this.header && !this.header.getAttribute('style'))
-                this.header.style.padding = "0px 16px";
-            if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll))
-                this.tButton.style.transform = "scale(1)"
-        } else {
-            if (this.header && this.header.getAttribute('style'))
-                this.header.removeAttribute("style")
-            if (this.tButton && this.tButton.getAttribute('style'))
-                this.tButton.removeAttribute('style')
-        }
+        if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40)
+            this.scrollLow()
+        else
+            this.scrollHigh()
+
         this.oldScroll = window.scrollY;
+    }
+
+    scrollHigh() {
+        if (this.header && this.header.getAttribute('style'))
+            this.header.removeAttribute("style")
+        if (this.tButton && this.tButton.getAttribute('style'))
+            this.tButton.removeAttribute('style')
+    }
+
+    scrollLow() {
+        if (this.header && !this.header.getAttribute('style'))
+            this.header.style.padding = "0px 16px";
+        if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll))
+            this.tButton.style.transform = "scale(1)"
     }
 }
 
