@@ -107,6 +107,31 @@ div.subjectSelect > a >div.subject-footer {
     color: #000;
 }
 
+/** task select */
+
+.course_grp {
+    border: thin solid #d1d1d1;
+    background-color: #fff;
+}
+
+.course_grp > *:nth-child(even) {
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
+.course_link {
+    background: #fff !important;
+    color: #424242;
+}
+
+a.course_link:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.course_link.course_disabled {
+    border-left: 2px solid #b0b0b0 !important;
+    color: #616161;
+}
+
 /** item header */
 
 table.header

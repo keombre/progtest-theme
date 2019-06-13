@@ -135,6 +135,35 @@ div.subjectSelect > a > div.subject-footer {
     filter: invert(95%);
 }
 
+/** task select */
+
+.course_grp {
+    border: thin solid #505050;
+    background-color: #2d2d2d;
+}
+
+.course_grp > *:nth-child(even) {
+    background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.course_grp a {
+    color: #fff;
+}
+
+.course_link {
+    background: #2d2d2d !important;
+    color: #fff;
+}
+
+a.course_link:hover {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.course_link.course_disabled {
+    border-left: 2px solid #424242 !important;
+    color: #9E9E9E;
+}
+
 /** item header */
 
 table.header {

@@ -598,16 +598,10 @@ div.subjectSelect > a >div.subject-footer {
 }
 
 .course_grp {
-    background: #fff;
     border-radius: 5px;
-    border: thin solid #d8d8d8;
-    box-shadow: 0 2px 4px -2px #8b8b8b;
+    box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.25);;
     height: fit-content;
     overflow: hidden;
-}
-
-.course_grp > *:nth-child(even) {
-    background: rgba(0, 0, 0, 0.025) !important;
 }
 
 span.course_title {
@@ -623,21 +617,13 @@ span.course_title {
 .course_link {
     display: block;
     font-size: 13pt;
-    color: #424242;
     position: relative;
     padding: 6px 0 6px 13px;
     border-left: 2px solid transparent;
     font-weight: 500;
-    background: #fff !important;
-}
-
-a.course_link:hover {
-    background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 .course_link.course_disabled {
-    color: #616161;
-    border-left: 2px solid #b0b0b0 !important;
     font-weight: 400;
 }
 
