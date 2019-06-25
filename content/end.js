@@ -290,7 +290,8 @@ class Task extends Logged {
         let storage = window.localStorage
         if (!storage) return
 
-        let task = btoa(window.location.search)
+        let params = window.location.search.split('&')
+        let task = btoa((params[1] || '') + (params[2] || '') + (params[3] || ''))
 
         if (document.getElementById('refProgress')) {
             storage.setItem('upload', true)
