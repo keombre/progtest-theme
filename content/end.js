@@ -321,7 +321,7 @@ class Course extends Logged {
         this.createContainers()
 
         this.getTasks().forEach(e =>
-            eval(`this.${e.type}`).innerHTML += this.createLink(e)
+            eval(`this.${e.type}`).appendChild(this.createLink(e))
         )
 
         let container = document.createElement('div')
@@ -329,25 +329,16 @@ class Course extends Logged {
         
         this.writeContainers(container)
         document.body.replaceChild(container, document.querySelector('center'))
-        
-        this.bindTaskLinks()
+
+        document.addEventListener('keydown', e => {
+            if (e.key == "Escape")
+                this.hideModal()
+        })
 
         let styleSheet = document.createElement("style")
         styleSheet.type = "text/css"
         styleSheet.innerText = this.createSpanningStylesheet(container)
         document.head.appendChild(styleSheet)
-    }
-
-    bindTaskLinks() {
-        [...document.querySelector('.course_tasks_grp').children].forEach((e, i) => {
-            if (!i) return
-            e.addEventListener('click', this.taskLink.bind(this))
-        })
-        
-        document.addEventListener('keydown', e => {
-            if (e.key == "Escape")
-                this.hideModal()
-        })
     }
 
     createSpanningStylesheet(container) {
@@ -367,7 +358,7 @@ class Course extends Logged {
             eval(`this.${e} = document.createElement('div')`)
             eval(`this.${e}`).classList.add(`course_${e}_grp`)
             eval(`this.${e}`).classList.add(`course_grp`)
-            eval(`this.${e}`).innerHTML += this.createTitle(e)
+            eval(`this.${e}`).appendChild(this.createTitle(e))
         })
     }
 
@@ -381,29 +372,36 @@ class Course extends Logged {
             "extras": "Extra",
             "unknown": "Neznámá kategorie"
         })[name]
-        if (text)
-            return `<span class="course_title">${text}</span>`
-        else
-            return "<span></span>"
+        let elem = document.createElement('span')
+        if (text) {
+            elem.classList.add('course_title')
+            elem.innerText = text
+        }
+        return elem
     }
 
     writeContainers(elem) {
         this.getContainerNames().forEach(e => {
             const text = eval(`this.${e}`)
             if (text.childElementCount > 1)
-                elem.innerHTML += text.outerHTML
+                elem.appendChild(text)
         })
     }
 
     createLink(entry) {
-        let ret = ""
-        ret += entry.link ?
-            `<a href="${entry.link}" class="course_link${entry.active ? '' : ' course_disabled'}">` :
-            `<span class="course_link${entry.active ? '' : ' course_disabled'}">`
-        ret += `<span class="course_link_name">${entry.name}</span>`
-        ret += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
-        ret += entry.deadline ? `<span class="course_link_deadline">${entry.deadline}</span>` : ''
-        ret += entry.link ? `</a>` : `</span>`
+        let ret
+        if (entry.link) {
+            ret = document.createElement('a')
+            ret.href = entry.link
+            ret.classList.add('course_link', entry.active ? null : 'course_disabled')
+            ret.addEventListener('click', this.taskLink.bind(this))
+        } else {
+            ret = document.createElement('span')
+            ret.classList.add('course_link', entry.active ? null : 'course_disabled')
+        }
+        ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
+        ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
+        ret.innerHTML += entry.deadline ? `<span class="course_link_deadline">${entry.deadline}</span>` : ''
         return ret
     }
 
