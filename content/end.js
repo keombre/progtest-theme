@@ -286,7 +286,7 @@ class Task extends Logged {
     }
 
     easterEgg() {
-        // play Portal 2 button sound on successful task submission (you are welcome ;) )
+        // play Portal 2 turrent sound on successful task submission (you are welcome ;) )
         let storage = window.localStorage
         if (!storage) return
 
@@ -300,8 +300,7 @@ class Task extends Logged {
         } else if (storage.getItem('upload') == "true" && storage.getItem('task') == task) {
             // upload ended and ptt has never seen this page before (yay!)
             if (document.querySelector("form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell")) {
-                // dammit Google!! Why can't I simply autoplay and YouTube can?!
-                document.body.innerHTML += `<iframe src="https://i1.theportalwiki.net/img/a/a5/Portal2_sfx_button_positive.m4a" allow="autoplay" style="border: none; height: 0;"></iframe>`
+                document.body.innerHTML += `<iframe src="${chrome.extension.getURL('./themes/assets/turret.ogg')}" allow="autoplay" style="border: none; height: 0;"></iframe>`
             }
         }
         storage.setItem('upload', false)
