@@ -132,6 +132,53 @@ a.course_link:hover {
     color: #616161;
 }
 
+.modal {
+    background: #fff;
+    box-shadow: 0 5px 30px #494949;
+    border: thin solid #ababab;
+}
+
+.modal-close {
+    background: #E0E0E0;
+}
+
+.modal-close:hover {
+    background: #BDBDBD;
+}
+
+.modal-header {
+    background: #EEEEEE;
+    border-bottom: thin solid #ababab;
+}
+
+.modal-score-my::after {
+    color: #8b8b8b;
+}
+
+.modal-score-max {
+    color: #525252;
+}
+
+.modal-deadline-late {
+    color: #a00000;
+}
+
+.modal-line {
+    color: #000;
+}
+
+.modal-line:hover {
+    background: #E0E0E0;
+}
+
+.mtask-score-my::after {
+    color: #8b8b8b;
+}
+
+.mtask-score-max {
+    color: #525252;
+}
+
 /** item header */
 
 table.header

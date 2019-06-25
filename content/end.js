@@ -10,7 +10,7 @@ class Err404 {
 
     constructor() {
         document.title = "404 | ProgTest";
-        
+
         let link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
@@ -51,7 +51,7 @@ class Login {
             })
 
             uniselect.children[0].setAttribute('active', 'true')
-            
+
             l_form.appendChild(uniselect)
 
             // add title mover
@@ -90,7 +90,7 @@ class Logged {
         }
 
         this.header = document.querySelector("body > table")
-        
+
         if (typeof this.header != "undefined" && this.header != null) {
             window.onscroll = this.scrollCheck.bind(this)
             window.addEventListener('load', this.scrollCheck.bind(this))
@@ -124,13 +124,13 @@ class Logged {
 }
 
 class Main extends Logged {
-    
+
     constructor() {
         super()
 
         const subjects = document.createElement('div')
         subjects.classList.add('subjectSelect')
-        
+
         const settings = document.createElement('div')
         settings.classList.add('subjectSelect')
         settings.classList.add('mainInfo');
@@ -147,7 +147,7 @@ class Main extends Logged {
                 footer = "",
                 push = settings
             ] = this.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
-            
+
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}">
     <div class="subject-title">${e[2]}</div>
@@ -175,10 +175,10 @@ class Main extends Logged {
             return [this.orderC++, 'icon-unknown', text, ""]
         else
             return [
-                100 - (text.substr(bracketPos+1, 2) * 2) - text.includes('LS)'),
+                100 - (text.substr(bracketPos + 1, 2) * 2) - text.includes('LS)'),
                 this.getSubjectIcon(title),
-                text.substr(0, bracketPos-1),
-                text.slice(bracketPos+1, -1)
+                text.substr(0, bracketPos - 1),
+                text.slice(bracketPos + 1, -1)
             ]
     }
 
@@ -231,7 +231,11 @@ class Task extends Logged {
                     node.parentElement.className += " testRes testOK"
                 else
                     node.parentElement.className += " testRes testAOK"
-            } else if (text.includes('Neúspěch') || text.includes('Program provedl neplatnou operaci a byl ukončen')) {
+            } else if (
+                text.includes('Neúspěch') ||
+                text.includes('Program provedl neplatnou operaci a byl ukončen') ||
+                text.includes('Program překročil přidělenou maximální')
+            ) {
                 node.parentElement.className += " testRes testFailed"
             } else {
                 node.parentElement.className += " testRes testUnknown"
@@ -319,17 +323,31 @@ class Course extends Logged {
         this.getTasks().forEach(e =>
             eval(`this.${e.type}`).innerHTML += this.createLink(e)
         )
-        
+
         let container = document.createElement('div')
         container.classList.add('course_container')
-
+        
         this.writeContainers(container)
         document.body.replaceChild(container, document.querySelector('center'))
+        
+        this.bindTaskLinks()
 
         let styleSheet = document.createElement("style")
         styleSheet.type = "text/css"
         styleSheet.innerText = this.createSpanningStylesheet(container)
         document.head.appendChild(styleSheet)
+    }
+
+    bindTaskLinks() {
+        [...document.querySelector('.course_tasks_grp').children].forEach((e, i) => {
+            if (!i) return
+            e.addEventListener('click', this.taskLink.bind(this))
+        })
+        
+        document.addEventListener('keydown', e => {
+            if (e.key == "Escape")
+                this.hideModal()
+        })
     }
 
     createSpanningStylesheet(container) {
@@ -379,7 +397,7 @@ class Course extends Logged {
 
     createLink(entry) {
         let ret = ""
-        ret += entry.link ? 
+        ret += entry.link ?
             `<a href="${entry.link}" class="course_link${entry.active ? '' : ' course_disabled'}">` :
             `<span class="course_link${entry.active ? '' : ' course_disabled'}">`
         ret += `<span class="course_link_name">${entry.name}</span>`
@@ -404,11 +422,11 @@ class Course extends Logged {
                 "Checkpoint": "extras",
                 "Code": "extras",
                 "Výsledky": "results"
-            })[name.replace(/ .*/,'')] || "unknown"
+            })[name.replace(/ .*/, '')] || "unknown"
 
             if (name.includes('Teorie') || name.includes('Test'))
                 type = "exams"
-            
+
             // PS1 naming scheme
             else if (name.includes('. test'))
                 type = "tests"
@@ -420,9 +438,7 @@ class Course extends Logged {
             const active = !e.children[0].children[0].classList.contains('menuListDis')
             if (e.childElementCount == 4) {
                 let link = e.children[3].querySelector('a.butLink')
-                let deadline = e.children[2].innerText
-                if (deadline.includes(' 23:59:59'))
-                    deadline = deadline.substr(0, deadline.lastIndexOf(' '))
+                let deadline = this.trimDeadline(e.children[2].innerText)
 
                 return {
                     type,
@@ -444,6 +460,174 @@ class Course extends Logged {
                 }
             }
         })
+    }
+
+    trimDeadline(text) {
+        if (text.includes(' 23:59:59'))
+            return text.substr(0, text.lastIndexOf(' '))
+        return text
+    }
+
+    hideModal() {
+        let modal = document.querySelector('.modal')
+        if (modal) {
+            modal.classList.remove('modal-show')
+            modal.classList.add('modal-hide')
+        }
+    }
+
+    taskLink(event) {
+        // skip middle button & control+click
+        if (event.which != 1 || event.ctrlKey)
+            return true
+        
+        let target = event.target
+        while (target.getAttribute('href') == null) {
+            target = target.parentElement
+        }
+        this.getTaskGroups(target.getAttribute('href'))
+        event.preventDefault()
+        event.stopPropagation()
+        return false
+    }
+
+    getTaskGroups(link) {
+        fetch(link).then(e => {
+            if (!e.ok || e.redirected)
+                return Promise.reject()
+            return e.text()
+        })
+        .then(this.parseTaskGrp.bind(this))
+        //.then(this.checkSingleLink.bind(this))
+        .then(this.createModal.bind(this))
+        .catch(() => window.location.assign(link))
+    }
+/*
+    // not stable enough
+    checkSingleLink(data) {
+        if (data.tasks.length == 1)
+            window.location.assign(data.tasks[0].link)
+        Promise.resolve(data)
+    }
+*/
+    createModal(data) {
+        // create/get modal
+        let modal = document.querySelector('.modal')
+        if (modal == null) {
+            modal = document.createElement('div')
+            modal.classList.add('modal')
+            document.body.insertBefore(modal, document.querySelector('.course_container'))
+        }
+        modal.innerHTML = ""
+        modal.classList.remove('modal-hide')
+        modal.classList.add('modal-show')
+        let modalClose = document.createElement('div')
+        modalClose.classList.add('modal-close')
+        modalClose.innerText = '✖️'
+        modalClose.addEventListener('click', this.hideModal.bind(this))
+        modal.appendChild(modalClose)
+
+        let modalHeader = document.createElement('div')
+        modalHeader.classList.add('modal-header')
+        modalHeader.innerHTML = `
+<div class="modal-title">${data.info.title}</div>
+<div class="modal-score">
+    <span class="modal-score-my">${data.info.score}</span><span class="modal-score-max">${data.info.scoreMax}</span>
+</div>
+<div class="modal-deadline">
+    <span class="modal-deadline-norm">${data.info.deadline}</span><span class="modal-deadline-late">${data.info.lateDeadline}</span>
+</div>
+`
+        modal.appendChild(modalHeader)
+        data.tasks.forEach(task => {
+            let modalLine = document.createElement('a')
+            modalLine.classList.add('modal-line')
+            modalLine.href = task.link
+            modalLine.innerHTML = `
+<div class="mtask-title">${task.title}</div>
+<div class="mtask-sub">
+    <span class="mtask-sub-my">${task.sub}</span><span class="mtask-sub-max">/${task.subMax} </span><span class="mtask-sub-pen">(+${task.subPen})</span>
+</div>
+<div class="mtask-score">
+    <span class="mtask-score-my">${task.score}</span><span class="mtask-score-max">${task.scoreMax}</span>
+</div>
+`
+            modal.appendChild(modalLine)
+        })
+    }
+
+    parseTaskGrp(text) {
+        // sanitize page
+        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
+        let doc = new DOMParser().parseFromString(text, 'text/html')
+
+        /* data schema
+        {
+            'info': {
+                'title': '',
+                'deadline': '',
+                'lateDeadline': '',
+                'lateDeadlineInfo': '',
+                'score': '',
+                'scoreMax': '',
+                'scoreInfo': ''
+            },
+            'tasks': [
+                {
+                    'title': '',
+                    'link': '',
+                    'text': '',
+                    'sub': '',
+                    'subMax': '',
+                    'subPen': '',
+                    'score': '',
+                    'scoreMax': ''
+                }
+            ]
+        }
+        */
+
+        let data = { 'info': {}, 'tasks': [] }
+
+        // gather global task info
+        data.info['title'] = doc.querySelector("body > center").innerText.trim()
+        data.info['deadline'] = this.trimDeadline(doc.querySelector("#maintable > tbody > tr:nth-child(1) > td.tCell").innerText)
+        let deadline = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rCell > b"), score
+        if (deadline) {
+            data.info['lateDeadline'] = '(' + this.trimDeadline(deadline.innerText) + ')'
+            data.info['lateDeadlineInfo'] = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rCell").innerText.slice(data.info['lateDeadline'].length + 2, -1)
+            score = doc.querySelector("#maintable > tbody > tr:nth-child(3) > td.rbCell > b").innerText
+        } else {
+            data.info['lateDeadline'] = ""
+            data.info['lateDeadlineInfo'] = ""
+            score = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rbCell > b").innerText
+        }
+        let scoreDivPos = score.indexOf('/')
+        data.info['score'] = score.substr(0, scoreDivPos - 3)
+        data.info['scoreMax'] = score.slice(scoreDivPos + 2, -2)
+        data.info['scoreInfo'] = doc.querySelector("#maintable > tbody > tr:nth-child(3) > td.rbCell").innerText.slice(score.length + 2, -1)
+
+        // gather info about individual assignments
+        doc.querySelectorAll('#maintable').forEach((e, i) => {  // Why are there multiple elements with same id?! :-(
+            if (!i) return
+            let task = {}
+            task['title'] = e.querySelector("tbody > tr:nth-child(1) > td.tbSepCell").innerText
+            task['link'] = e.querySelector("tbody > tr:nth-child(5) > td > div > div > a").href
+            task['text'] = e.querySelector("tbody > tr:nth-child(4) > td").innerText
+            let subms = e.querySelector("tbody > tr:nth-child(2) > td.rtCell").innerText
+            let submsSl = subms.indexOf('/'), submsPl = subms.indexOf('+')
+            task['sub'] = subms.substr(0, submsSl - 1)
+            task['subMax'] = subms.substr(submsSl + 2, submsPl - submsSl - 3)
+            task['subPen'] = subms.substr(submsPl + 2)
+            let taskScore = e.querySelector("tbody > tr:nth-child(3) > td.rbCell").innerText
+            let taskScoreDiv = taskScore.indexOf('/')
+            task['score'] = taskScore.substr(0, taskScoreDiv - 3)
+            task['scoreMax'] = taskScore.slice(taskScoreDiv + 2, -2)
+
+            data.tasks.push(task)
+        })
+
+        return Promise.resolve(data)
     }
 }
 
@@ -496,8 +680,8 @@ const preload = () => {
                     parser = new Logged()
                 else
                     parser = new Main()
-                
-                
+
+
         }
     else
         parser = new Main()

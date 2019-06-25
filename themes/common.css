@@ -776,6 +776,171 @@ span.course_title::before {
     border-color: #616161;
 }
 
+.modal {
+    position: fixed;
+    top: 20%;
+    width: 50%;
+    left: 25%;
+    min-height: 50px;
+    z-index: 50;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.modal-show {
+    animation: .2s modal-slide;
+}
+
+.modal-hide {
+    animation: .2s modal-slide-reverse running;
+    visibility: hidden;
+}
+
+/* need another keyframe to restart animation */
+@keyframes modal-slide-reverse {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+        visibility: visible;
+    }
+    99% {
+        visibility: visible;
+    }
+    100% {
+        visibility: hidden;
+        opacity: 0;
+        transform: translate(0, -10px);
+    }
+}
+
+@keyframes modal-slide {
+    0% {
+        opacity: 0;
+        transform: translate(0, -10px);
+        visibility: hidden;
+    }
+    99% {
+        visibility: visible;
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .modal {
+        width: 75%;
+        left: 12.5%;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .modal {
+        width: 90%;
+        left: 5%;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    text-align: center;
+    height: 20px;
+    border-bottom-left-radius: 5px;
+    line-height: 20px;
+    cursor: pointer;
+    z-index: 500;
+}
+
+.modal-header {
+    padding: 15px;
+}
+
+.modal-title {
+    font-size: 20pt;
+    font-weight: 500;
+}
+
+.modal-score {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.modal-score-my {
+    font-size: 30pt;
+}
+
+.modal-score-my::after {
+    content: "/";
+    font-weight: 100;
+}
+
+.modal-score-max {
+    font-size: 22pt;
+    font-weight: 100;
+}
+
+.modal-deadline {
+    margin-top: 7px;
+}
+
+.modal-deadline-norm {
+    font-size: 14pt;
+    font-weight: 100;
+}
+
+.modal-deadline-late {
+    font-size: 11pt;
+    margin-left: 5pt;
+    font-weight: 100;
+}
+
+.modal-line {
+    padding: 15px;
+    display: block;
+    position: relative;
+}
+
+.mtask-title {
+    font-size: 16pt;
+    display: inline-block;
+}
+
+.mtask-score {
+    position: absolute;
+    top: 7px;
+    right: 15px;
+}
+
+.mtask-score-my {
+    font-size: 22pt;
+}
+
+.mtask-score-my::after {
+    content: "/";
+    font-weight: 100;
+}
+
+.mtask-score-max {
+    font-size: 15pt;
+    font-weight: 100;
+}
+
+.mtask-sub {
+    font-size: 10pt;
+    display: inline;
+    margin-left: 8px;
+}
+
+.mtask-sub-pen {
+    font-weight: 100;
+}
+
 /** item header */
 
 table.header
