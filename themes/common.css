@@ -904,11 +904,18 @@ span.course_title::before {
     padding: 15px;
     display: block;
     position: relative;
+    padding-right: 140px;
 }
 
 .mtask-title {
     font-size: 16pt;
-    display: inline-block;
+}
+
+.mtask-text {
+    margin-top: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .mtask-score {
@@ -933,8 +940,9 @@ span.course_title::before {
 
 .mtask-sub {
     font-size: 10pt;
-    display: inline;
-    margin-left: 8px;
+    position: absolute;
+    top: 37pt;
+    right: 15px;
 }
 
 .mtask-sub-pen {

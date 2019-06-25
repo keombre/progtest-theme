@@ -551,6 +551,7 @@ class Course extends Logged {
 <div class="mtask-score">
     <span class="mtask-score-my">${task.score}</span><span class="mtask-score-max">${task.scoreMax}</span>
 </div>
+<div class="mtask-text">${task.text}</div>
 `
             modal.appendChild(modalLine)
         })

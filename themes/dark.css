@@ -197,6 +197,7 @@ a.course_link:hover {
 
 .modal-line {
     color: #fff !important;
+    border-bottom: thin solid #333333;
 }
 
 .modal-line:hover {
