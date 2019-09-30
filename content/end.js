@@ -187,7 +187,8 @@ class Main extends Logged {
             "BI-PA1": "icon-pa1",
             "BI-PA2": "icon-pa2",
             "BI-PS1": "icon-ps1",
-            "BI-OSY": "icon-osy"
+            "BI-OSY": "icon-osy",
+            "BI-TJV": "icon-tjv"
         })[title] || "icon-unknown"
     }
 

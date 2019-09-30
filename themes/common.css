@@ -550,6 +550,10 @@ div.subjectSelect > a >div.subject-footer {
     background-image: url('./assets/icons/ps1.svg')
 }
 
+.icon-tjv {
+    background-image: url('./assets/icons/tjv.svg')
+}
+
 .icon-setting {
     background-image: url('./assets/icons/settings.svg');
 }
