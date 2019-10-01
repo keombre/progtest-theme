@@ -426,8 +426,8 @@ class Course extends Logged {
         let datestr = ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear()
         ret.classList.add(
             'course_link',
-            entry.active ? null : 'course_disabled',
-            entry.deadline == datestr || (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : null
+            entry.active ? 'course_link' : 'course_disabled',
+            entry.deadline == datestr && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link'
         )
         ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
         ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
