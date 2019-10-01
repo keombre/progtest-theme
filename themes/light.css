@@ -115,20 +115,20 @@ div.subjectSelect > a >div.subject-footer {
 }
 
 .course_grp > *:nth-child(even) {
-    background: rgba(0, 0, 0, 0.05) !important;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .course_link {
-    background: #fff !important;
+    background: #fff;
     color: #424242;
 }
 
 a.course_link:hover {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .course_link.course_disabled {
-    border-left: 2px solid #b0b0b0 !important;
+    border-left: 2px solid #b0b0b0;
     color: #616161;
 }
 

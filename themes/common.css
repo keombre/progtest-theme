@@ -739,45 +739,74 @@ span.course_title::before {
     content: "❓";
 }
 
-.course_tasks_grp .course_link,
 .course_tasks_grp span.course_title {
     background: #7cb342;
+}
+
+.course_tests_grp span.course_title {
+    background: #3f51b5;
+}
+
+.course_extras_grp span.course_title {
+    background: #FB8C00;
+}
+
+.course_tasks_extra_grp span.course_title {
+    background: #4caf50;
+}
+
+.course_sem_grp span.course_title {
+    background: #9C27B0;
+}
+
+.course_exams_grp span.course_title {
+    background: #795548;
+}
+
+.course_unknown_grp span.course_title {
+    background: #9e9e9e;
+}
+
+.course_tasks_grp .course_link,
+.course_tasks_grp span.course_title {
     border-color: #558b2f;
 }
 
 .course_tests_grp .course_link,
 .course_tests_grp span.course_title {
-    background: #3f51b5;
     border-color: #303f9f;
 }
 
 .course_extras_grp .course_link,
 .course_extras_grp span.course_title {
-    background: #FB8C00;
     border-color: #EF6C00;
 }
 
 .course_tasks_extra_grp .course_link,
 .course_tasks_extra_grp span.course_title {
-    background: #4caf50;
     border-color: #388e3c;
 }
 
 .course_sem_grp .course_link,
 .course_sem_grp span.course_title {
-    background: #9C27B0;
     border-color: #7b1fa2;
 }
 
 .course_exams_grp .course_link,
 .course_exams_grp span.course_title {
-    background: #795548;
     border-color: #5d4037;
 }
 
 .course_unknown_grp span.course_title {
-    background: #9e9e9e;
     border-color: #616161;
+}
+
+.course_deadline_today {
+    background-color: #FFC107 !important;
+}
+
+.course_deadline_today:hover {
+    background-color: #ffb300 !important;
 }
 
 .modal {

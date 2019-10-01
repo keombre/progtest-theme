@@ -418,12 +418,17 @@ class Course extends Logged {
         if (entry.link) {
             ret = document.createElement('a')
             ret.href = entry.link
-            ret.classList.add('course_link', entry.active ? null : 'course_disabled')
             ret.addEventListener('click', this.taskLink.bind(this))
         } else {
             ret = document.createElement('span')
-            ret.classList.add('course_link', entry.active ? null : 'course_disabled')
         }
+        let d = new Date()
+        let datestr = ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear()
+        ret.classList.add(
+            'course_link',
+            entry.active ? null : 'course_disabled',
+            entry.deadline == datestr || (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : null
+        )
         ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
         ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
         ret.innerHTML += entry.deadline ? `<span class="course_link_deadline">${entry.deadline}</span>` : ''

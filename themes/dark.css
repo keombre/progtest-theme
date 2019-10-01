@@ -143,7 +143,7 @@ div.subjectSelect > a > div.subject-footer {
 }
 
 .course_grp > *:nth-child(even) {
-    background: rgba(0, 0, 0, 0.1) !important;
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .course_grp a {
@@ -151,16 +151,16 @@ div.subjectSelect > a > div.subject-footer {
 }
 
 .course_link {
-    background: #2d2d2d !important;
+    background: #2d2d2d;
     color: #fff;
 }
 
 a.course_link:hover {
-    background-color: rgba(0, 0, 0, 0.2) !important;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .course_link.course_disabled {
-    border-left: 2px solid #424242 !important;
+    border-left: 2px solid #424242;
     color: #9E9E9E;
 }
 
