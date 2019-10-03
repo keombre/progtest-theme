@@ -188,7 +188,8 @@ class Main extends Logged {
             "BI-PA2": "icon-pa2",
             "BI-PS1": "icon-ps1",
             "BI-OSY": "icon-osy",
-            "BI-PJV": "icon-pjv"
+            "BI-PJV": "icon-pjv",
+            "BI-AG1": "icon-ag1"
         })[title] || "icon-unknown"
     }
 
@@ -462,6 +463,8 @@ class Course extends Logged {
                 type = "tasks"
             else if (name.includes('Checkpoint'))
                 type = "sem"
+            else if (name.includes('Úloha'))
+                type = "tasks"
 
             const active = !e.children[0].children[0].classList.contains('menuListDis')
             if (e.childElementCount == 4) {
