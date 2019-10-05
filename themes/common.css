@@ -86,12 +86,9 @@
 }
 
 .anim-logo {
-    color: #565f7c;
-    font-weight: 500;
-    font-size: 150px;
     position: absolute;
-    top: calc(50% - 150px);
-    left: calc(50% - 7px);
+    top: calc(50% - 93px);
+    left: calc(50% + 5px);
 }
 
 /** global layout */

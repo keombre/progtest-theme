@@ -8,7 +8,11 @@ const loader = `
     <div class="anim-load anim-1"></div>
     <div class="anim-load anim-2"></div>
     <div class="anim-load anim-3"></div>
-    <div class="anim-logo">P</div>
+    <svg class="anim-logo" width="18.85mm" version="1.1" viewBox="0 0 23.272 34.408" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(-91.281 -156.77)">
+        <path transform="scale(.26458)" d="m345 592.52v130.04h22.191v-46.16h23.389c26.86-0.2507 42.835-24.438 42.367-45.045-0.42142-18.58-13.702-38.75-40-38.84zm22.191 17.232h19.506c15.165 0 22.945 12.225 23.125 23.125 0.18935 11.453-10.085 25.09-23.482 25.09h-19.148z" fill="#565f7c"/>
+        </g>
+    </svg>
 </div>`
 
 
