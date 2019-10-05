@@ -222,8 +222,56 @@ class Task extends Logged {
         let progress = document.getElementById('refVal')
         if (progress)
             setTimeout(() => progress.scrollIntoView({ block: "center" }), 10)
+
+        this.replaceCountdown()
         
         this.easterEgg()
+    }
+
+    replaceCountdown() {
+        if (!document.getElementById('countdown')) return
+        // block setTimeout calls
+        let elt = document.createElement("script")
+        elt.innerHTML = "window.setCountdown();window.setCountdown = function () {};"
+        document.head.appendChild(elt)
+        
+        // rename element
+        document.getElementById('countdown').setAttribute('id', 'ptt-countdown')
+
+        // create hidden mocked element
+        let hide = document.createElement("div")
+        hide.setAttribute("id", "countdown")
+        hide.style.display = "none"
+        document.head.appendChild(hide)
+
+        let elm = document.getElementById('ptt-countdown')
+        if (elm.innerHTML == '&nbsp;') return;
+        elm.style.minWidth = "200px"
+        let deadline = parseInt(elm.innerHTML.slice(0, -4)) * 1000 + new Date().getTime()
+
+        let loop = () => {
+            let remaining = (deadline - new Date().getTime()) / 1000
+            let t = "Zbýv"
+            if (remaining > 86400) {
+                let days = parseInt(remaining / 86400)
+                t += ([
+                    "",
+                    "á <b>{} den",
+                    "ají <b>{} dny",
+                    "ají <b>{} dny",
+                    "ají <b>{} dny"
+                ][remaining / 86400] || "á <b>{} dní").replace('{}', days)
+                t += ", "
+            } else
+                t += "á <b>"
+            let hours = remaining % 86400
+            let minutes = hours % 3600
+            t += parseInt(hours / 3600) + "h, " + parseInt(minutes / 60) + "m a " + parseInt(minutes % 60) + "s</b>"
+            elm.innerHTML = t
+        }
+        
+        loop()
+        this.timerLoop = setInterval(loop, 900)
     }
 
     markResultsTable() {
