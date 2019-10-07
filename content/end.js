@@ -178,7 +178,7 @@ class Main extends Logged {
                 100 - (text.substr(bracketPos + 1, 2) * 2) - text.includes('LS)'),
                 this.getSubjectIcon(title),
                 text.substr(0, bracketPos - 1),
-                text.slice(bracketPos + 1, -1)
+                "20" + text.slice(bracketPos + 1, -1)
             ]
     }
 
@@ -189,7 +189,8 @@ class Main extends Logged {
             "BI-PS1": "icon-ps1",
             "BI-OSY": "icon-osy",
             "BI-PJV": "icon-pjv",
-            "BI-AG1": "icon-ag1"
+            "BI-AG1": "icon-ag1",
+            "BI-AAG": "icon-aag"
         })[title] || "icon-unknown"
     }
 

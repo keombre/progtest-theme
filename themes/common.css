@@ -555,6 +555,10 @@ div.subjectSelect > a >div.subject-footer {
     background-image: url('./assets/icons/ag1.svg')
 }
 
+.icon-aag {
+    background-image: url('./assets/icons/aag.svg')
+}
+
 .icon-setting {
     background-image: url('./assets/icons/settings.svg');
 }
