@@ -350,7 +350,9 @@ class Task extends Logged {
         } else if (storage.getItem('upload') == "true" && storage.getItem('task') == task) {
             // upload ended and ptt has never seen this page before (yay!)
             if (document.querySelector("form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell")) {
-                document.body.innerHTML += `<iframe src="${chrome.extension.getURL('./themes/assets/turret.ogg')}" allow="autoplay" style="border: none; height: 0;"></iframe>`
+                try {
+                    new Audio(chrome.runtime.getURL("./themes/assets/turret.ogg")).play()
+                } catch {}
             }
         }
         storage.setItem('upload', false)
