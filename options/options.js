@@ -13,7 +13,7 @@ function save_options() {
   }, function () {
     var status = document.getElementById('status');
     status.textContent = 'Option saved';
-    chrome.tabs.reload();
+    chrome.tabs.reload({bypassCache: true});
     setTimeout(function () {
       status.textContent = '';
     }, 1500);

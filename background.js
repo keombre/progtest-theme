@@ -2,8 +2,7 @@
 var theme = 'light';
 var dropdown = true
 
-chrome.runtime.onInstalled.addListener(function () {
-
+const updateConfig = () => {
     chrome.storage.sync.get({
         selectedTheme: 'light',
         autoHide: true
@@ -11,7 +10,11 @@ chrome.runtime.onInstalled.addListener(function () {
         theme = items.selectedTheme;
         dropdown = items.autoHide;
     })
-})
+}
+
+chrome.runtime.onInstalled.addListener(updateConfig)
+chrome.storage.onChanged.addListener(updateConfig)
+chrome.runtime.onStartup.addListener(updateConfig)
 
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
@@ -19,17 +22,6 @@ chrome.runtime.onMessage.addListener(
             sendResponse({ theme: theme, dropdown: dropdown })
     })
 
-chrome.storage.onChanged.addListener(
-    () => {
-        chrome.storage.sync.get({
-            selectedTheme: 'light',
-            autoHide: true
-        }, (items) => {
-            theme = items.selectedTheme;
-            dropdown = items.autoHide;
-        })
-    }
-)
 
 chrome.webRequest.onBeforeRequest.addListener(
     () => {
