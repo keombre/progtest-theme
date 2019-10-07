@@ -756,7 +756,11 @@ const preload = () => {
                 break
             default:
                 // determine if site is really main
-                if (document.querySelector('span.navLink > a.navLink[href="?X=Main"]'))
+                let navlink = document.querySelector("span.navlink") // first time login
+                if (
+                    document.querySelector('span.navLink > a.navLink[href="?X=Main"]') || (
+                    navlink && navlink.innerText.includes("Než")
+                ))
                     parser = new Logged()
                 else
                     parser = new Main()
