@@ -1,4 +1,4 @@
-out := "progtest-theme.zip"
+out := "progtest-themes.zip"
 
 current_dir := $(notdir $(shell pwd))
 

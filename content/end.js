@@ -501,7 +501,9 @@ class Course extends Logged {
                 "Práce": "extras",
                 "Checkpoint": "extras",
                 "Code": "extras",
-                "Výsledky": "results"
+                "Výsledky": "results",
+                "Úlohy": "extras",
+                "Programovací": "tasks"
             })[name.replace(/ .*/, '')] || "unknown"
 
             if (name.includes('Teorie') || name.includes('Test'))
