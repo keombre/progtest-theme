@@ -565,6 +565,9 @@ class Course extends Logged {
         if (event.which != 1 || event.ctrlKey)
             return true
         
+        if (!event.target.innerText.includes("Výsledky"))
+            this.displaySpinner()
+        
         let target = event.target
         while (target.getAttribute('href') == null) {
             target = target.parentElement
@@ -576,7 +579,6 @@ class Course extends Logged {
     }
 
     getTaskGroups(link) {
-        this.displaySpinner()
         fetch(link).then(e => {
             if (!e.ok || e.redirected)
                 return Promise.reject()
