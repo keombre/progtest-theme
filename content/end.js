@@ -574,6 +574,7 @@ class Course extends Logged {
     }
 
     getTaskGroups(link) {
+        this.displaySpinner()
         fetch(link).then(e => {
             if (!e.ok || e.redirected)
                 return Promise.reject()
@@ -583,6 +584,12 @@ class Course extends Logged {
         //.then(this.checkSingleLink.bind(this))
         .then(this.createModal.bind(this))
         .catch(() => window.location.assign(link))
+    }
+
+    displaySpinner() {
+        let spinner = document.createElement("div")
+        spinner.classList.add("modal-spinner")
+        document.body.insertBefore(spinner, document.querySelector('.course_container'))
     }
 /*
     // not stable enough
@@ -621,6 +628,8 @@ class Course extends Logged {
 </div>
 `
         modal.appendChild(modalHeader)
+        let modalBody = document.createElement('div')
+        modalBody.classList.add("modal-body")
         data.tasks.forEach(task => {
             let modalLine = document.createElement('a')
             modalLine.classList.add('modal-line')
@@ -635,8 +644,12 @@ class Course extends Logged {
 </div>
 <div class="mtask-text">${task.text}</div>
 `
-            modal.appendChild(modalLine)
+            modalBody.appendChild(modalLine)
         })
+        let spinner = document.getElementsByClassName("modal-spinner")[0]
+        if (spinner)
+            spinner.parentNode.removeChild(spinner)
+        modal.appendChild(modalBody)
     }
 
     parseTaskGrp(text) {

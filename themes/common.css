@@ -816,7 +816,7 @@ span.course_title::before {
 
 .modal {
     position: fixed;
-    top: 20%;
+    top: 150px;
     width: 50%;
     left: 25%;
     min-height: 50px;
@@ -832,6 +832,21 @@ span.course_title::before {
 .modal-hide {
     animation: .2s modal-slide-reverse running;
     visibility: hidden;
+}
+
+.modal-body {
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+}
+
+.modal-spinner {
+    background: url(./assets/spinner.svg), radial-gradient(ellipse at center, #fffa 40%,#fff0 70%);
+    position: absolute;
+    top: calc(50% - 100px);
+    left: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
+    z-index: 1000;
 }
 
 /* need another keyframe to restart animation */
