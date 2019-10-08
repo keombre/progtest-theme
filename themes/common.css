@@ -846,7 +846,7 @@ span.course_title::before {
     left: calc(50% - 100px);
     width: 200px;
     height: 200px;
-    z-index: 1000;
+    z-index: 99;
 }
 
 /* need another keyframe to restart animation */

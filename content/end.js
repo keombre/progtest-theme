@@ -565,9 +565,6 @@ class Course extends Logged {
         if (event.which != 1 || event.ctrlKey)
             return true
         
-        if (!event.target.innerText.includes("Výsledky"))
-            this.displaySpinner()
-        
         let target = event.target
         while (target.getAttribute('href') == null) {
             target = target.parentElement
@@ -579,6 +576,7 @@ class Course extends Logged {
     }
 
     getTaskGroups(link) {
+        this.displaySpinner()
         fetch(link).then(e => {
             if (!e.ok || e.redirected)
                 return Promise.reject()
@@ -587,7 +585,16 @@ class Course extends Logged {
         .then(this.parseTaskGrp.bind(this))
         //.then(this.checkSingleLink.bind(this))
         .then(this.createModal.bind(this))
-        .catch(() => window.location.assign(link))
+        .catch(() => {
+            window.location.assign(link)
+            this.hideSpinner()
+        })
+    }
+
+    hideSpinner() {
+        let spinner = document.getElementsByClassName("modal-spinner")[0]
+        if (spinner)
+            spinner.parentNode.removeChild(spinner)
     }
 
     displaySpinner() {
@@ -650,9 +657,7 @@ class Course extends Logged {
 `
             modalBody.appendChild(modalLine)
         })
-        let spinner = document.getElementsByClassName("modal-spinner")[0]
-        if (spinner)
-            spinner.parentNode.removeChild(spinner)
+        this.hideSpinner()
         modal.appendChild(modalBody)
     }
 
