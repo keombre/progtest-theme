@@ -135,7 +135,8 @@ class Main extends Logged {
         settings.classList.add('subjectSelect')
         settings.classList.add('mainInfo');
 
-        this.orderC = 100
+        this.orderC = 1000
+        let orders = {}
 
         // collect all elements
         this.getSubjects().forEach(e => {
@@ -147,9 +148,9 @@ class Main extends Logged {
                 footer = "",
                 push = settings
             ] = this.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
-
+            orders[order] = footer
             push.innerHTML += `
-<a href="${e[1]}" class="subject" style="order: ${order}">
+<a href="${e[1]}" class="subject" style="order: ${order}" pttorder="${order}">
     <div class="subject-title">${e[2]}</div>
     <div class="icon ${icon}"></div>
     <div class="subject-body">${text}</div>
@@ -157,7 +158,35 @@ class Main extends Logged {
 </a>`
         })
 
-        document.querySelector('center').outerHTML = subjects.outerHTML + settings.outerHTML
+        for (let order in orders) {
+            if (order >=1000) continue
+            let header = document.createElement('span')
+            header.classList.add('subjectHeader')
+            header.style.order = order - 1
+            header.setAttribute('pttcolorder', order)
+            header.innerHTML = (order%20?'Letní':'Zimní') + ' semestr <b>' + orders[order].substr(0, 7) + '</b>'
+            header.addEventListener('click', this.collapseSem.bind(this))
+            subjects.appendChild(header)
+        }
+        let cent = document.querySelector('center')
+        cent.parentNode.replaceChild(settings, cent)
+        settings.parentNode.insertBefore(subjects, settings)
+
+        let min = Math.min(...Object.keys(orders))
+        for (let order in orders) {
+            let elm = document.querySelector('[pttcolorder="' + order + '"]')
+            if (elm && order != min)
+                elm.click()
+        }
+    }
+
+    collapseSem(event) {
+        let elm = event.target
+        if (elm.nodeName == 'B')
+            elm = elm.parentNode
+        document.querySelectorAll('[pttorder="' + elm.getAttribute('pttcolorder') + '"]').forEach(e => {
+            e.classList.toggle('subject-hidden')
+        })
     }
 
     parseSettings(title) {
@@ -175,7 +204,7 @@ class Main extends Logged {
             return [this.orderC++, 'icon-unknown', text, ""]
         else
             return [
-                100 - (text.substr(bracketPos + 1, 2) * 2) - text.includes('LS)'),
+                (100 - (text.substr(bracketPos + 1, 2) * 2) - text.includes('LS)')) * 10,
                 this.getSubjectIcon(title),
                 text.substr(0, bracketPos - 1),
                 "20" + text.slice(bracketPos + 1, -1)

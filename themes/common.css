@@ -464,7 +464,7 @@ div.mainInfo {
 
 div.subjectSelect {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 270px 270px 270px;
     grid-gap: 20px 24px;
     place-content: center;
     margin: 0 50px;
@@ -488,7 +488,7 @@ div.subjectSelect.mainInfo > a {
 {
     div.subjectSelect
     {
-        grid-template-columns: auto auto;
+        grid-template-columns: 270px 270px;
     }
 }
 
@@ -496,7 +496,7 @@ div.subjectSelect.mainInfo > a {
 {
     div.subjectSelect
     {
-        grid-template-columns: auto;
+        grid-template-columns: 270px;
     }
 }
 
@@ -523,6 +523,27 @@ div.subjectSelect > a >div.subject-footer {
     text-align: center;
     font-size: 12pt;
     padding: 7px 0;
+}
+
+div.subjectSelect > span.subjectHeader {
+    grid-column: 1/-1;
+    width: auto;
+    height: 35px;
+    background: linear-gradient(to right, #343a40 20%,rgba(0,0,0,0) 99%);
+    line-height: 35px;
+    padding-left: 14px;
+    font-size: 22px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    color: #fff;
+    margin-bottom: -12px;
+    font-weight: 100;
+    cursor: pointer;
+    user-select: none;
+}
+
+.subject-hidden {
+    display: none;
 }
 
 .icon {
@@ -1046,6 +1067,11 @@ td[valign="top"]
 }
 
 /** item body */
+
+.rtbCell > .outButton,
+.rtbCell > .but1 {
+    float: right;
+}
 
 .rtbCell > table
 {
