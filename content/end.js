@@ -237,6 +237,8 @@ class Task extends Logged {
     constructor() {
         super()
 
+        this.fixLinks()
+
         // autohide result tables
         if (dropdown)
             this.autoHideResults()
@@ -256,6 +258,12 @@ class Task extends Logged {
         this.replaceCountdown()
         
         this.easterEgg()
+    }
+
+    fixLinks() {
+        document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"]').forEach(e => {
+            e.setAttribute('target', '_blank')
+        })
     }
 
     replaceCountdown() {
