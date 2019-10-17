@@ -15,7 +15,7 @@ class Err404 {
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
 
-        link.setAttribute('href', chrome.extension.getURL('./themes/404/' + theme + '.css'))
+        link.setAttribute('href', browser.extension.getURL('./themes/404/' + theme + '.css'))
         document.getElementsByTagName('head')[0].appendChild(link)
 
         document.body.innerHTML = this.site_body
@@ -38,7 +38,7 @@ class Login {
             l_form.parentElement.insertBefore(title, l_form)
             l_form.className += " loginForm"
 
-            let uniselect = document.createElement('DIV')
+            let uniselect = document.createElement('DIV')-
             uniselect.id = "uniSel"
 
             document.querySelector("#main > tbody > tr:nth-child(2) > td.rtbCell > select").childNodes.forEach(e => {
@@ -66,7 +66,8 @@ class Login {
             inputs[1].addEventListener('focusout', loginFocusOut)
 
             document.getElementsByName('lang')[0].outerHTML += this.langGlobe
-
+            
+            document.querySelector("#uniSel > .uniVal").click();
         }
     }
 }
@@ -389,7 +390,7 @@ class Task extends Logged {
             // upload ended and ptt has never seen this page before (yay!)
             if (document.querySelector("form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell")) {
                 try {
-                    new Audio(chrome.runtime.getURL("./themes/assets/turret.ogg")).play()
+                    new Audio(browser.runtime.getURL("./themes/assets/turret.ogg")).play()
                 } catch {}
             }
         }

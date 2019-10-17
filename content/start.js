@@ -16,7 +16,7 @@ const loader = `
 </div>`
 
 
-chrome.runtime.sendMessage({ type: "config" }, function (response) {
+browser.runtime.sendMessage({ type: "config" }, function (response) {
 
     // load user config and dispatch event when ready
     theme = response.theme
@@ -34,7 +34,7 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
     favicon.type = 'image/x-icon';
     favicon.rel = 'shortcut icon';
-    favicon.href = chrome.extension.getURL('./themes/assets/favicon.ico');
+    favicon.href = browser.extension.getURL('./themes/assets/favicon.ico');
     document.getElementsByTagName('head')[0].appendChild(favicon);
 
     // change page title
