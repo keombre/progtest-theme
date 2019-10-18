@@ -123,6 +123,14 @@ div.subjectSelect > a >div.subject-footer {
     color: #424242;
 }
 
+span.course_link {
+    color: #b1b1b1;
+}
+
+span span.course_link_score {
+    background: #B0BEC5;
+}
+
 a.course_link:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
