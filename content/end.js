@@ -261,7 +261,7 @@ class Task extends Logged {
     }
 
     fixLinks() {
-        document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"]').forEach(e => {
+        document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"], [href*="?X=DryRunD&"], [href*="?X=DryRunO&"], [href*="?X=DryRunI&"], [href*="?X=CompileD&"]').forEach(e => {
             e.setAttribute('target', '_blank')
         })
     }
