@@ -325,6 +325,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 
 .hljs {
     display: block;
+    width: fit-content;
     overflow-x: auto;
     padding: 0.5em;
     background: #F0F0F0;
