@@ -861,7 +861,6 @@ span.course_title::before {
 }
 
 .modal-spinner {
-    background: url(./assets/spinner.svg), radial-gradient(ellipse at center, #fffa 40%,#fff0 70%);
     position: absolute;
     top: calc(50% - 100px);
     left: calc(50% - 100px);

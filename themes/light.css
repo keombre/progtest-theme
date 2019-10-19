@@ -180,6 +180,10 @@ a.course_link:hover {
     background: #E0E0E0;
 }
 
+.modal-spinner {
+    background: url(./assets/spinner.svg), radial-gradient(ellipse at center, #fffa 40%,#fff0 70%);
+}
+
 .mtask-score-my::after {
     color: #8b8b8b;
 }

@@ -212,6 +212,10 @@ a.course_link:hover {
     background: #393939;
 }
 
+.modal-spinner {
+    background: url(./assets/spinner.svg), radial-gradient(ellipse at center, #000a 40%,#0000 70%);
+}
+
 .mtask-score-my::after {
     color: #525252;
 }
