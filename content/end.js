@@ -97,6 +97,8 @@ class Logged {
         }
 
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
+        
+        this.highlightCode();
     }
 
     scrollCheck() {
@@ -120,6 +122,12 @@ class Logged {
             this.header.style.padding = "0px 16px";
         if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll))
             this.tButton.style.transform = "scale(1)"
+    }
+
+    highlightCode() {
+        document.querySelectorAll('pre, code, tt').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
     }
 }
 
