@@ -163,7 +163,7 @@ class Logged {
             let localTasks = JSON.parse(localStorage.tasks)
             let notify = tasks.filter(t => {return !localTasks.some(e => e.link === t.link)})
             this.displayNotifications(notify.concat(localTasks.filter(e => e.seen == false)))
-            localStorage.tasks = JSON.stringify(localTasks.concat(notify.map(e => {e['seen'] = false; return e})))
+            localStorage.tasks = JSON.stringify(localTasks.concat(notify))
         }
     }
 
@@ -210,7 +210,8 @@ class Logged {
                 tasks.push({
                     'subject': e.innerText,
                     'link': f.href,
-                    'name': f.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText
+                    'name': f.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText,
+                    'seen': false
                 })
             })
         }
