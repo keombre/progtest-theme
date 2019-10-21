@@ -96,29 +96,31 @@ class Logged {
             window.addEventListener('load', this.scrollCheck.bind(this))
         }
 
-        if (window.localStorage) {
-            let bell = document.createElement('div')
-            bell.classList.add('notify', 'off')
-            bell.addEventListener('click', this.notifyToggle.bind(this))
-            let logout = document.querySelector('.navLink[href*="Logout"]')
-            logout.parentNode.insertBefore(bell, logout)
-
-            document.addEventListener('click', e => {
-                if (e.target != bell)
-                    document.getElementsByClassName('notifications')[0].classList.add('notifications-hide')
-            })
-
-            let notify = document.createElement('div')
-            notify.classList.add('notifications', 'notifications-hide')
-            notify.innerHTML = '<b>Žádná upozornění</b>'
-            document.body.insertBefore(notify, document.body.firstElementChild)
-        }
-
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
         
+        this.displayBell()
         this.highlightCode()
-
         this.notifications()
+    }
+
+    displayBell() {
+        if (!window.localStorage || !displayNotifications)
+            return
+        let bell = document.createElement('div')
+        bell.classList.add('notify', 'off')
+        bell.addEventListener('click', this.notifyToggle.bind(this))
+        let logout = document.querySelector('.navLink[href*="Logout"]')
+        logout.parentNode.insertBefore(bell, logout)
+
+        document.addEventListener('click', e => {
+            if (e.target != bell)
+                document.getElementsByClassName('notifications')[0].classList.add('notifications-hide')
+        })
+
+        let notify = document.createElement('div')
+        notify.classList.add('notifications', 'notifications-hide')
+        notify.innerHTML = '<b>Žádná upozornění</b>'
+        document.body.insertBefore(notify, document.body.firstElementChild)
     }
 
     scrollCheck() {
@@ -151,7 +153,7 @@ class Logged {
     }
 
     async notifications() {
-        if (!window.localStorage) return
+        if (!window.localStorage || !displayNotifications) return
 
         let tasks = await this.taskSpider()
 
@@ -175,10 +177,7 @@ class Logged {
             let node = document.createElement('a')
             node.href = e.link
             node.innerHTML = `<i>${e.subject}</i> Nová úloha:<br /><b>${e.name}</b>`
-            let hide = document.createElement('div')
-            hide.classList.add('notify-hide')
-            hide.addEventListener('click', this.notifySeen.bind(this))
-            node.appendChild(hide)
+            node.addEventListener('click', this.notifySeen.bind(this))
             frame.appendChild(node)
         })
     }
@@ -237,7 +236,6 @@ class Logged {
             frame.innerHTML = '<b>Žádná upozornění</b>'
             document.getElementsByClassName('notify')[0].classList.replace('on', 'off')
         }
-        event.preventDefault()
     }
 }
 

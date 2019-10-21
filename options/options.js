@@ -7,9 +7,11 @@ chrome.tabs.query({ active: true, currentWindow: true }, function callback(tabs)
 function save_options() {
   var theme = document.getElementById('theme').value;
   var hide = document.getElementById('dropdown').checked;
+  var notify = document.getElementById('notifications').checked;
   chrome.storage.sync.set({
     selectedTheme: theme,
-    autoHide: hide
+    autoHide: hide,
+    notifications: notify
   }, function () {
     var status = document.getElementById('status');
     status.textContent = 'Option saved';
@@ -23,16 +25,18 @@ function save_options() {
 function restore_options() {
   chrome.storage.sync.get({
     selectedTheme: 'light',
-    autoHide: true
+    autoHide: true,
+    notifications: true
   }, function (items) {
     document.getElementById('theme').value = items.selectedTheme;
     document.getElementById('dropdown').checked = items.autoHide;
+    document.getElementById('notifications').checked = items.notifications;
     hideDropdown()
   });
 }
 
 function hideDropdown() {
-  var dd = document.getElementById('dropdown').parentNode
+  var dd = document.getElementById('config')
   if (document.getElementById('theme').value.includes('orig')) {
     dd.style.visibility = "hidden";
   } else {
