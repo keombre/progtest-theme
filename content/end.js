@@ -621,6 +621,10 @@ class Course extends Logged {
     }
 
     getTaskGroups(link) {
+        if (link.includes('Results')) {
+            window.location.assign(link)
+            return
+        }
         this.displaySpinner()
         fetch(link).then(e => {
             if (!e.ok || e.redirected)
