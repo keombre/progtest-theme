@@ -927,6 +927,7 @@ const preload = () => {
                 break
             case "Results":
                 parser = new Results()
+                break
             case "Compiler":
             case "DryRun":
             case "Task":
