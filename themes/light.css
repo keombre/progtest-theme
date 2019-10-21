@@ -86,6 +86,20 @@ body > table td
     background-color: rgb(255, 193, 7) !important;
 }
 
+.notifications {
+    background: #fff;
+    border-color: #eee;
+}
+
+.notifications > a {
+    color: #000;
+    border-color: #d5d5d5;
+}
+
+.notifications > a:hover {
+    background: #ececec;
+}
+
 /** subject select */
 
 div.subjectSelect > a {

@@ -96,9 +96,29 @@ class Logged {
             window.addEventListener('load', this.scrollCheck.bind(this))
         }
 
+        if (window.localStorage) {
+            let bell = document.createElement('div')
+            bell.classList.add('notify', 'off')
+            bell.addEventListener('click', this.notifyToggle.bind(this))
+            let logout = document.querySelector('.navLink[href*="Logout"]')
+            logout.parentNode.insertBefore(bell, logout)
+
+            document.addEventListener('click', e => {
+                if (e.target != bell)
+                    document.getElementsByClassName('notifications')[0].classList.add('notifications-hide')
+            })
+
+            let notify = document.createElement('div')
+            notify.classList.add('notifications', 'notifications-hide')
+            notify.innerHTML = '<b>Žádná upozornění</b>'
+            document.body.insertBefore(notify, document.body.firstElementChild)
+        }
+
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
         
-        this.highlightCode();
+        this.highlightCode()
+
+        this.notifications()
     }
 
     scrollCheck() {
@@ -126,8 +146,98 @@ class Logged {
 
     highlightCode() {
         document.querySelectorAll('pre, code, tt').forEach((block) => {
-            hljs.highlightBlock(block);
-        });
+            hljs.highlightBlock(block)
+        })
+    }
+
+    async notifications() {
+        if (!window.localStorage) return
+
+        let tasks = await this.taskSpider()
+
+        if (!localStorage.tasks) {
+            localStorage.tasks = JSON.stringify(tasks.map(e => {e['seen'] = true; return e}))
+        } else {
+            let localTasks = JSON.parse(localStorage.tasks)
+            let notify = tasks.filter(t => {return !localTasks.some(e => e.link === t.link)})
+            this.displayNotifications(notify.concat(localTasks.filter(e => e.seen == false)))
+            localStorage.tasks = JSON.stringify(localTasks.concat(notify.map(e => {e['seen'] = false; return e})))
+        }
+    }
+
+    displayNotifications(elems) {
+        if (!elems.length)
+            return
+        document.getElementsByClassName('notify')[0].classList.replace('off', 'on')
+        let frame = document.getElementsByClassName('notifications')[0]
+        frame.innerHTML = ""
+        elems.forEach(e => {
+            let node = document.createElement('a')
+            node.href = e.link
+            node.innerHTML = `<i>${e.subject}</i> Nová úloha:<br /><b>${e.name}</b>`
+            let hide = document.createElement('div')
+            hide.classList.add('notify-hide')
+            hide.addEventListener('click', this.notifySeen.bind(this))
+            node.appendChild(hide)
+            frame.appendChild(node)
+        })
+    }
+
+    getLinksFromHTML(text, href) {
+        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
+        let doc = new DOMParser().parseFromString(text, 'text/html')
+        return doc.querySelectorAll(`.butLink[href*="${href}"]`)
+    }
+
+    async taskSpider() {
+        let main = await fetch("/index.php?X=Main")
+        if (!main.ok || main.redirected) return []
+        
+        let mainText = await main.text()
+        let subjects = this.getLinksFromHTML(mainText, 'Course')
+        if (!subjects) return []
+        let tasks = []
+
+        for (let e of subjects) {
+            let course = await fetch(e.href)
+            if (!course.ok || course.redirected)
+                return
+            let text = await course.text()
+            let taskLinks = this.getLinksFromHTML(text, 'TaskGrp')
+            if (!taskLinks)
+                return
+            
+            taskLinks.forEach(f => {
+                tasks.push({
+                    'subject': e.innerText,
+                    'link': f.href,
+                    'name': f.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText
+                })
+            })
+        }
+        return tasks
+    }
+
+    notifyToggle() {
+        document.getElementsByClassName('notifications')[0].classList.toggle('notifications-hide')
+    }
+
+    notifySeen(event) {
+        let localTasks = JSON.parse(localStorage.tasks)
+        let link = event.target.parentElement.href
+        localTasks.map(e => {
+            if (e.link == link)
+                e.seen = true
+            return e
+        })
+        localStorage.tasks = JSON.stringify(localTasks)
+        let frame = document.getElementsByClassName('notifications')[0]
+        frame.removeChild(event.target.parentElement)
+        if (!frame.childElementCount) {
+            frame.innerHTML = '<b>Žádná upozornění</b>'
+            document.getElementsByClassName('notify')[0].classList.replace('on', 'off')
+        }
+        event.preventDefault()
     }
 }
 
