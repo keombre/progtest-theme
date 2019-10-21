@@ -207,9 +207,10 @@ class Logged {
                 return
             
             taskLinks.forEach(f => {
+                let url = new URL(f.href)
                 tasks.push({
                     'subject': e.innerText,
-                    'link': f.href,
+                    'link': '/' + url.search,
                     'name': f.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText,
                     'seen': false
                 })
@@ -224,9 +225,9 @@ class Logged {
 
     notifySeen(event) {
         let localTasks = JSON.parse(localStorage.tasks)
-        let link = event.target.parentElement.href
+        let link = new URL(event.target.parentElement.href)
         localTasks.map(e => {
-            if (e.link == link)
+            if (e.link == '/' + link.search)
                 e.seen = true
             return e
         })
