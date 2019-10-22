@@ -1,4 +1,6 @@
 build_dir := "build"
+source_name := "progtest-theme.tar.gz"
+current_dir := $(notdir $(shell pwd))
 
 zip: clean
 	mkdir ${build_dir} 2>/dev/null || exit 0
@@ -35,6 +37,18 @@ zip: clean
 	# Build the extension zip with web-ext
 	npx web-ext build -s ${build_dir}
 
+source: clean_source
+	cd .. &&\
+	tar -zcvf ${source_name}\
+	 --exclude './${current_dir}/node_modules'\
+	 --exclude './${current_dir}/build'\
+	 --exclude './${current_dir}/web-ext-artifacts'\
+	 --exclude='.[^(babelrc)/]*'\
+	 ./${current_dir}
+
 clean:
 	yes |rm -r ${build_dir}/* 2>/dev/null || exit 0
 	rm web-ext-artifacts/progtest_themes-* 2>/dev/null || exit 0
+
+clean_source:
+	rm ../${source_name} || exit 0
