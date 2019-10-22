@@ -4,18 +4,18 @@
   "description": "Theme manager for ProgTest",
   "main": "background.js",
   "scripts": {
-    "build": "web-ext build"
+    "lint": "web-ext lint"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mstieranka/progtest-theme.git"
   },
   "author": "Matej Stieranka",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/mstieranka/progtest-theme/issues"
   },
-  "homepage": "https://github.com/mstieranka/progtest-theme#readme",
+  "homepage": "https://github.com/mstieranka/progtest-theme",
   "devDependencies": {
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
