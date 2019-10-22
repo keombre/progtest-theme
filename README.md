@@ -1,14 +1,17 @@
-# ProgTest Themes
+ProgTest Themes
+========
 
 **ProgTest Themes** is a WebExtension for Google Chrome and Mozilla Firefox which works as a theme manager for [ProgTest](https://progtest.fit.cvut.cz). It also adds other useful features to ProgTest, such as syntax highlighting or notifications.
 
-## Download
+Download
+--------
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 
 [~~Firefox Addons~~]() Coming soon
 
-## Building from source
+Building from source
+--------
 
 In order to build from source, you are going to need `npm` and `make`.
 
