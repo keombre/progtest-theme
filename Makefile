@@ -36,5 +36,5 @@ zip: clean
 	npx web-ext build -s ${build_dir}
 
 clean:
-	yes |rm -r ${build_dir} 2>/dev/null || exit 0
+	yes |rm -r ${build_dir}/* 2>/dev/null || exit 0
 	rm web-ext-artifacts/progtest_themes-* 2>/dev/null || exit 0
