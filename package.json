@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mstieranka/progtest-theme.git"
+    "url": "git+https://github.com/keombre/progtest-theme.git"
   },
-  "author": "Matej Stieranka",
+  "author": "keombre",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mstieranka/progtest-theme/issues"
+    "url": "https://github.com/keombre/progtest-theme/issues"
   },
-  "homepage": "https://github.com/mstieranka/progtest-theme",
+  "homepage": "https://github.com/keombre/progtest-theme",
   "devDependencies": {
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
