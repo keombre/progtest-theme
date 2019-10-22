@@ -241,6 +241,33 @@ class Logged {
     }
 }
 
+class Exam extends Logged {
+    constructor() {
+        super()
+
+        // normalize html
+        document.querySelectorAll(`
+            form[name="form1"] table tr:nth-child(n+5) td.rCell,
+            form[name="form1"] table tr:nth-child(n+5) td.rbCell`
+        ).forEach(e => {
+            let radio = e.querySelector('input[type="radio"]')
+            if (!radio) continue
+            e.classList.add('radio')
+            e.childNodes.forEach(f => {if (f.nodeName == "#text") {
+                let label = document.createElement('span')
+                label.innerText = e.textContent
+                label.classList.add('radio-label')
+                e.replaceChild(label, f)
+            }})
+            let dot = e.previousElementSibling.querySelector('.redBox')
+            if (dot) {
+                dot.parentElement.removeChild(dot)
+                radio.classList.add('radio-red')
+            }
+        })
+    }
+}
+
 class Main extends Logged {
 
     constructor() {
@@ -923,6 +950,9 @@ const preload = () => {
             case "KNT":
             case "TaskGrp":
                 parser = new Logged()
+                break
+            case "KNTQ":
+                parser = new Exam()
                 break
             case "Course":
                 parser = new Course()
