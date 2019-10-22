@@ -1,5 +1,6 @@
 var theme
 var dropdown
+var displayNotifications
 var settingsLoaded = false
 var pttLoaded = new Event('ptt-loaded');
 
@@ -16,11 +17,12 @@ const loader = `
 </div>`
 
 
-browser.runtime.sendMessage({ type: "config" }, function (response) {
+chrome.runtime.sendMessage({ type: "config" }, function (response) {
 
     // load user config and dispatch event when ready
     theme = response.theme
     dropdown = response.dropdown
+    displayNotifications = response.displayNotifications
 
     if (response.theme == 'orig' || response.theme == 'orig-dark')
         return
@@ -34,7 +36,7 @@ browser.runtime.sendMessage({ type: "config" }, function (response) {
     var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
     favicon.type = 'image/x-icon';
     favicon.rel = 'shortcut icon';
-    favicon.href = browser.extension.getURL('./themes/assets/favicon.ico');
+    favicon.href = chrome.extension.getURL('./themes/assets/favicon.ico');
     document.getElementsByTagName('head')[0].appendChild(favicon);
 
     // change page title

@@ -86,6 +86,20 @@ body > table td
     background-color: rgb(255, 193, 7) !important;
 }
 
+.notifications {
+    background: #fff;
+    border-color: #eee;
+}
+
+.notifications > a {
+    color: #000;
+    border-color: #d5d5d5;
+}
+
+.notifications > a:hover {
+    background: #ececec;
+}
+
 /** subject select */
 
 div.subjectSelect > a {
@@ -121,6 +135,14 @@ div.subjectSelect > a >div.subject-footer {
 .course_link {
     background: #fff;
     color: #424242;
+}
+
+span.course_link {
+    color: #b1b1b1;
+}
+
+span span.course_link_score {
+    background: #B0BEC5;
 }
 
 a.course_link:hover {
@@ -170,6 +192,10 @@ a.course_link:hover {
 
 .modal-line:hover {
     background: #E0E0E0;
+}
+
+.modal-spinner {
+    background: url(./assets/spinner.svg), radial-gradient(ellipse at center, #fffa 40%,#fff0 70%);
 }
 
 .mtask-score-my::after {
@@ -307,4 +333,82 @@ input.err
 	background-color: #607D8B;
 	border-color: #455A64 !important;
 	text-shadow: 0px 1px 0px #455A64;
+}
+
+/*
+
+Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+
+*/
+
+.hljs {
+    display: block;
+    width: fit-content;
+    overflow-x: auto;
+    padding: 0.5em;
+    background: #F0F0F0;
+}
+
+code.hljs, tt.hljs {
+    display: inline;
+    padding: .1em
+}
+
+/* Base color: saturation 0; */
+
+.hljs, .hljs-subst {
+    color: #444;
+}
+
+.hljs-comment {
+    color: #888888;
+}
+
+.hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta-keyword, .hljs-doctag, .hljs-name {
+    font-weight: bold;
+}
+
+/* User color: hue: 0 */
+
+.hljs-type, .hljs-string, .hljs-number, .hljs-selector-id, .hljs-selector-class, .hljs-quote, .hljs-template-tag, .hljs-deletion {
+    color: #880000;
+}
+
+.hljs-title, .hljs-section {
+    color: #880000;
+    font-weight: bold;
+}
+
+.hljs-regexp, .hljs-symbol, .hljs-variable, .hljs-template-variable, .hljs-link, .hljs-selector-attr, .hljs-selector-pseudo {
+    color: #BC6060;
+}
+
+/* Language color: hue: 90; */
+
+.hljs-literal {
+    color: #78A960;
+}
+
+.hljs-built_in, .hljs-bullet, .hljs-code, .hljs-addition {
+    color: #397300;
+}
+
+/* Meta color: hue: 200 */
+
+.hljs-meta {
+    color: #1f7199;
+}
+
+.hljs-meta-string {
+    color: #4d99bf;
+}
+
+/* Misc effects */
+
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-strong {
+    font-weight: bold;
 }

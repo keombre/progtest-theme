@@ -4,9 +4,9 @@
 <style>
 body {
   width: 200px;
-    height: 200px;
-    text-align: center;
-    margin: 0;
+  height: 200px;
+  text-align: center;
+  margin: 0;
 }
 
 .header {
@@ -42,7 +42,8 @@ body {
 }
 
 .dropdown_c {
-  margin-top: 5px;
+  margin: 5px 0 0 10px;
+  text-align: left;
 }
 
 </style>
@@ -62,8 +63,16 @@ Select your theme
   <option value="dark">Dark</option>
 </select>
 <br />
-<div class="dropdown_c">
-  <input type="checkbox" id="dropdown"> Autohide results
+  <table class="dropdown_c" id="config">
+    <tr>
+      <td><input type="checkbox" id="dropdown"></td>
+      <td>Autohide results</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" id="notifications"></td>
+        <td>Show notifications</td>
+      </tr>
+  </table>
 </div>
 
 <div id="status"></div>

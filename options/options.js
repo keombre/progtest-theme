@@ -1,19 +1,21 @@
-browser.tabs.query({ active: true, currentWindow: true }, function callback(tabs) {
+chrome.tabs.query({ active: true, currentWindow: true }, function callback(tabs) {
   if (tabs[0].url.indexOf('://progtest.fit.cvut.cz') == -1 &&
       tabs[0].url.indexOf('://ptmock.localhost') == -1)
-    browser.tabs.create({url: "https://progtest.fit.cvut.cz/"})
+    chrome.tabs.create({url: "https://progtest.fit.cvut.cz/"})
 })
 
 function save_options() {
   var theme = document.getElementById('theme').value;
   var hide = document.getElementById('dropdown').checked;
-  browser.storage.sync.set({
+  var notify = document.getElementById('notifications').checked;
+  chrome.storage.sync.set({
     selectedTheme: theme,
-    autoHide: hide
+    autoHide: hide,
+    notifications: notify
   }, function () {
     var status = document.getElementById('status');
     status.textContent = 'Option saved';
-    browser.tabs.reload({bypassCache: true});
+    chrome.tabs.reload({bypassCache: true});
     setTimeout(function () {
       status.textContent = '';
     }, 1500);
@@ -21,18 +23,20 @@ function save_options() {
 }
 
 function restore_options() {
-  browser.storage.sync.get({
+  chrome.storage.sync.get({
     selectedTheme: 'light',
-    autoHide: true
+    autoHide: true,
+    notifications: true
   }, function (items) {
     document.getElementById('theme').value = items.selectedTheme;
     document.getElementById('dropdown').checked = items.autoHide;
+    document.getElementById('notifications').checked = items.notifications;
     hideDropdown()
   });
 }
 
 function hideDropdown() {
-  var dd = document.getElementById('dropdown').parentNode
+  var dd = document.getElementById('config')
   if (document.getElementById('theme').value.includes('orig')) {
     dd.style.visibility = "hidden";
   } else {

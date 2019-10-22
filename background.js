@@ -1,33 +1,36 @@
 
 var theme = 'light';
-var dropdown = true;
+var dropdown = true
+var displayNotifications = true
 
 const updateConfig = () => {
-    browser.storage.sync.get({
+    chrome.storage.sync.get({
         selectedTheme: 'light',
-        autoHide: true
+        autoHide: true,
+        notifications: true
     }, (items) => {
         theme = items.selectedTheme;
         dropdown = items.autoHide;
+        displayNotifications = items.notifications
     })
 }
 
-browser.runtime.onInstalled.addListener(updateConfig)
-browser.storage.onChanged.addListener(updateConfig)
-browser.runtime.onStartup.addListener(updateConfig)
+chrome.runtime.onInstalled.addListener(updateConfig)
+chrome.storage.onChanged.addListener(updateConfig)
+chrome.runtime.onStartup.addListener(updateConfig)
 
-browser.runtime.onMessage.addListener(
+chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         if (request.type == "config")
-            sendResponse({ theme: theme, dropdown: dropdown })
+            sendResponse({ theme: theme, dropdown: dropdown, displayNotifications: displayNotifications })
     })
 
 
-browser.webRequest.onBeforeRequest.addListener(
+chrome.webRequest.onBeforeRequest.addListener(
     () => {
         if (theme == 'orig')
             return { cancel: false };
-        return { redirectUrl: browser.runtime.getURL('themes/' + theme + '.css') };
+        return { redirectUrl: chrome.runtime.getURL('themes/' + theme + '.css') };
     },
     { urls: ["*://progtest.fit.cvut.cz/css.css", "*://ptmock.localhost/css.css"] },
     ["blocking"]

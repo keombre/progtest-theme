@@ -1,12 +1,12 @@
 {
     "name": "ProgTest Themes",
-    "version": "1.0.20",
+    "version": "1.0.25",
     "description": "Theme manager for ProgTest",
     "manifest_version": 2,
     "content_scripts": [
         {
             "run_at": "document_start",
-            "js": ["content/start.js"],
+            "js": ["content/start.js", "content/highlightjs/highlight.pack.js"],
             "matches": ["*://progtest.fit.cvut.cz/*"],
             "all_frames": true
         },
@@ -40,8 +40,8 @@
         "themes/*"
     ],
     "applications": {
-	"gecko": {
-	    "id": "progtest-themes@stieranka.dev"    
-	}
+        "gecko": {
+            "id": "progtest-themes@keombre"
+        }
     }
 }

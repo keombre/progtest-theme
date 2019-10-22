@@ -15,7 +15,7 @@ class Err404 {
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
 
-        link.setAttribute('href', browser.extension.getURL('./themes/404/' + theme + '.css'))
+        link.setAttribute('href', chrome.extension.getURL('./themes/404/' + theme + '.css'))
         document.getElementsByTagName('head')[0].appendChild(link)
 
         document.body.innerHTML = this.site_body
@@ -38,7 +38,7 @@ class Login {
             l_form.parentElement.insertBefore(title, l_form)
             l_form.className += " loginForm"
 
-            let uniselect = document.createElement('DIV')-
+            let uniselect = document.createElement('DIV')
             uniselect.id = "uniSel"
 
             document.querySelector("#main > tbody > tr:nth-child(2) > td.rtbCell > select").childNodes.forEach(e => {
@@ -66,8 +66,11 @@ class Login {
             inputs[1].addEventListener('focusout', loginFocusOut)
 
             document.getElementsByName('lang')[0].outerHTML += this.langGlobe
-            
-            document.querySelector("#uniSel > .uniVal").click();
+
+            // in firefox, when opening the page, load the selected login type
+            if (typeof browser !== 'undefined') {
+                document.querySelector("#uniSel > .uniVal").click();
+            }
         }
     }
 }
@@ -98,6 +101,30 @@ class Logged {
         }
 
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
+        
+        this.displayBell()
+        this.highlightCode()
+        this.notifications()
+    }
+
+    displayBell() {
+        if (!window.localStorage || !displayNotifications)
+            return
+        let bell = document.createElement('div')
+        bell.classList.add('notify', 'off')
+        bell.addEventListener('click', this.notifyToggle.bind(this))
+        let logout = document.querySelector('.navLink[href*="Logout"]')
+        logout.parentNode.insertBefore(bell, logout)
+
+        document.addEventListener('click', e => {
+            if (e.target != bell)
+                document.getElementsByClassName('notifications')[0].classList.add('notifications-hide')
+        })
+
+        let notify = document.createElement('div')
+        notify.classList.add('notifications', 'notifications-hide')
+        notify.innerHTML = '<b>Žádná upozornění</b>'
+        document.body.insertBefore(notify, document.body.firstElementChild)
     }
 
     scrollCheck() {
@@ -121,6 +148,100 @@ class Logged {
             this.header.style.padding = "0px 16px";
         if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll))
             this.tButton.style.transform = "scale(1)"
+    }
+
+    highlightCode() {
+        document.querySelectorAll('pre, code, tt').forEach((block) => {
+            hljs.highlightBlock(block)
+        })
+    }
+
+    async notifications() {
+        if (!window.localStorage || !displayNotifications) return
+
+        let tasks = await this.taskSpider()
+
+        if (!localStorage.tasks) {
+            localStorage.tasks = JSON.stringify(tasks.map(e => {e['seen'] = true; return e}))
+        } else {
+            let localTasks = JSON.parse(localStorage.tasks)
+            let notify = tasks.filter(t => {return !localTasks.some(e => e.link === t.link)})
+            this.displayNotifications(notify.concat(localTasks.filter(e => e.seen == false)))
+            localStorage.tasks = JSON.stringify(localTasks.concat(notify))
+        }
+    }
+
+    displayNotifications(elems) {
+        if (!elems.length)
+            return
+        document.getElementsByClassName('notify')[0].classList.replace('off', 'on')
+        let frame = document.getElementsByClassName('notifications')[0]
+        frame.innerHTML = ""
+        elems.forEach(e => {
+            let node = document.createElement('a')
+            node.href = e.link
+            node.innerHTML = `<i>${e.subject}</i> Nová úloha:<br /><b>${e.name}</b>`
+            node.addEventListener('click', this.notifySeen.bind(this))
+            frame.appendChild(node)
+        })
+    }
+
+    getLinksFromHTML(text, href) {
+        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
+        let doc = new DOMParser().parseFromString(text, 'text/html')
+        return doc.querySelectorAll(`.butLink[href*="${href}"]`)
+    }
+
+    async taskSpider() {
+        let main = await fetch("/index.php?X=Main")
+        if (!main.ok || main.redirected) return []
+        
+        let mainText = await main.text()
+        let subjects = this.getLinksFromHTML(mainText, 'Course')
+        if (!subjects) return []
+        let tasks = []
+
+        for (let e of subjects) {
+            let course = await fetch(e.href)
+            if (!course.ok || course.redirected)
+                return
+            let text = await course.text()
+            let taskLinks = this.getLinksFromHTML(text, 'TaskGrp')
+            if (!taskLinks)
+                return
+            
+            taskLinks.forEach(f => {
+                let url = new URL(f.href)
+                tasks.push({
+                    'subject': e.innerText,
+                    'link': '/' + url.search,
+                    'name': f.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText,
+                    'seen': false
+                })
+            })
+        }
+        return tasks
+    }
+
+    notifyToggle() {
+        document.getElementsByClassName('notifications')[0].classList.toggle('notifications-hide')
+    }
+
+    notifySeen(event) {
+        let localTasks = JSON.parse(localStorage.tasks)
+        let link = new URL(event.target.parentElement.href)
+        localTasks.map(e => {
+            if (e.link == '/' + link.search)
+                e.seen = true
+            return e
+        })
+        localStorage.tasks = JSON.stringify(localTasks)
+        let frame = document.getElementsByClassName('notifications')[0]
+        frame.removeChild(event.target.parentElement)
+        if (!frame.childElementCount) {
+            frame.innerHTML = '<b>Žádná upozornění</b>'
+            document.getElementsByClassName('notify')[0].classList.replace('on', 'off')
+        }
     }
 }
 
@@ -262,7 +383,7 @@ class Task extends Logged {
     }
 
     fixLinks() {
-        document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"]').forEach(e => {
+        document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"], [href*="?X=DryRunD&"], [href*="?X=DryRunO&"], [href*="?X=DryRunI&"], [href*="?X=CompileD&"]').forEach(e => {
             e.setAttribute('target', '_blank')
         })
     }
@@ -390,7 +511,7 @@ class Task extends Logged {
             // upload ended and ptt has never seen this page before (yay!)
             if (document.querySelector("form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell")) {
                 try {
-                    new Audio(browser.runtime.getURL("./themes/assets/turret.ogg")).play()
+                    new Audio(chrome.runtime.getURL("./themes/assets/turret.ogg")).play()
                 } catch {}
             }
         }
@@ -614,6 +735,10 @@ class Course extends Logged {
     }
 
     getTaskGroups(link) {
+        if (link.includes('Results')) {
+            window.location.assign(link)
+            return
+        }
         this.displaySpinner()
         fetch(link).then(e => {
             if (!e.ok || e.redirected)
@@ -808,6 +933,7 @@ const preload = () => {
                 break
             case "Results":
                 parser = new Results()
+                break
             case "Compiler":
             case "DryRun":
             case "Task":

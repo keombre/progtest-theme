@@ -1,0 +1,26 @@
+{
+  "name": "progtest-theme",
+  "version": "1.0.25",
+  "description": "Theme manager for ProgTest",
+  "main": "background.js",
+  "scripts": {
+    "build": "web-ext build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mstieranka/progtest-theme.git"
+  },
+  "author": "Matej Stieranka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mstieranka/progtest-theme/issues"
+  },
+  "homepage": "https://github.com/mstieranka/progtest-theme#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "babel-preset-minify": "^0.5.1",
+    "web-ext": "^3.2.0"
+  }
+}
