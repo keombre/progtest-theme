@@ -1,70 +1,33 @@
 build_dir := "build"
-source_name := "progtest-theme.tar.gz"
-current_dir := $(notdir $(shell pwd))
+src_dir := "src"
+out_dir := "out"
+
+manifest_dir := "manifests"
+
 key_file := "keys.txt"
 api_key := $(shell head -n 1 ${key_file})
 api_secret := $(shell tail -n 1 ${key_file})
 
+all: chrome firefox
+
 zip: clean
 	mkdir ${build_dir} 2>/dev/null || exit 0
-
-	# Copy files and folders separately so that
-	# find + cp doesn't stash all files to the same folder
-	
-	# 1. Find and copy all files inside the main folder
-	find ./ -maxdepth 1 -type f \
-	  ! -path "./.*"\
-	  ! -path "./Makefile"\
-	  ! -path "./manifest.debug.json"\
-	  ! -path "./manifest.chrome.json"\
-	  ! -path "./manifest.firefox.json"\
-	  ! -path "./*lock*"\
-	  ! -path "./package.json"\
-	  ! -path "./LICENSE"\
-	  ! -path "./keys.txt"\
-	  ! -path "./update.json"\
-	| xargs -I file cp file ${build_dir}
-
-	# 2. Find and copy all folders inside the main folder
-	find ./ -maxdepth 1 -type d \
-	  ! -path "./node_modules"\
-	  ! -path "./${build_dir}"\
-	  ! -path "./web-ext-artifacts"\
-	  ! -path "./.*"\
-	  ! -path "./"\
-	| xargs -I file cp -r file ${build_dir}
-
-	# Transpile all files with babel
-	# Note: the original copied files will be overwritten
-	find ./ -name "*[^pack].js"\
-	 ! -path "./node_modules/*"\
-	 ! -path "./${build_dir}/*"\
-	| xargs -I file npx babel file -o ./${build_dir}/file
+	npx babel ${src_dir} --out-dir ${build_dir} --copy-files
 
 firefox: zip
-	cp manifest.firefox.json ${build_dir}/manifest.json
-	# Build the extension zip with web-ext
-	npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir}
+	cp ${manifest_dir}/firefox.json ${build_dir}/manifest.json
+	mkdir -p ${out_dir}/firefox || exit 0
+	rm ${out_dir}/firefox/* || exit 0
+	#npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir} -a ${out_dir}/firefox
+	npx web-ext build -s ${build_dir} -a ${out_dir}/firefox
 
 chrome: zip
-	cp manifest.chrome.json ${build_dir}/manifest.json
-	mkdir web-ext-artifacts || exit 0
+	cp ${manifest_dir}/chrome.json ${build_dir}/manifest.json
+	mkdir -p ${out_dir}/chrome || exit 0
 	ln -s ${build_dir} progtest-themes
-	find ./progtest-themes/ -type f | xargs zip web-ext-artifacts/progtest_themes-chrome.zip $1
+	rm ${out_dir}/chrome/* || exit 0
+	find ./progtest-themes/ -type f | xargs zip ${out_dir}/chrome/progtest_themes.zip
 	rm progtest-themes
 
-source: clean_source
-	cd .. &&\
-	tar -zcvf ${source_name}\
-	 --exclude './${current_dir}/node_modules'\
-	 --exclude './${current_dir}/build'\
-	 --exclude './${current_dir}/web-ext-artifacts'\
-	 --exclude='.[^(babelrc)/]*'\
-	 ./${current_dir}
-
 clean:
-	yes |rm -r ${build_dir}/* 2>/dev/null || exit 0
-	rm web-ext-artifacts/progtest_themes-* 2>/dev/null || exit 0
-
-clean_source:
-	rm ../${source_name} || exit 0
+	rm -r ${build_dir}/* 2>/dev/null || exit 0

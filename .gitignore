@@ -1,5 +1,5 @@
 ./vscode/ipch/*
-web-ext-artifacts
+out
 node_modules
 build
 keys.txt
