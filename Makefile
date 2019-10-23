@@ -39,7 +39,7 @@ zip: clean
 	| xargs -I file npx babel file -o ./${build_dir}/file
 
 	# Build the extension zip with web-ext
-	npx web-ext sign --channel=listed --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir}
+	npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir}
 
 source: clean_source
 	cd .. &&\
