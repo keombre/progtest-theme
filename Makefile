@@ -2,8 +2,8 @@ build_dir := "build"
 source_name := "progtest-theme.tar.gz"
 current_dir := $(notdir $(shell pwd))
 key_file := "keys.txt"
-api_key = `head -n 1 ${key_file}`
-api_secret = `tail -n 1 ${key_file}`
+api_key := $(shell head -n 1 ${key_file})
+api_secret := $(shell tail -n 1 ${key_file})
 
 zip: clean
 	mkdir ${build_dir} 2>/dev/null || exit 0
@@ -38,7 +38,7 @@ zip: clean
 	| xargs -I file npx babel file -o ./${build_dir}/file
 
 	# Build the extension zip with web-ext
-	npx web-ext sign --channel=unlisted --api-key=user:${api_key} --api-secret=${api_secret} -s ${build_dir}
+	npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir}
 
 source: clean_source
 	cd .. &&\
