@@ -10,18 +10,18 @@ api_secret := $(shell tail -n 1 ${key_file})
 
 all: chrome firefox
 
-zip: clean
+source: clean
 	mkdir ${build_dir} 2>/dev/null || exit 0
 	npx babel ${src_dir} --out-dir ${build_dir} --copy-files
 
-firefox: zip
+firefox: source
 	cp ${manifest_dir}/firefox.json ${build_dir}/manifest.json
 	mkdir -p ${out_dir}/firefox || exit 0
 	rm ${out_dir}/firefox/* || exit 0
 	#npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir} -a ${out_dir}/firefox
 	npx web-ext build -s ${build_dir} -a ${out_dir}/firefox
 
-chrome: zip
+chrome: source
 	cp ${manifest_dir}/chrome.json ${build_dir}/manifest.json
 	mkdir -p ${out_dir}/chrome || exit 0
 	ln -s ${build_dir} progtest-themes

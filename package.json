@@ -20,7 +20,6 @@
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "babel-preset-minify": "^0.5.1",
     "web-ext": "^3.2.0"
   }
 }
