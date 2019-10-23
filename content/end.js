@@ -255,7 +255,7 @@ class Exam extends Logged {
             form[name="form1"] table tr:nth-child(n+5) td.rbCell`
         ).forEach(e => {
             let radio = e.querySelector('input[type="radio"]')
-            if (!radio) continue
+            if (!radio) return
             e.classList.add('radio')
             e.childNodes.forEach(f => {if (f.nodeName == "#text") {
                 let label = document.createElement('span')
