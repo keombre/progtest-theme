@@ -16,10 +16,13 @@ zip: clean
 	  ! -path "./.*"\
 	  ! -path "./Makefile"\
 	  ! -path "./manifest.debug.json"\
+	  ! -path "./manifest.chrome.json"\
+	  ! -path "./manifest.firefox.json"\
 	  ! -path "./*lock*"\
 	  ! -path "./package.json"\
 	  ! -path "./LICENSE"\
 	  ! -path "./keys.txt"\
+	  ! -path "./update.json"\
 	| xargs -I file cp file ${build_dir}
 
 	# 2. Find and copy all folders inside the main folder
@@ -38,8 +41,17 @@ zip: clean
 	 ! -path "./${build_dir}/*"\
 	| xargs -I file npx babel file -o ./${build_dir}/file
 
+firefox: zip
+	cp manifest.firefox.json ${build_dir}/manifest.json
 	# Build the extension zip with web-ext
 	npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir}
+
+chrome: zip
+	cp manifest.chrome.json ${build_dir}/manifest.json
+	mkdir web-ext-artifacts || exit 0
+	ln -s ${build_dir} progtest-themes
+	find ./progtest-themes/ -type f | xargs zip web-ext-artifacts/progtest_themes-chrome.zip $1
+	rm progtest-themes
 
 source: clean_source
 	cd .. &&\
