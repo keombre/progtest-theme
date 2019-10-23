@@ -8,7 +8,7 @@ Download
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 
-[~~Firefox Addons~~]() Coming soon
+[Firefox Addon](https://github.com/keombre/progtest-theme/releases/download/1.0.28/progtest_themes-1.0.28-an+fx.xpi)
 
 Building from source
 --------
