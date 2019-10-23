@@ -38,5 +38,10 @@
     },
     "web_accessible_resources": [
         "themes/*"
-    ]
+    ],
+    "applications": {
+        "gecko": {
+            "id": "progtest-themes@keombre"
+        }
+    }
 }

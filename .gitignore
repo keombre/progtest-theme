@@ -1,1 +1,4 @@
 ./vscode/ipch/*
+web-ext-artifacts
+node_modules
+build

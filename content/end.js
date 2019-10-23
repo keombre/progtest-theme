@@ -67,6 +67,10 @@ class Login {
 
             document.getElementsByName('lang')[0].outerHTML += this.langGlobe
 
+            // in firefox, when opening the page, load the selected login type
+            if (typeof browser !== 'undefined') {
+                document.querySelector("#uniSel > .uniVal").click();
+            }
         }
     }
 }
