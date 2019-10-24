@@ -8,10 +8,12 @@ function save_options() {
   var theme = document.getElementById('theme').value;
   var hide = document.getElementById('dropdown').checked;
   var notify = document.getElementById('notifications').checked;
+  var highlight = document.getElementById('highlighting').checked;
   chrome.storage.sync.set({
     selectedTheme: theme,
     autoHide: hide,
-    notifications: notify
+    notifications: notify,
+    highlighting: highlight
   }, function () {
     var status = document.getElementById('status');
     status.textContent = 'Option saved';
@@ -26,11 +28,13 @@ function restore_options() {
   chrome.storage.sync.get({
     selectedTheme: 'light',
     autoHide: true,
-    notifications: true
+    notifications: true,
+    highlighting: true
   }, function (items) {
     document.getElementById('theme').value = items.selectedTheme;
     document.getElementById('dropdown').checked = items.autoHide;
     document.getElementById('notifications').checked = items.notifications;
+    document.getElementById('highlighting').checked = items.highlighting;
     hideDropdown()
   });
 }
