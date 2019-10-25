@@ -598,6 +598,8 @@ class Course extends Logged {
                 this.hideModal()
         })
 
+        document.addEventListener('click', _ => this.hideModal())
+
         let styleSheet = document.createElement("style")
         styleSheet.type = "text/css"
         styleSheet.innerText = this.createSpanningStylesheet(container)
@@ -983,7 +985,6 @@ const preload = () => {
                     parser = new Logged()
                 else
                     parser = new Main()
-
 
         }
     else
