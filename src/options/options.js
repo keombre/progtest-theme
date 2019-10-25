@@ -42,12 +42,12 @@ function restore_options() {
 function hideDropdown() {
   var dd = document.getElementById('config')
   if (document.getElementById('theme').value.includes('orig')) {
-    dd.style.visibility = "hidden";
+    dd.style.display = "none";
   } else {
-    dd.style.visibility = "initial";
+    dd.style.display = "block";
   }
 }
 
 document.getElementById('theme').addEventListener('change', hideDropdown)
-document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click', save_options);
+document.addEventListener('DOMContentLoaded', restore_options)
+document.getElementById('save').addEventListener('click', save_options)

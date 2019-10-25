@@ -3,8 +3,8 @@
 <head>
 <style>
 body {
-  width: 150px;
-  height: 195px;
+  width: 155px;
+  padding-bottom: 10px;
   text-align: center;
   margin: 0;
   font-family: "Segoe UI", Tahoma, sans-serif;
@@ -44,7 +44,7 @@ body {
 }
 
 .dropdown_c {
-  margin: 5px 0 0 10px;
+  margin: 5px 10px 0 10px;
   text-align: left;
 }
 
@@ -55,7 +55,7 @@ body {
     <img src="../themes/assets/favicon.ico">
     <span>Themes</span>
   </div>
-<p>
+<p style="margin-bottom: 5px;">
 Select your theme
 </p>
 <select id="theme">
@@ -66,6 +66,9 @@ Select your theme
 </select>
 <br />
   <table class="dropdown_c" id="config">
+    <tr>
+      <td colspan="2" style="font-size: 14px;border-bottom: thin solid #bfbfbf;text-indent: 5px;">Config</td>
+    </tr>
     <tr>
       <td><input type="checkbox" id="dropdown"></td>
       <td>Autohide results</td>

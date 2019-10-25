@@ -103,7 +103,7 @@ class Logged {
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
         
         this.displayBell()
-        if (highlighting) this.highlightCode()
+        this.highlightCode()
         this.notifications()
     }
 
@@ -152,7 +152,10 @@ class Logged {
 
     highlightCode() {
         document.querySelectorAll('pre, code, tt').forEach((block) => {
-            hljs.highlightBlock(block)
+            if (highlighting)
+                hljs.highlightBlock(block)
+            else
+                block.classList.add('hljs')
         })
     }
 
