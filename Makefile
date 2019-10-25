@@ -18,8 +18,8 @@ firefox: source
 	cp ${manifest_dir}/firefox.json ${build_dir}/manifest.json
 	mkdir -p ${out_dir}/firefox || exit 0
 	rm ${out_dir}/firefox/* || exit 0
-	#npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir} -a ${out_dir}/firefox
-	npx web-ext build -s ${build_dir} -a ${out_dir}/firefox
+	npx web-ext sign --channel=unlisted --api-key=${api_key} --api-secret=${api_secret} -s ${build_dir} -a ${out_dir}/firefox
+	#npx web-ext build -s ${build_dir} -a ${out_dir}/firefox
 
 chrome: source
 	cp ${manifest_dir}/chrome.json ${build_dir}/manifest.json
