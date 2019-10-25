@@ -103,7 +103,7 @@ class Logged {
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
         
         this.displayBell()
-        this.highlightCode()
+        if (highlighting) this.highlightCode()
         this.notifications()
     }
 
