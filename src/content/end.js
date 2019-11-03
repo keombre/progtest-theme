@@ -254,8 +254,8 @@ class Exam extends Logged {
 
         // normalize html
         document.querySelectorAll(`
-            form[name="form1"] table tr:nth-child(n+5) td.rCell,
-            form[name="form1"] table tr:nth-child(n+5) td.rbCell`
+            form[name="form1"] table tr:nth-child(n+4) td.rCell,
+            form[name="form1"] table tr:nth-child(n+4) td.rbCell`
         ).forEach(e => {
             let radio = e.querySelector('input[type="radio"]')
             if (!radio) return
