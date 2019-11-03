@@ -1,5 +1,7 @@
 var theme
 var dropdown
+var displayNotifications
+var highlighting
 var settingsLoaded = false
 var pttLoaded = new Event('ptt-loaded');
 
@@ -21,6 +23,8 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     // load user config and dispatch event when ready
     theme = response.theme
     dropdown = response.dropdown
+    displayNotifications = response.displayNotifications
+    highlighting = response.highlighting
 
     if (response.theme == 'orig' || response.theme == 'orig-dark')
         return

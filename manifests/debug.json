@@ -1,0 +1,43 @@
+{
+    "name": "ProgTest Themes",
+    "version": "1.0.14",
+    "description": "Theme manager for ProgTest",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "run_at": "document_start",
+            "js": ["content/start.js", "content/highlightjs/highlight.pack.js"],
+            "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
+            "all_frames": true
+        },
+        {
+            "run_at": "document_end",
+            "js": ["content/end.js"],
+            "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
+            "all_frames": true
+        }
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "*://progtest.fit.cvut.cz/*",
+        "*://ptmock.localhost/*",
+        "storage",
+        "tabs"
+    ],
+    "browser_action": {
+        "default_title": "",
+        "default_icon": "icon.png",
+        "default_popup": "options/options.html"
+    },
+    "icons": {
+        "128": "icon.png"
+    },
+    "web_accessible_resources": [
+        "themes/*"
+    ]
+}

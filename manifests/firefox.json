@@ -1,19 +1,19 @@
 {
     "name": "ProgTest Themes",
-    "version": "1.0.14",
+    "version": "1.0.29",
     "description": "Theme manager for ProgTest",
     "manifest_version": 2,
     "content_scripts": [
         {
             "run_at": "document_start",
-            "js": ["content/start.js"],
-            "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
+            "js": ["content/start.js", "content/highlightjs/highlight.pack.js"],
+            "matches": ["*://progtest.fit.cvut.cz/*"],
             "all_frames": true
         },
         {
             "run_at": "document_end",
             "js": ["content/end.js"],
-            "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
+            "matches": ["*://progtest.fit.cvut.cz/*"],
             "all_frames": true
         }
     ],
@@ -25,7 +25,6 @@
         "webRequest",
         "webRequestBlocking",
         "*://progtest.fit.cvut.cz/*",
-        "*://ptmock.localhost/*",
         "storage",
         "tabs"
     ],
@@ -39,5 +38,11 @@
     },
     "web_accessible_resources": [
         "themes/*"
-    ]
+    ],
+    "applications": {
+        "gecko": {
+            "id": "progtest-themes@keombre",
+            "update_url": "https://raw.githubusercontent.com/keombre/progtest-theme/stable/update.json"
+        }
+    }
 }

@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css");
+
 :root
 {
     --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
@@ -34,7 +36,7 @@
     user-select: none;
     transition: opacity .2s ease;
     opacity: 1;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .loadWrapperHide {
@@ -284,7 +286,7 @@ select.std.w200[name="UID_UNIVERSITY"]
 #langGlobe {
     position: absolute;
     top: 9px;
-    right: 25px;
+    right: 28px;
     z-index: -1;
 }
 
@@ -455,6 +457,72 @@ body > table td:nth-child(1) > span > *:nth-child(1)
     left: 0px;
     z-index: 200;
     transition: width 1s linear 0s;
+}
+
+.notify {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    vertical-align: top;
+    margin-right: 30px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.notify:hover {
+    filter: brightness(1.5);
+}
+
+.notify.off {
+    background: url('assets/notifications_none.svg');
+}
+
+.notify.on {
+    background: url('assets/notifications_active.svg');
+}
+
+.notifications {
+    position: fixed;
+    top: 70px;
+    right: 25px;
+    width: 250px;
+    min-height: 25px;
+    border: thin solid;
+    box-shadow: 0px 2px 5px -1px #000;
+    border-radius: 5px;
+    z-index: 500;
+    transition: opacity linear 0.1s;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.notifications-hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.notifications > a {
+    display: block;
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: 100;
+    border-bottom: thin solid;
+    position: relative;
+}
+
+.notifications > b {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 14px 0;
+}
+
+.notifications > a > b {
+    font-size: 18px;
+    font-weight: 600;
 }
 
 /** subject select */
@@ -861,7 +929,6 @@ span.course_title::before {
 }
 
 .modal-spinner {
-    background: url(./assets/spinner.svg), radial-gradient(ellipse at center, #fffa 40%,#fff0 70%);
     position: absolute;
     top: calc(50% - 100px);
     left: calc(50% - 100px);
@@ -1460,10 +1527,16 @@ tr.resStat td {
 
 /** buttons */
 
-input[type=radio]
-{
-    position: relative;
-    top: 2px;
+.radio {
+    height: 28px;
+}
+.radio input[type="radio"] {
+    -webkit-appearance: initial;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    transition: all 250ms ease;
+    vertical-align: bottom;
 }
 
 input.std,

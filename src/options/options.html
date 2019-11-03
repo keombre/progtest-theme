@@ -3,10 +3,12 @@
 <head>
 <style>
 body {
-  width: 150px;
-    height: 175px;
-    text-align: center;
-    margin: 0;
+  width: 155px;
+  padding-bottom: 10px;
+  text-align: center;
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-size: 12px;
 }
 
 .header {
@@ -42,7 +44,8 @@ body {
 }
 
 .dropdown_c {
-  margin-top: 5px;
+  margin: 5px 10px 0 10px;
+  text-align: left;
 }
 
 </style>
@@ -52,7 +55,7 @@ body {
     <img src="../themes/assets/favicon.ico">
     <span>Themes</span>
   </div>
-<p>
+<p style="margin-bottom: 5px;">
 Select your theme
 </p>
 <select id="theme">
@@ -62,8 +65,23 @@ Select your theme
   <option value="dark">Dark</option>
 </select>
 <br />
-<div class="dropdown_c">
-  <input type="checkbox" id="dropdown"> Autohide results
+  <table class="dropdown_c" id="config">
+    <tr>
+      <td colspan="2" style="font-size: 14px;border-bottom: thin solid #bfbfbf;text-indent: 5px;">Config</td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" id="dropdown"></td>
+      <td>Autohide results</td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" id="notifications"></td>
+      <td>Show notifications</td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" id="highlighting"></td>
+      <td>Syntax highlighting</td>
+    </tr>
+  </table>
 </div>
 
 <div id="status"></div>
