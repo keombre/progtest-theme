@@ -260,6 +260,11 @@ class Exam extends Logged {
         ).forEach(e => {
             let radio = e.querySelector('input[type="radio"]')
             if (!radio) return
+            let dot = e.previousElementSibling.querySelector('.redBox')
+            if (dot) {
+                dot.parentElement.removeChild(dot)
+                radio.classList.add('radio-red')
+            }
             e.classList.add('radio')
             let label = document.createElement('span')
             label.classList.add('radio-label')
@@ -268,17 +273,12 @@ class Exam extends Logged {
                 if (f.nodeName == "#text") {
                     label.innerHTML += f.textContent
                     e.replaceChild(label, f)
-                } else if (f.nodeName == "SUP") {
+                } else {
                     label.innerHTML += f.outerHTML
                     remove.push(f)
                 }
             })
             remove.forEach(g => g.remove())
-            let dot = e.previousElementSibling.querySelector('.redBox')
-            if (dot) {
-                dot.parentElement.removeChild(dot)
-                radio.classList.add('radio-red')
-            }
         })
     }
 }
