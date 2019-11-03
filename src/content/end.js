@@ -255,18 +255,25 @@ class Exam extends Logged {
 
         // normalize html
         document.querySelectorAll(`
-            form[name="form1"] table tr:nth-child(n+5) td.rCell,
-            form[name="form1"] table tr:nth-child(n+5) td.rbCell`
+            form[name="form1"] table tr:nth-child(n+4) td.rCell,
+            form[name="form1"] table tr:nth-child(n+4) td.rbCell`
         ).forEach(e => {
             let radio = e.querySelector('input[type="radio"]')
             if (!radio) return
             e.classList.add('radio')
-            e.childNodes.forEach(f => {if (f.nodeName == "#text") {
-                let label = document.createElement('span')
-                label.innerText = e.textContent
-                label.classList.add('radio-label')
-                e.replaceChild(label, f)
-            }})
+            let label = document.createElement('span')
+            label.classList.add('radio-label')
+            let remove = [];
+            e.childNodes.forEach(f => {
+                if (f.nodeName == "#text") {
+                    label.innerHTML += f.textContent
+                    e.replaceChild(label, f)
+                } else if (f.nodeName == "SUP") {
+                    label.innerHTML += f.outerHTML
+                    remove.push(f)
+                }
+            })
+            remove.forEach(g => g.remove())
             let dot = e.previousElementSibling.querySelector('.redBox')
             if (dot) {
                 dot.parentElement.removeChild(dot)
