@@ -232,7 +232,8 @@ class Logged {
 
     notifySeen(event) {
         let localTasks = JSON.parse(localStorage.tasks)
-        let link = new URL(event.target.parentElement.href)
+        let linkNode = event.target.nodeName == "A" ? event.target : event.target.parentElement
+        let link = new URL(linkNode.href)
         localTasks.map(e => {
             if (e.link == '/' + link.search)
                 e.seen = true
@@ -240,7 +241,7 @@ class Logged {
         })
         localStorage.tasks = JSON.stringify(localTasks)
         let frame = document.getElementsByClassName('notifications')[0]
-        frame.removeChild(event.target.parentElement)
+        frame.removeChild(linkNode)
         if (!frame.childElementCount) {
             frame.innerHTML = '<b>Žádná upozornění</b>'
             document.getElementsByClassName('notify')[0].classList.replace('on', 'off')
