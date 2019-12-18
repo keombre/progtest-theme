@@ -177,6 +177,11 @@ span span.course_link_score {
     background: #394145;
 }
 
+span.course_link_score_sum {
+    color: #eae4ef !important;
+    border-top: thin solid rgba(255, 255, 255, 0.3) !important;
+}
+
 a.course_link:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }

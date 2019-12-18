@@ -602,6 +602,7 @@ class Course extends Logged {
         container.classList.add('course_container')
         
         this.writeContainers(container)
+        this.writeContainerSum()
         document.body.replaceChild(container, document.querySelector('center'))
 
         document.addEventListener('keydown', e => {
@@ -615,6 +616,24 @@ class Course extends Logged {
         styleSheet.type = "text/css"
         styleSheet.innerText = this.createSpanningStylesheet(container)
         document.head.appendChild(styleSheet)
+    }
+
+    writeContainerSum() {
+        this.getContainerNames().forEach(e => {
+            if (e == "results") return
+            const text = eval(`this.${e}`)
+            if (text.childElementCount <= 1) return
+            let sum = 0
+            text.querySelectorAll('.course_link_score').forEach(e => {
+                let score = parseFloat(e.innerText)
+                if (!isNaN(score)) sum += score
+            })
+            let sumElem = document.createElement("span")
+            sumElem.innerText = sum.toFixed(2)
+            sumElem.classList.add("course_link")
+            sumElem.classList.add("course_link_score_sum")
+            text.appendChild(sumElem)
+        })
     }
 
     createSpanningStylesheet(container) {

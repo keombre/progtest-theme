@@ -721,6 +721,16 @@ span.course_title {
     font-weight: 500;
 }
 
+span.course_link_score_sum:before {
+    content: "Σ = ";
+}
+
+span.course_link_score_sum {
+    text-align: right;
+    padding-right: 15px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
 .course_link.course_disabled {
     font-weight: 400;
 }
