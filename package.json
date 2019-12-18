@@ -1,6 +1,6 @@
 {
   "name": "progtest-theme",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Theme manager for ProgTest",
   "main": "background.js",
   "scripts": {
@@ -20,6 +20,6 @@
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "web-ext": "^3.2.0"
+    "web-ext": "^3.2.1"
   }
 }
