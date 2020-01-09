@@ -475,11 +475,11 @@ body > table td:nth-child(1) > span > *:nth-child(1)
 }
 
 .notify.off {
-    background: url('assets/notifications_none.svg');
+    background: url('./assets/notifications_none.svg');
 }
 
 .notify.on {
-    background: url('assets/notifications_active.svg');
+    background: url('./assets/notifications_active.svg');
 }
 
 .notifications {

@@ -38,7 +38,14 @@ chrome.webRequest.onBeforeRequest.addListener(
     () => {
         if (theme == 'orig')
             return { cancel: false };
-        return { redirectUrl: chrome.runtime.getURL('themes/' + theme + '.css') };
+        // style path definitions
+        const path = {
+            light: 'newStyle/light.css',
+            dark: 'newStyle/dark.css',
+            'orig-dark': 'orig/dark.css',
+            'primer-light': 'primer/light.css'
+        }[theme]
+        return { redirectUrl: chrome.runtime.getURL('themes/' + path) };
     },
     { urls: ["*://progtest.fit.cvut.cz/css.css", "*://ptmock.localhost/css.css"] },
     ["blocking"]

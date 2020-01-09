@@ -1,0 +1,110 @@
+@import "./primer.css";
+
+/** page loader */
+
+#loadWrapper {
+    font-family: var(--font);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    transition: opacity .2s ease;
+    opacity: 1;
+    z-index: 1000;
+}
+
+.loadWrapperHide {
+    opacity: 0 !important;
+}
+
+.loadWrapperHide > .anim-load {
+    animation-play-state: paused !important;
+}
+
+.anim-load {
+    animation-play-state: running;
+    position: absolute;
+    height: 30px;
+    background: #565f7c;
+    width: 30px;
+    border-radius: 3px;
+    left: calc(50% - 34px);
+    transform-origin: right center;
+}
+
+@keyframes width {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(2.5, 1);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.anim-1 {
+    top: calc(50% - 93px);
+    animation: 1s width infinite;
+}
+
+.anim-2 {
+    top: calc(50% - 55px);
+    animation: 1s width infinite;
+    animation-delay: .33s;
+}
+
+.anim-3 {
+    top: calc(50% - 18px);
+    animation: 1s width infinite;
+    animation-delay: .66s;
+}
+
+.anim-logo {
+    position: absolute;
+    top: calc(50% - 93px);
+    left: calc(50% + 5px);
+}
+
+#loadWrapper {
+    background: #fff;
+}
+
+.errorReporter {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: #D32F2F;
+    border: thin solid #B71C1C;
+    color: #fff;
+    padding: 1px 6px;
+    white-space: pre;
+    box-shadow: 0 0 2px 0 #707070;
+    font-size: 8pt;
+}
+
+.errorReporter:before {
+    content: "ProgTest Themes Error Reporter\A";
+    font-size: 9pt;
+}
+
+html
+{
+    height: 100%;
+}
+
+body
+{
+    overflow-y: scroll;
+    margin: 0;
+    height: 100%;
+}
+
+#wide-bg {
+    background-image: url("./assets/bg-login.svg");
+    background-size: cover;
+    background-position: bottom;
+}
