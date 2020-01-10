@@ -34,17 +34,78 @@ let Primer = {}
         </div>
     </div>
 </div>
+`,
+        Logged: {
+            Header: `
+<div style="z-index: 2" class="Header p-2 position-fixed width-full">
+    <div class="Header-item Header-item--full">
+        <a href="?X=Main" class="Header-link f4">
+            <span>ProgTest</span>
+        </a>
+    </div>
+    <div class="Header-item mr-0">
+        <details class="dropdown details-reset details-overlay d-inline-block">
+            <summary class="p-1 mt-n1 mb-n1 d-inline">
+                <span class="mr-1"><%username%></span>
+                <div class="dropdown-caret"></div>
+            </summary>
+            <ul class="dropdown-menu dropdown-menu-sw">
+                <li><a class="dropdown-item" href="?X=FAQ">FAQ</a></li>
+                <li><a class="dropdown-item" href="?X=Preset">Nastavení</a></li><li class="dropdown-divider" role="separator"></li>
+                <li><a class="dropdown-item" href="?X=Logout">Odhlásit se</a></li>
+            </ul>
+        </details>
+    </div>
+</div>
+<div class="position-fixed px-3 py-2 top-6 height-full col-2 border-right border-gray overflow-y-auto" style="z-index: 1">
+    <div class="border-bottom my-2">
+        <h4>Předměty</h4>
+        <div id="sidebar-subjects">
+            <span class="Label bg-blue m-2"><span>Načítání</span><span class="AnimatedEllipsis"></span></span>
+        </div>
+    </div>
+    <div class="my-2">
+        <h4>Kompilátory</h4>
+    </div>
+</div>
+<div class="float-right clearfix top-6 height-full col-10 bg-gray"></div>
+`,
+            Sidebar: {
+                Subject: `
+<details class="my-3 user-select-none" <%open%>>
+    <summary style="outline: none">
+        <h4 class="d-inline f4 text-gray"><%name%></h4>
+        <a href="<%link%>" class="btn btn-sm btn-outline py-0 float-right">Přejít</a>
+    </summary>
+    <div class="f6 text-gray mb-1" style="margin-left: 19px;"><%fullname%></div>
+    <%tasks%>
+</details>
+`,
+                Task: `<div class="px-3 py-1"><a href="<%link%>"><%name%></a></div>
 `
+            }
+        }
     }
 
     Primer.Common = {
-        Clear: () => {
-            document.body.innerHTML = ""
+        Clear: (target = document.body) => {
+            target.innerHTML = ""
         },
         Render: (template, args = {}, target = document.body) => {
+            const replArr = (str, find, replace) => {
+                let regex = [], map = {}
+                find.forEach((e, f) => {
+                    regex.push(e.replace(/([-[\]{}()*+?.\\^$|#,])/g,'\\$1'))
+                    map[e] = replace[f]
+                })
+                regex = regex.join('|')
+                str = str.replace(new RegExp(regex, 'g'), matched => map[matched])
+                return str
+            }
             let sour = []
             let resp = []
             for (let p in args) {
+                if (args[p] === null) continue
                 sour.push("<%" + p + "%>")
                 if (typeof args[p] == "string")
                     resp.push(args[p])
@@ -53,7 +114,10 @@ let Primer = {}
                 else
                     resp.push(args[p].outerHTML)
             }
-            target.innerHTML += template.replace(sour, resp)
+            if (target === true)
+                return replArr(template, sour, resp)
+            else
+                target.innerHTML += replArr(template, sour, resp)
         },
         Attach: (elements, scope, event="click") => {
             for (let e in elements)
@@ -77,6 +141,8 @@ let Primer = {}
 
     Primer.Login = class {
         constructor() {
+            localStorage.removeItem('subjects')
+
             this.unis = this.getUniIDs()
             this.langs = [
                 {
@@ -183,10 +249,41 @@ let Primer = {}
 
     Primer.Logged = class {
         constructor() {
+            this.username = document.title.substr(0, document.title.indexOf(" "))
+            
+            Primer.Common.Clear()
+            Primer.Common.Render(Primer.Templates.Logged.Header, {
+                username: this.username.charAt(0).toUpperCase() + this.username.slice(1),
+            })
 
+            this.buildNavTree().then(e => {
+                let subjects = ""
+                e.forEach(f => {
+                    let tasks = ""
+                    f.children.forEach(g => {
+                        tasks += Primer.Common.Render(Primer.Templates.Logged.Sidebar.Task, {
+                            name: g.name,
+                            link: g.link
+                        }, true)
+                    })
+                    const year = new Date().getFullYear().toString().substr(-2)
+                    subjects += Primer.Common.Render(Primer.Templates.Logged.Sidebar.Subject, {
+                        name: f.code,
+                        link: f.link,
+                        tasks: tasks,
+                        fullname: f.name,
+                        open: (f.year.includes(year) ? "open" : "") // todo: make this better
+                    }, true)
+                })
+                document.getElementById("sidebar-subjects").innerHTML = subjects
+            })
         }
 
         async buildNavTree() {
+            const localSubjects = localStorage.getItem("subjects")
+            if (localSubjects !== null)
+                return JSON.parse(localSubjects)
+
             const body = await Primer.Common.Fetch("/index.php?X=Main")
             let links = []
             await Primer.Common.asyncForEach(body.querySelectorAll(".butLink"), async e => {
@@ -214,12 +311,16 @@ let Primer = {}
                             deadline: f.parentElement.children[2].innerText
                         })
                 })
+                const fullname = e.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText
                 links.push({
                     link: e.href,
-                    name: e.innerText,
+                    code: e.innerText,
+                    name: fullname.substr(0, fullname.lastIndexOf(" (")),
+                    year: fullname.slice(fullname.lastIndexOf("(")+1, -1),
                     children: sublinks
                 })
             })
+            localStorage.setItem("subjects", JSON.stringify(links))
             return links
         }
     }
