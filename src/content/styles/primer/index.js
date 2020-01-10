@@ -58,6 +58,16 @@ let Primer = {}
         Attach: (elements, scope, event="click") => {
             for (let e in elements)
                 document.getElementById(e).addEventListener(event, elements[e].bind(scope))
+        },
+        Fetch: async (url) => {
+            const root = await fetch(url)
+            const body = await root.text()
+            let parser = new DOMParser()
+            return parser.parseFromString(body, 'text/html'); 
+        },
+        asyncForEach: async (array, callback) => {
+            for (let index = 0; index < array.length; index++)
+                await callback(array[index], index, array)
         }
     }
 
@@ -172,7 +182,46 @@ let Primer = {}
     }
 
     Primer.Logged = class {
+        constructor() {
 
+        }
+
+        async buildNavTree() {
+            const body = await Primer.Common.Fetch("/index.php?X=Main")
+            let links = []
+            await Primer.Common.asyncForEach(body.querySelectorAll(".butLink"), async e => {
+                if (
+                    e.href.includes("X=Preset") ||
+                    e.href.includes("X=CompilersDryRuns") ||
+                    e.href.includes("X=FAQ")
+                ) return
+
+                const subject = await Primer.Common.Fetch(e.href)
+                let sublinks = []
+                subject.querySelectorAll(".lBox").forEach(f => {
+                    if (f.parentElement.childElementCount == 2)
+                        sublinks.push({
+                            type: "results",
+                            link: f.parentElement.children[1].querySelector("a").href,
+                            name: f.innerText
+                        })
+                    else
+                        sublinks.push({
+                            type: "task",
+                            link: (f.parentElement.children[3].querySelector("a")??{href:null}).href,
+                            name: f.innerText,
+                            score: parseFloat(f.parentElement.children[1].innerText),
+                            deadline: f.parentElement.children[2].innerText
+                        })
+                })
+                links.push({
+                    link: e.href,
+                    name: e.innerText,
+                    children: sublinks
+                })
+            })
+            return links
+        }
     }
 
     Primer.Exam = class extends Primer.Logged {
