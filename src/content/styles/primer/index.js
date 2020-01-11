@@ -37,11 +37,9 @@ let Primer = {}
 `,
         Logged: {
             Header: `
-<div style="z-index: 2" class="Header p-2 position-fixed width-full">
+<div style="z-index: 2; height: 40px" class="Header p-2 position-fixed width-full">
     <div class="Header-item Header-item--full">
-        <a href="?X=Main" class="Header-link f4">
-            <span>ProgTest</span>
-        </a>
+        <a href="?X=Main" class="mt-n2 mb-n2 Header-link f3-light">Prog<b>test</b></a>
     </div>
     <div class="Header-item mr-0">
         <details class="dropdown details-reset details-overlay d-inline-block">
@@ -57,7 +55,7 @@ let Primer = {}
         </details>
     </div>
 </div>
-<div class="position-fixed px-3 py-2 top-6 height-full col-2 border-right border-gray overflow-y-auto" style="z-index: 1">
+<div class="position-fixed px-3 py-2 top-6 col-xl-2 col-lg-3 col-4 d-sm-block d-none border-right border-gray overflow-y-auto" style="z-index: 1; height: calc(100% - 40px)">
     <div class="border-bottom my-2">
         <h4>Předměty</h4>
         <div id="sidebar-subjects">
@@ -68,13 +66,13 @@ let Primer = {}
         <h4>Kompilátory</h4>
     </div>
 </div>
-<div class="float-right clearfix top-6 height-full col-10 bg-gray"></div>
+<div class="float-right clearfix top-6 col-xl-10 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)"></div>
 `,
             Sidebar: {
                 Subject: `
 <details class="my-3 user-select-none" <%open%>>
     <summary style="outline: none">
-        <h4 class="d-inline f4 text-gray"><%name%></h4>
+        <h4 class="d-inline lead f4 text-gray"><b><%name%></b> <%year%></h4>
         <a href="<%link%>" class="btn btn-sm btn-outline py-0 float-right">Přejít</a>
     </summary>
     <div class="f6 text-gray mb-1" style="margin-left: 19px;"><%fullname%></div>
@@ -218,7 +216,7 @@ let Primer = {}
 
         form_keyboard(event) {
             if (event.keyCode == 13)
-                this.validate("login")
+                this.submit("login")
         }
 
         login(username, password, lang, uni, type) {
@@ -266,13 +264,13 @@ let Primer = {}
                             link: g.link
                         }, true)
                     })
-                    const year = new Date().getFullYear().toString().substr(-2)
                     subjects += Primer.Common.Render(Primer.Templates.Logged.Sidebar.Subject, {
                         name: f.code,
                         link: f.link,
                         tasks: tasks,
                         fullname: f.name,
-                        open: (f.year.includes(year) ? "open" : "") // todo: make this better
+                        year: f.year + " " + ["ZS", "LS"][f.sem],
+                        open: (f.year == (e[0]??{year: f.year}).year ? "open" : "")
                     }, true)
                 })
                 document.getElementById("sidebar-subjects").innerHTML = subjects
@@ -283,6 +281,22 @@ let Primer = {}
             const localSubjects = localStorage.getItem("subjects")
             if (localSubjects !== null)
                 return JSON.parse(localSubjects)
+            
+            const types = {
+                "Zahřívací": "tasks",
+                "Domácí": "tasks",
+                "Programovací": "tasks",
+                "Soutěžní": "tasks_extra",
+                "Semestrální": "sem",
+                "Znalostní": "tests",
+                "Zkouška": "exams",
+                "Cvičení": "extras",
+                "Práce": "extras",
+                "Checkpoint": "extras",
+                "Code": "extras",
+                "Úlohy": "extras",
+                "Výsledky": "results",
+            }
 
             const body = await Primer.Common.Fetch("/index.php?X=Main")
             let links = []
@@ -302,24 +316,36 @@ let Primer = {}
                             link: f.parentElement.children[1].querySelector("a").href,
                             name: f.innerText
                         })
-                    else
+                    else {
+                        const name = f.innerText
+                        
+                        let type = types[name.replace(/ .*/, '')] || "unknown"
+                        if (name.includes('Teorie') || name.includes('Test')) type = "exams"
+                        else if (name.includes('. test')) type = "tests"
+                        else if (name.includes('domácí cvičení')) type = "tasks"
+                        else if (name.includes('Checkpoint')) type = "sem"
+                        else if (name.includes('Úloha')) type = "tasks"
+                        
                         sublinks.push({
-                            type: "task",
+                            type: type,
                             link: (f.parentElement.children[3].querySelector("a")??{href:null}).href,
-                            name: f.innerText,
+                            name: name,
                             score: parseFloat(f.parentElement.children[1].innerText),
                             deadline: f.parentElement.children[2].innerText
                         })
+                    }
                 })
                 const fullname = e.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText
                 links.push({
                     link: e.href,
                     code: e.innerText,
                     name: fullname.substr(0, fullname.lastIndexOf(" (")),
-                    year: fullname.slice(fullname.lastIndexOf("(")+1, -1),
+                    year: 2000 + parseInt(fullname.substr(fullname.lastIndexOf("(")+1, 2)),
+                    sem: fullname.includes("LS)") ? 1 : 0,
                     children: sublinks
                 })
             })
+            links.sort((a, b) => b.year == a.year ? b.sem - a.sem : b.year - a.year)
             localStorage.setItem("subjects", JSON.stringify(links))
             return links
         }
