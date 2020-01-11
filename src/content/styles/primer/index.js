@@ -55,7 +55,7 @@ let Primer = {}
         </details>
     </div>
 </div>
-<div class="position-fixed px-3 py-2 top-6 col-xl-2 col-lg-3 col-4 d-sm-block d-none border-right border-gray overflow-y-auto" style="z-index: 1; height: calc(100% - 40px)">
+<div class="position-fixed px-3 py-2 top-6 col-lg-3 col-4 d-sm-block d-none border-right border-gray overflow-y-auto" style="z-index: 1; height: calc(100% - 40px)">
     <div class="border-bottom my-2">
         <h4>Předměty</h4>
         <div id="sidebar-subjects">
@@ -66,7 +66,7 @@ let Primer = {}
         <h4>Kompilátory</h4>
     </div>
 </div>
-<div class="float-right clearfix top-6 col-xl-10 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)"></div>
+<div class="float-right clearfix top-6 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)"></div>
 `,
             Sidebar: {
                 Subject: `
@@ -85,7 +85,7 @@ let Primer = {}
     <%content%>
 </details>
 `,
-                Task: `<div class="px-3 py-1"><a href="<%link%>"><%icon%><%name%></a></div>
+                Task: `<div class="px-3 py-1"><a href="<%link%>"><%icon%><%name%></a> <span class="Counter Counter--gray"><%score%></span></div>
 `,
                 Icons: {
                     results: `<svg width="16" height="16" class="octicon octicon-graph pr-1" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M16 14v1H0V0h1v14h15zM5 13H3V8h2v5zm4 0H7V3h2v10zm4 0h-2V6h2v7z"></path></svg>`,
@@ -292,6 +292,7 @@ let Primer = {}
                                 taskGroups.push({
                                     text: Primer.Common.Render(Primer.Templates.Logged.Sidebar.Task, {
                                         name: i.name,
+                                        score: "",
                                         link: i.link,
                                         icon: Primer.Templates.Logged.Sidebar.Icons.results
                                     }, true),
@@ -300,6 +301,7 @@ let Primer = {}
                             else
                                 tasks += Primer.Common.Render(Primer.Templates.Logged.Sidebar.Task, {
                                     name: i.name,
+                                    score: isNaN(i.score) ? "0.00" : (i.score??0).toFixed(2),
                                     link: i.link,
                                     icon: ""
                                 }, true)
