@@ -134,9 +134,11 @@ let Primer = {}
                 sour.push("<%" + p + "%>")
                 if (typeof args[p] == "string")
                     resp.push(args[p])
-                else if (Array.isArray(args[p]))
-                    args[p].forEach(e => resp.push(e.outerHTML))
-                else
+                else if (Array.isArray(args[p])) {
+                    let d = ""
+                    args[p].forEach(e =>  d += e.outerHTML)
+                    resp.push(d)
+                } else
                     resp.push(args[p].outerHTML)
             }
             if (target === true)
