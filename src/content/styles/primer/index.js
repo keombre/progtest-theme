@@ -66,7 +66,7 @@ let Primer = {}
         <h4>Kompilátory</h4>
     </div>
 </div>
-<div class="float-right clearfix top-6 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)"></div>
+<div id="container" class="float-right clearfix top-6 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)"></div>
 `,
             Sidebar: {
                 Subject: `
@@ -109,10 +109,55 @@ let Primer = {}
                     unknown: "gray-dark",
                 }
             }
+        },
+        Main: {
+            Card: `
+<div class="Box col-4 float-left m-3 hover-grow" style="height: 100px">
+    <div class="border-right d-inline-block height-full" style="width: 100px">
+        <img class="p-3" src="<%icon%>" style="width: 100px; height: 100px" />
+    </div>
+    <div class="p-2 d-inline-block v-align-top height-full" style="max-width: calc(100% - 105px)">
+            <svg width="16" height="16" class="octicon octicon-repo mr-1" viewBox="0 0 12 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M4 9H3V8h1v1zm0-3H3v1h1V6zm0-2H3v1h1V4zm0-2H3v1h1V2zm8-1v12c0 .55-.45 1-1 1H6v2l-1.5-1.5L3 16v-2H1c-.55 0-1-.45-1-1V1c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zm-1 10H1v2h2v-1h3v1h5v-2zm0-10H2v9h9V1z"></path></svg>
+            <a href="<%link%>" class="f4 text-bold"><%code%></a>
+            <p class="text-gray text-small"><%name%></p>
+            <p class="text-gray text-small"><%year%></p>
+    </div>
+</div>
+`,
+            TimelineRow: `
+<div class="TimelineItem clearfix ml-5">
+    <div class="TimelineItem-badge bg-<%color%> text-white" style="">
+        <svg width="16" height="16" class="octicon octicon-mortar-board" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M8.11 2.8a.34.34 0 00-.2 0L.27 5.18a.35.35 0 000 .67L2 6.4v1.77c-.3.17-.5.5-.5.86 0 .19.05.36.14.5-.08.14-.14.31-.14.5v2.58c0 .55 2 .55 2 0v-2.58c0-.19-.05-.36-.14-.5.08-.14.14-.31.14-.5 0-.38-.2-.69-.5-.86V6.72l4.89 1.53c.06.02.14.02.2 0l7.64-2.38a.35.35 0 000-.67L8.1 2.81l.01-.01zM4 8l3.83 1.19h-.02c.13.03.25.03.36 0L12 8v2.5c0 1-1.8 1.5-4 1.5s-4-.5-4-1.5V8zm3.02-2.5c0 .28.45.5 1 .5s1-.22 1-.5-.45-.5-1-.5-1 .22-1 .5z"></path></svg>
+    </div>
+    <div class="TimelineItem-body">
+        <div class="">
+            <h4 style="font-weight: 300;"><%sem%> <b><%year%></b></h4>
+        </div>
+        <%content%>
+    </div>
+</div>
+`,
+            TimelineEnd: `
+<div class="TimelineItem ml-5 height-full position-absolute bottom-0" style="z-index: 0"></div>
+`,
+            Icons: {
+                "BI-AAG": chrome.extension.getURL("./themes/newStyle/assets/icons/aag.svg"),
+                "BI-AG1": chrome.extension.getURL("./themes/newStyle/assets/icons/ag1.svg"),
+                "BI-OSY": chrome.extension.getURL("./themes/newStyle/assets/icons/osy.svg"),
+                "BI-PA1": chrome.extension.getURL("./themes/newStyle/assets/icons/pa1.svg"),
+                "BI-PA2": chrome.extension.getURL("./themes/newStyle/assets/icons/pa2.svg"),
+                "BI-PJV": chrome.extension.getURL("./themes/newStyle/assets/icons/pjv.svg"),
+                "BI-PS1": chrome.extension.getURL("./themes/newStyle/assets/icons/ps1.svg"),
+                "unknown": chrome.extension.getURL("./themes/newStyle/assets/icons/unknown.svg"),
+            },
+            SemColor: [
+                'purple',
+                'red-5'
+            ]
         }
     }
 
-    Primer.Common = {
+    Primer.Utils = {
         Clear: (target = document.body) => {
             target.innerHTML = ""
         },
@@ -136,15 +181,15 @@ let Primer = {}
                     resp.push(args[p])
                 else if (Array.isArray(args[p])) {
                     let d = ""
-                    args[p].forEach(e =>  d += e.outerHTML)
+                    args[p].forEach(e => d += e.outerHTML)
                     resp.push(d)
                 } else
                     resp.push(args[p].outerHTML)
             }
             if (target === true)
-                return replArr(template, sour, resp)
+                return sour.length ? replArr(template, sour, resp) : template
             else
-                target.innerHTML += replArr(template, sour, resp)
+                target.innerHTML += sour.length ? replArr(template, sour, resp) : template
         },
         Attach: (elements, scope, event = "click") => {
             for (let e in elements)
@@ -159,6 +204,11 @@ let Primer = {}
         asyncForEach: async (array, callback) => {
             for (let index = 0; index < array.length; index++)
                 await callback(array[index], index, array)
+        },
+        GetClearCurrentDOM() {
+            const root = document.body.cloneNode(true)
+            document.body.innerHTML = ""
+            return root
         }
     }
 
@@ -182,14 +232,14 @@ let Primer = {}
                 }
             ]
 
-            Primer.Common.Clear()
-            Primer.Common.Render(Primer.Templates.Login, { unis: this.buildUniOptions() })
-            Primer.Common.Attach({
+            Primer.Utils.Clear()
+            Primer.Utils.Render(Primer.Templates.Login, { unis: this.buildUniOptions() })
+            Primer.Utils.Attach({
                 'sso_link': this.login_shib,
                 'login_link': this.login_validate,
                 'reset_link': this.reset_validate
             }, this)
-            Primer.Common.Attach({
+            Primer.Utils.Attach({
                 'login_form': this.form_keyboard
             }, this, 'keydown')
         }
@@ -278,10 +328,11 @@ let Primer = {}
         constructor() {
             this.username = document.title.substr(0, document.title.indexOf(" "))
 
-            Primer.Common.Clear()
-            Primer.Common.Render(Primer.Templates.Logged.Header, {
+            this.currentDOM = Primer.Utils.GetClearCurrentDOM()
+            Primer.Utils.Render(Primer.Templates.Logged.Header, {
                 username: this.username.charAt(0).toUpperCase() + this.username.slice(1),
             })
+            this.container = document.getElementById("container")
 
             this.buildNavTree().then(e => {
                 const taskGroupNames = {
@@ -303,7 +354,7 @@ let Primer = {}
                         f.tasks[g].forEach(i => {
                             if (g == "results")
                                 taskGroups.push({
-                                    text: Primer.Common.Render(Primer.Templates.Logged.Sidebar.Results, {
+                                    text: Primer.Utils.Render(Primer.Templates.Logged.Sidebar.Results, {
                                         name: i.name,
                                         link: i.link,
                                         icon: Primer.Templates.Logged.Sidebar.Icons.results
@@ -311,16 +362,16 @@ let Primer = {}
                                     id: taskGroupNames[g][1]
                                 })
                             else
-                                tasks += Primer.Common.Render(Primer.Templates.Logged.Sidebar.Task, {
+                                tasks += Primer.Utils.Render(Primer.Templates.Logged.Sidebar.Task, {
                                     name: i.name,
-                                    score: isNaN(i.score) ? "0.00" : (i.score??0).toFixed(2),
+                                    score: isNaN(i.score) ? "0.00" : (i.score ?? 0).toFixed(2),
                                     link: i.link,
                                     color: Primer.Templates.Logged.Sidebar.Colors[g]
                                 }, true)
                         })
                         if (g == "results") continue
                         taskGroups.push({
-                            text: Primer.Common.Render(Primer.Templates.Logged.Sidebar.TaskGroup, {
+                            text: Primer.Utils.Render(Primer.Templates.Logged.Sidebar.TaskGroup, {
                                 name: taskGroupNames[g][0],
                                 content: tasks,
                                 icon: Primer.Templates.Logged.Sidebar.Icons[g]
@@ -332,7 +383,7 @@ let Primer = {}
                     taskGroups.sort((a, b) => a.id - b.id)
                     taskGroups.forEach(e => taskGroupsText += e.text)
 
-                    subjects += Primer.Common.Render(Primer.Templates.Logged.Sidebar.Subject, {
+                    subjects += Primer.Utils.Render(Primer.Templates.Logged.Sidebar.Subject, {
                         name: f.code,
                         link: f.link,
                         tasks: taskGroupsText,
@@ -366,16 +417,16 @@ let Primer = {}
                 "Výsledky": "results",
             }
 
-            const body = await Primer.Common.Fetch("/index.php?X=Main")
+            const body = await Primer.Utils.Fetch("/index.php?X=Main")
             let links = []
-            await Primer.Common.asyncForEach(body.querySelectorAll(".butLink"), async e => {
+            await Primer.Utils.asyncForEach(body.querySelectorAll(".butLink"), async e => {
                 if (
                     e.href.includes("X=Preset") ||
                     e.href.includes("X=CompilersDryRuns") ||
                     e.href.includes("X=FAQ")
                 ) return
 
-                const subject = await Primer.Common.Fetch(e.href)
+                const subject = await Primer.Utils.Fetch(e.href)
                 let tasks = {}
                 subject.querySelectorAll(".lBox").forEach(f => {
                     if (f.parentElement.childElementCount == 2) {
@@ -422,11 +473,65 @@ let Primer = {}
         }
     }
 
-    Primer.Exam = class extends Primer.Logged {
+    Primer.Main = class extends Primer.Logged {
+        constructor() {
+            super()
+            this.getSubjects().then(e => {
+                for (let year in e) {
+                    e[year].forEach((f, sem) => {
+                        let cards = ""
+                        f.forEach(val => cards += this.buildCard(val))
+                        Primer.Utils.Render(Primer.Templates.Main.TimelineRow, {
+                            sem: ["Zimní semestr", "Letní semestr"][sem],
+                            year: year + "/" + (parseInt(year.toString().substr(-2)) + 1),
+                            content: cards,
+                            color: Primer.Templates.Main.SemColor[sem]
+                        }, this.container)
+                    })
+                }
+                Primer.Utils.Render(Primer.Templates.Main.TimelineEnd, {}, this.container)
+            })
+        }
 
+        buildCard(subject) {
+            const icon = Primer.Templates.Main.Icons[subject.code] ?? Primer.Templates.Main.Icons["unknown"]
+            return Primer.Utils.Render(Primer.Templates.Main.Card, {
+                name: subject.name,
+                link: subject.link,
+                code: subject.code,
+                year: subject.year + "/" + (parseInt(subject.year.toString().substr(-2)) + 1) + " " + ["ZS", "LS"][subject.sem],
+                icon
+            }, true)
+        }
+
+        async getSubjects() {
+            let links = []
+            await Primer.Utils.asyncForEach(this.currentDOM.querySelectorAll(".butLink"), async e => {
+                if (
+                    e.href.includes("X=Preset") ||
+                    e.href.includes("X=CompilersDryRuns") ||
+                    e.href.includes("X=FAQ")
+                ) return
+                const fullname = e.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText
+                const year = 2000 + parseInt(fullname.substr(fullname.lastIndexOf("(") + 1, 2))
+                const sem = fullname.includes("LS)") ? 1 : 0
+                if (!(year in links))
+                    links[year] = []
+                if (typeof links[year][sem] == "undefined")
+                    links[year][sem] = []
+                links[year][sem].push({
+                    link: e.href,
+                    code: e.innerText,
+                    name: fullname.substr(0, fullname.lastIndexOf(" (")),
+                    year,
+                    sem
+                })
+            })
+            return links
+        }
     }
 
-    Primer.Main = class extends Primer.Logged {
+    Primer.Exam = class extends Primer.Logged {
 
     }
 
