@@ -113,19 +113,22 @@ let Primer = {}
         Main: {
             Card: `
 <div class="Box col-4 float-left m-3 hover-grow" style="height: 100px">
-    <div class="border-right d-inline-block height-full" style="width: 100px">
-        <img class="p-3" src="<%icon%>" style="width: 100px; height: 100px" />
+    <div class="float-left border-right d-inline-block height-full" style="width: 100px">
+        <a href="<%link%>"><img class="p-3" src="<%icon%>" style="width: 100px; height: 100px" /></a>
     </div>
-    <div class="p-2 d-inline-block v-align-top height-full" style="max-width: calc(100% - 105px)">
+    <div class="float-left p-2 height-full position-relative" style="width: calc(100% - 100px)">
             <svg width="16" height="16" class="octicon octicon-repo mr-1" viewBox="0 0 12 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M4 9H3V8h1v1zm0-3H3v1h1V6zm0-2H3v1h1V4zm0-2H3v1h1V2zm8-1v12c0 .55-.45 1-1 1H6v2l-1.5-1.5L3 16v-2H1c-.55 0-1-.45-1-1V1c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zm-1 10H1v2h2v-1h3v1h5v-2zm0-10H2v9h9V1z"></path></svg>
             <a href="<%link%>" class="f4 text-bold"><%code%></a>
             <p class="text-gray text-small"><%name%></p>
-            <p class="text-gray text-small"><%year%></p>
+            <div class="position-absolute" style="bottom: 8px">
+                <svg class="octicon octicon-book mr-1" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>
+                <a class="text-small" href="<%infoLink%>" target="_blank" style="vertical-align: text-bottom">Stránky předmětu</a>
+            </div>
     </div>
 </div>
 `,
             TimelineRow: `
-<div class="TimelineItem clearfix ml-5">
+<div class="TimelineItem clearfix ml-5 pb-0">
     <div class="TimelineItem-badge bg-<%color%> text-white" style="">
         <svg width="16" height="16" class="octicon octicon-mortar-board" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M8.11 2.8a.34.34 0 00-.2 0L.27 5.18a.35.35 0 000 .67L2 6.4v1.77c-.3.17-.5.5-.5.86 0 .19.05.36.14.5-.08.14-.14.31-.14.5v2.58c0 .55 2 .55 2 0v-2.58c0-.19-.05-.36-.14-.5.08-.14.14-.31.14-.5 0-.38-.2-.69-.5-.86V6.72l4.89 1.53c.06.02.14.02.2 0l7.64-2.38a.35.35 0 000-.67L8.1 2.81l.01-.01zM4 8l3.83 1.19h-.02c.13.03.25.03.36 0L12 8v2.5c0 1-1.8 1.5-4 1.5s-4-.5-4-1.5V8zm3.02-2.5c0 .28.45.5 1 .5s1-.22 1-.5-.45-.5-1-.5-1 .22-1 .5z"></path></svg>
     </div>
@@ -140,6 +143,11 @@ let Primer = {}
             TimelineEnd: `
 <div class="TimelineItem ml-5 height-full position-absolute bottom-0" style="z-index: 0"></div>
 `,
+            TimelineStart: `
+<div class="pl-5 py-2 bg-gray position-relative border-bottom" style="z-index: 1">
+    <h2 class="f3">Seznam předmětů</h2>
+</div>
+`,
             Icons: {
                 "BI-AAG": chrome.extension.getURL("./themes/newStyle/assets/icons/aag.svg"),
                 "BI-AG1": chrome.extension.getURL("./themes/newStyle/assets/icons/ag1.svg"),
@@ -153,7 +161,17 @@ let Primer = {}
             SemColor: [
                 'purple',
                 'red-5'
-            ]
+            ],
+            SubjectLinks: {
+                "BI-AAG": "https://courses.fit.cvut.cz/BI-AAG/",
+                "BI-AG1": "https://courses.fit.cvut.cz/BI-AG1/",
+                "BI-OSY": "https://courses.fit.cvut.cz/BI-OSY/",
+                "BI-PA1": "https://moodle-vyuka.cvut.cz/course/view.php?id=2203",
+                "BI-PA2": "https://moodle.fit.cvut.cz/enrol/index.php?id=754",
+                "BI-PJV": "https://moodle-vyuka.cvut.cz/course/view.php?id=2265",
+                "BI-PS1": "https://courses.fit.cvut.cz/BI-PS1/",
+                "unknown": "https://courses.fit.cvut.cz/",
+            }
         }
     }
 
@@ -477,7 +495,9 @@ let Primer = {}
         constructor() {
             super()
             this.getSubjects().then(e => {
-                for (let year in e) {
+                Primer.Utils.Render(Primer.Templates.Main.TimelineStart, {}, this.container)
+                const years = Object.keys(e).sort()
+                years.forEach(year => {
                     e[year].forEach((f, sem) => {
                         let cards = ""
                         f.forEach(val => cards += this.buildCard(val))
@@ -488,7 +508,7 @@ let Primer = {}
                             color: Primer.Templates.Main.SemColor[sem]
                         }, this.container)
                     })
-                }
+                })
                 Primer.Utils.Render(Primer.Templates.Main.TimelineEnd, {}, this.container)
             })
         }
@@ -500,7 +520,8 @@ let Primer = {}
                 link: subject.link,
                 code: subject.code,
                 year: subject.year + "/" + (parseInt(subject.year.toString().substr(-2)) + 1) + " " + ["ZS", "LS"][subject.sem],
-                icon
+                icon,
+                infoLink: Primer.Templates.Main.SubjectLinks[subject.code]
             }, true)
         }
 
