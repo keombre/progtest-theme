@@ -149,14 +149,14 @@ let Primer = {}
 </div>
 `,
             Icons: {
-                "BI-AAG": chrome.extension.getURL("./themes/newStyle/assets/icons/aag.svg"),
-                "BI-AG1": chrome.extension.getURL("./themes/newStyle/assets/icons/ag1.svg"),
-                "BI-OSY": chrome.extension.getURL("./themes/newStyle/assets/icons/osy.svg"),
-                "BI-PA1": chrome.extension.getURL("./themes/newStyle/assets/icons/pa1.svg"),
-                "BI-PA2": chrome.extension.getURL("./themes/newStyle/assets/icons/pa2.svg"),
-                "BI-PJV": chrome.extension.getURL("./themes/newStyle/assets/icons/pjv.svg"),
-                "BI-PS1": chrome.extension.getURL("./themes/newStyle/assets/icons/ps1.svg"),
-                "unknown": chrome.extension.getURL("./themes/newStyle/assets/icons/unknown.svg"),
+                "BI-AAG": chrome.extension.getURL("./themes/primer/assets/icons/aag.png"),
+                "BI-AG1": chrome.extension.getURL("./themes/primer/assets/icons/ag1.png"),
+                "BI-OSY": chrome.extension.getURL("./themes/primer/assets/icons/osy.png"),
+                "BI-PA1": chrome.extension.getURL("./themes/primer/assets/icons/pa1.png"),
+                "BI-PA2": chrome.extension.getURL("./themes/primer/assets/icons/pa2.png"),
+                "BI-PJV": chrome.extension.getURL("./themes/primer/assets/icons/pjv.png"),
+                "BI-PS1": chrome.extension.getURL("./themes/primer/assets/icons/ps1.png"),
+                "unknown": chrome.extension.getURL("./themes/primer/assets/icons/unknown.png"),
             },
             SemColor: [
                 'purple',
@@ -496,18 +496,17 @@ let Primer = {}
             super()
             this.getSubjects().then(e => {
                 Primer.Utils.Render(Primer.Templates.Main.TimelineStart, {}, this.container)
-                const years = Object.keys(e).sort()
-                years.forEach(year => {
-                    e[year].forEach((f, sem) => {
-                        let cards = ""
-                        f.forEach(val => cards += this.buildCard(val))
-                        Primer.Utils.Render(Primer.Templates.Main.TimelineRow, {
-                            sem: ["Zimní semestr", "Letní semestr"][sem],
-                            year: year + "/" + (parseInt(year.toString().substr(-2)) + 1),
-                            content: cards,
-                            color: Primer.Templates.Main.SemColor[sem]
-                        }, this.container)
-                    })
+                const ids = Object.keys(e).sort().reverse()
+                ids.forEach(id => {
+                    const [year, sem] = id.split("+").map(e => parseInt(e))
+                    let cards = ""
+                    e[id].forEach(f => cards += this.buildCard(f))
+                    Primer.Utils.Render(Primer.Templates.Main.TimelineRow, {
+                        sem: ["Zimní semestr", "Letní semestr"][sem],
+                        year: year + "/" + (parseInt(year.toString().substr(-2)) + 1),
+                        content: cards,
+                        color: Primer.Templates.Main.SemColor[sem]
+                    }, this.container)
                 })
                 Primer.Utils.Render(Primer.Templates.Main.TimelineEnd, {}, this.container)
             })
@@ -536,11 +535,10 @@ let Primer = {}
                 const fullname = e.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText
                 const year = 2000 + parseInt(fullname.substr(fullname.lastIndexOf("(") + 1, 2))
                 const sem = fullname.includes("LS)") ? 1 : 0
-                if (!(year in links))
-                    links[year] = []
-                if (typeof links[year][sem] == "undefined")
-                    links[year][sem] = []
-                links[year][sem].push({
+                const id = year + "+" + sem
+                if (!(id in links))
+                    links[id] = []
+                links[id].push({
                     link: e.href,
                     code: e.innerText,
                     name: fullname.substr(0, fullname.lastIndexOf(" (")),
