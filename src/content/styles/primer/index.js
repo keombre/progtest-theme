@@ -43,7 +43,7 @@ let Primer = {}
     </div>
     <div class="Header-item mr-0">
         <details class="dropdown details-reset details-overlay d-inline-block">
-            <summary class="p-1 mt-n1 mb-n1 d-inline">
+            <summary class="p-1 mt-n1 mb-n1 d-inline user-select-none">
                 <span class="mr-1"><%username%></span>
                 <div class="dropdown-caret"></div>
             </summary>
@@ -66,12 +66,14 @@ let Primer = {}
         <h4>Kompilátory</h4>
     </div>
 </div>
-<div id="container" class="float-right clearfix top-6 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)"></div>
+<div id="container" class="float-right clearfix top-6 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)">
+    <span class="State box-shadow m-2"><span>Načítání</span><span class="AnimatedEllipsis"></span></span>
+</div>
 `,
             Sidebar: {
                 Subject: `
 <details class="my-3 user-select-none" <%open%>>
-    <summary style="outline: none">
+    <summary>
         <h4 class="d-inline lead f4 text-gray"><b><%name%></b> <%year%></h4>
         <a href="<%link%>" class="btn btn-sm btn-outline py-0 float-right">Přejít</a>
     </summary>
@@ -81,7 +83,7 @@ let Primer = {}
 `,
                 TaskGroup: `
 <details class="ml-3 py-1 details-reset">
-    <summary style="outline: none"><%icon%> <%name%> <span class="dropdown-caret"></span></summary>
+    <summary><%icon%> <%name%> <span class="dropdown-caret"></span></summary>
     <%content%>
 </details>
 `,
@@ -113,7 +115,7 @@ let Primer = {}
         Main: {
             Card: `
 <div class="Box col-4 float-left m-3 hover-grow" style="height: 100px">
-    <div class="float-left border-right d-inline-block height-full" style="width: 100px">
+    <div class="float-left border-right d-inline-block height-full bg-gray user-select-none" style="width: 100px">
         <a href="<%link%>"><img class="p-3" src="<%icon%>" style="width: 100px; height: 100px" /></a>
     </div>
     <div class="float-left p-2 height-full position-relative" style="width: calc(100% - 100px)">
@@ -172,8 +174,53 @@ let Primer = {}
                 "BI-PS1": "https://courses.fit.cvut.cz/BI-PS1/",
                 "unknown": "https://courses.fit.cvut.cz/",
             }
-        }
+        },
+        Course: {
+            Container: `
+<div class="d-flex flex-wrap flex-items-start flex-column overflow-auto" style="max-height:calc(100vh - 40px);align-content:space-evenly">
+    <%content%>
+</div>
+`,
+            TasksBox: `
+<div class="Box Box--condensed col-3 float-left m-2 mb-4">
+    <div class="Box-header">
+        <h3 class="Box-title"><%name%></h3>
+    </div>
+    <ul>
+        <%content%>
+    </ul>
+</div>
+`,
+            Task: `
+<li class="Box-row">
+    <details class="details-reset details-overlay">
+        <summary class="clearfix user-select-none">
+            <div class="float-left">
+                <h5><%name%></h5>
+                <span class="text-small text-gray"><%deadline%></span>
+            </div>
+            <div class="float-right">
+                <span class="Counter bg-gray f2-light px-2"><%score%></span>
+            </div>
+        </summary>
+        <div class="SelectMenu">
+            <div class="SelectMenu-modal">
+                <header class="SelectMenu-header d-flex flex-items-center">
+                    <h3 class="SelectMenu-title">Zadání</h3>
+                    <a href="<%link%>" class="btn btn-sm btn-outline py-0 float-right">Přejít</a>
+                </header>
+                <div class="SelectMenu-list">
+                    <%content%>
+                </div>
+            </div>
+        </div>
+    </details>
+</li>
+`,
+            TaskLink: `<a class="SelectMenu-item" role="menuitem" href="<%link%>"><%name%></a>
+`
     }
+}
 
     Primer.Utils = {
         Clear: (target = document.body) => {
@@ -227,6 +274,58 @@ let Primer = {}
             const root = document.body.cloneNode(true)
             document.body.innerHTML = ""
             return root
+        },
+        BuildTask(elem) {
+            if (elem.parentElement.childElementCount == 2) {
+                return {
+                    link: elem.parentElement.children[1].querySelector("a").href,
+                    name: elem.innerText,
+                    type: "results"
+                }
+            } else {
+                const name = elem.innerText
+
+                let type = {
+                    "Zahřívací": "tasks",
+                    "Domácí": "tasks",
+                    "Programovací": "tasks",
+                    "Soutěžní": "tasks_extra",
+                    "Semestrální": "sem",
+                    "Znalostní": "tests",
+                    "Zkouška": "exams",
+                    "Cvičení": "extras",
+                    "Práce": "extras",
+                    "Checkpoint": "extras",
+                    "Code": "extras",
+                    "Úlohy": "extras",
+                    "Výsledky": "results",
+                }[name.replace(/ .*/, '')] || "unknown"
+                if (name.includes('Teorie') || name.includes('Test')) type = "exams"
+                else if (name.includes('. test')) type = "tests"
+                else if (name.includes('domácí cvičení')) type = "tasks"
+                else if (name.includes('Checkpoint')) type = "sem"
+                else if (name.includes('Úloha')) type = "tasks"
+
+                let score = parseFloat(elem.parentElement.children[1].innerText)
+
+                return {
+                    link: (elem.parentElement.children[3].querySelector("a") ?? { href: null }).href,
+                    score: isNaN(score) ? 0 : score,
+                    deadline: elem.parentElement.children[2].innerText,
+                    name,
+                    type
+                }
+            }
+        },
+        taskGroupNames: {
+            results: ["Výsledky", 0],
+            tasks: ["Domácí úlohy", 1],
+            tests: ["Znalostní testy", 2],
+            extras: ["Extra", 3],
+            tasks_extra: ["Soutěžní úlohy", 4],
+            sem: ["Semestrální práce", 5],
+            exams: ["Zkouška", 6],
+            unknown: ["Neznámé", 7]
         }
     }
 
@@ -353,16 +452,6 @@ let Primer = {}
             this.container = document.getElementById("container")
 
             this.buildNavTree().then(e => {
-                const taskGroupNames = {
-                    results: ["Výsledky", 0],
-                    tasks: ["Domácí úlohy", 1],
-                    tests: ["Znalostní testy", 2],
-                    extras: ["Extra", 3],
-                    tasks_extra: ["Soutěžní úlohy", 4],
-                    sem: ["Semestrální práce", 5],
-                    exams: ["Zkouška", 6],
-                    unknown: ["Neznámé", 7]
-                }
 
                 let subjects = ""
                 e.forEach(f => {
@@ -377,7 +466,7 @@ let Primer = {}
                                         link: i.link,
                                         icon: Primer.Templates.Logged.Sidebar.Icons.results
                                     }, true),
-                                    id: taskGroupNames[g][1]
+                                    id: Primer.Utils.taskGroupNames[g][1]
                                 })
                             else
                                 tasks += Primer.Utils.Render(Primer.Templates.Logged.Sidebar.Task, {
@@ -390,11 +479,11 @@ let Primer = {}
                         if (g == "results") continue
                         taskGroups.push({
                             text: Primer.Utils.Render(Primer.Templates.Logged.Sidebar.TaskGroup, {
-                                name: taskGroupNames[g][0],
+                                name: Primer.Utils.taskGroupNames[g][0],
                                 content: tasks,
                                 icon: Primer.Templates.Logged.Sidebar.Icons[g]
                             }, true),
-                            id: taskGroupNames[g][1]
+                            id: Primer.Utils.taskGroupNames[g][1]
                         })
                     }
                     let taskGroupsText = ""
@@ -419,22 +508,6 @@ let Primer = {}
             if (localSubjects !== null)
                 return JSON.parse(localSubjects)
 
-            const types = {
-                "Zahřívací": "tasks",
-                "Domácí": "tasks",
-                "Programovací": "tasks",
-                "Soutěžní": "tasks_extra",
-                "Semestrální": "sem",
-                "Znalostní": "tests",
-                "Zkouška": "exams",
-                "Cvičení": "extras",
-                "Práce": "extras",
-                "Checkpoint": "extras",
-                "Code": "extras",
-                "Úlohy": "extras",
-                "Výsledky": "results",
-            }
-
             const body = await Primer.Utils.Fetch("/index.php?X=Main")
             let links = []
             await Primer.Utils.asyncForEach(body.querySelectorAll(".butLink"), async e => {
@@ -447,33 +520,10 @@ let Primer = {}
                 const subject = await Primer.Utils.Fetch(e.href)
                 let tasks = {}
                 subject.querySelectorAll(".lBox").forEach(f => {
-                    if (f.parentElement.childElementCount == 2) {
-                        if (!("results" in tasks))
-                            tasks["results"] = []
-                        tasks["results"].push({
-                            link: f.parentElement.children[1].querySelector("a").href,
-                            name: f.innerText
-                        })
-                    } else {
-                        const name = f.innerText
-
-                        let type = types[name.replace(/ .*/, '')] || "unknown"
-                        if (name.includes('Teorie') || name.includes('Test')) type = "exams"
-                        else if (name.includes('. test')) type = "tests"
-                        else if (name.includes('domácí cvičení')) type = "tasks"
-                        else if (name.includes('Checkpoint')) type = "sem"
-                        else if (name.includes('Úloha')) type = "tasks"
-
-                        if (!(type in tasks))
-                            tasks[type] = []
-
-                        tasks[type].push({
-                            link: (f.parentElement.children[3].querySelector("a") ?? { href: null }).href,
-                            name: name,
-                            score: parseFloat(f.parentElement.children[1].innerText),
-                            deadline: f.parentElement.children[2].innerText
-                        })
-                    }
+                    const task = Primer.Utils.BuildTask(f)
+                    if (!(task.type in tasks))
+                        tasks[task.type] = []
+                    tasks[task.type].push(task)
                 })
                 const fullname = e.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerText
                 links.push({
@@ -550,6 +600,49 @@ let Primer = {}
         }
     }
 
+    Primer.Course = class extends Primer.Logged {
+        constructor() {
+            super()
+            Primer.Utils.Clear(this.container)
+            Primer.Utils.Render(Primer.Templates.Course.Container, {
+                content: this.BuildCards(this.GetTasks())
+            }, this.container)
+        }
+
+        BuildCard(task) {
+            return Primer.Utils.Render(Primer.Templates.Course.Task, {
+                name: task.name,
+                link: task.link,
+                deadline: task.deadline ?? "",
+                score: ""+(task.score ?? "")
+            }, true)
+        }
+
+        BuildCards(tasks) {
+            let out = ""
+            for (let type in tasks) {
+                let content = ""
+                tasks[type].forEach(task => content += this.BuildCard(task))
+                out += Primer.Utils.Render(Primer.Templates.Course.TasksBox, {
+                    name: Primer.Utils.taskGroupNames[type][0],
+                    content
+                }, true)
+            }
+            return out
+        }
+
+        GetTasks() {
+            let tasks = {}
+            this.currentDOM.querySelectorAll(".lBox").forEach(f => {
+                const task = Primer.Utils.BuildTask(f)
+                if (!(task.type in tasks))
+                    tasks[task.type] = []
+                tasks[task.type].push(task)
+            })
+            return tasks
+        }
+    }
+
     Primer.Exam = class extends Primer.Logged {
 
     }
@@ -559,10 +652,6 @@ let Primer = {}
     }
 
     Primer.Results = class extends Primer.Logged {
-
-    }
-
-    Primer.Course = class extends Primer.Logged {
 
     }
 }
