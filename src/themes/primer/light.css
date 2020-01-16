@@ -133,3 +133,15 @@ body
 summary {
     outline: none;
 }
+
+.containerHeightFix {
+    height: calc(100vh - 87px);
+    align-content: space-between;
+}
+
+@media (max-width: 767px) {
+    .containerHeightFix {
+        height: auto;
+        align-content: center;
+    }
+}

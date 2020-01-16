@@ -55,7 +55,7 @@ let Primer = {}
         </details>
     </div>
 </div>
-<div class="position-fixed px-3 py-2 top-6 col-lg-3 col-4 d-sm-block d-none border-right border-gray overflow-y-auto" style="z-index: 1; height: calc(100% - 40px)">
+<div class="position-fixed px-3 py-2 top-6 col-lg-3 col-4 hide-md hide-sm border-right border-gray overflow-y-auto" style="z-index: 1; height: calc(100% - 40px)">
     <div class="border-bottom my-2">
         <h4>Předměty</h4>
         <div id="sidebar-subjects">
@@ -66,7 +66,7 @@ let Primer = {}
         <h4>Kompilátory</h4>
     </div>
 </div>
-<div id="container" class="float-right clearfix top-6 col-lg-9 col-sm-8 col-12 bg-gray position-relative" style="min-height: calc(100% - 40px)">
+<div id="container" class="float-right clearfix top-6 col-lg-9 col-md-8 col-12 bg-gray position-relative overflow-auto" style="min-height: calc(100% - 40px)">
     <span class="State box-shadow m-2"><span>Načítání</span><span class="AnimatedEllipsis"></span></span>
 </div>
 `,
@@ -131,7 +131,7 @@ let Primer = {}
 `,
             TimelineRow: `
 <div class="TimelineItem clearfix ml-5 pb-0">
-    <div class="TimelineItem-badge bg-<%color%> text-white" style="">
+    <div class="TimelineItem-badge bg-<%color%> text-white">
         <svg width="16" height="16" class="octicon octicon-mortar-board" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M8.11 2.8a.34.34 0 00-.2 0L.27 5.18a.35.35 0 000 .67L2 6.4v1.77c-.3.17-.5.5-.5.86 0 .19.05.36.14.5-.08.14-.14.31-.14.5v2.58c0 .55 2 .55 2 0v-2.58c0-.19-.05-.36-.14-.5.08-.14.14-.31.14-.5 0-.38-.2-.69-.5-.86V6.72l4.89 1.53c.06.02.14.02.2 0l7.64-2.38a.35.35 0 000-.67L8.1 2.81l.01-.01zM4 8l3.83 1.19h-.02c.13.03.25.03.36 0L12 8v2.5c0 1-1.8 1.5-4 1.5s-4-.5-4-1.5V8zm3.02-2.5c0 .28.45.5 1 .5s1-.22 1-.5-.45-.5-1-.5-1 .22-1 .5z"></path></svg>
     </div>
     <div class="TimelineItem-body">
@@ -146,7 +146,7 @@ let Primer = {}
 <div class="TimelineItem ml-5 height-full position-absolute bottom-0" style="z-index: 0"></div>
 `,
             TimelineStart: `
-<div class="pl-5 py-2 bg-gray position-relative border-bottom" style="z-index: 1">
+<div class="pl-5 py-2 bg-gray position-relative border-bottom" style="z-index: 1;height: 45px">
     <h2 class="f3">Seznam předmětů</h2>
 </div>
 `,
@@ -177,13 +177,13 @@ let Primer = {}
         },
         Course: {
             Container: `
-<div class="d-flex flex-wrap flex-items-start flex-column overflow-auto" style="max-height:calc(100vh - 40px);align-content:space-evenly">
+<div class="d-flex flex-xl-nowrap flex-wrap flex-xl-row flex-column overflow-x-auto containerHeightFix px-1" style="align-items: flex-start">
     <%content%>
 </div>
 `,
             TasksBox: `
-<div class="Box Box--condensed col-3 float-left m-2 mb-4">
-    <div class="Box-header">
+<div class="Box Box--condensed col-3 float-left mx-1 my-2" style="order: <%order%>;width: 250px">
+    <div class="Box-header px-2 bg-<%color%>-1 border-<%color%>-light">
         <h3 class="Box-title"><%name%></h3>
     </div>
     <ul>
@@ -192,15 +192,15 @@ let Primer = {}
 </div>
 `,
             Task: `
-<li class="Box-row">
+<li class="Box-row px-2">
     <details class="details-reset details-overlay">
         <summary class="clearfix user-select-none">
-            <div class="float-left">
-                <h5><%name%></h5>
+            <div class="float-left col-9">
+                <h5 class="mb-1"><%name%></h5>
                 <span class="text-small text-gray"><%deadline%></span>
             </div>
-            <div class="float-right">
-                <span class="Counter bg-gray f2-light px-2"><%score%></span>
+            <div class="float-right col-3">
+                <span class="Counter bg-gray f2-light px-2 float-right"><%score%></span>
             </div>
         </summary>
         <div class="SelectMenu">
@@ -218,6 +218,21 @@ let Primer = {}
 </li>
 `,
             TaskLink: `<a class="SelectMenu-item" role="menuitem" href="<%link%>"><%name%></a>
+`,
+            Header: `
+<div class="pl-5 py-2 bg-gray position-relative border-bottom clearfix" style="z-index: 1">
+    <h2 class="f3 float-left"><%name%></h2>
+    <div class="BtnGroup mr-2 float-right">
+        <a href="<%results%>" class="btn btn-sm btn-primary py-1 BtnGroup-item">
+            <svg width="20" height="20" class="octicon octicon-graph pr-1 mb-n1" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M16 14v1H0V0h1v14h15zM5 13H3V8h2v5zm4 0H7V3h2v10zm4 0h-2V6h2v7z"></path></svg>
+            <span>Výsledky</span>
+        </a>
+        <a href="<%link%>" target="_blank" class="btn btn-sm py-1 BtnGroup-item">
+            <svg class="octicon octicon-book pr-1 mb-n1" viewBox="0 0 16 17" version="1.1" width="20" height="20"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>
+            <span>Sylabus</span>
+        </a>
+    </div>
+</div>
 `
     }
 }
@@ -289,7 +304,7 @@ let Primer = {}
                     "Zahřívací": "tasks",
                     "Domácí": "tasks",
                     "Programovací": "tasks",
-                    "Soutěžní": "tasks_extra",
+                    "Soutěžní": "extras",
                     "Semestrální": "sem",
                     "Znalostní": "tests",
                     "Zkouška": "exams",
@@ -545,6 +560,7 @@ let Primer = {}
         constructor() {
             super()
             this.getSubjects().then(e => {
+                Primer.Utils.Clear(this.container)
                 Primer.Utils.Render(Primer.Templates.Main.TimelineStart, {}, this.container)
                 const ids = Object.keys(e).sort().reverse()
                 ids.forEach(id => {
@@ -604,8 +620,16 @@ let Primer = {}
         constructor() {
             super()
             Primer.Utils.Clear(this.container)
+            const courseName = this.currentDOM.querySelector(".navLink b").innerText.split(' ')[0]
+            const tasks = this.GetTasks()
+            Primer.Utils.Render(Primer.Templates.Course.Header, {
+                name: courseName,
+                link: Primer.Templates.Main.SubjectLinks[courseName],
+                results: tasks["results"][0].link
+            }, this.container)
+
             Primer.Utils.Render(Primer.Templates.Course.Container, {
-                content: this.BuildCards(this.GetTasks())
+                content: this.BuildCards(tasks)
             }, this.container)
         }
 
@@ -621,11 +645,15 @@ let Primer = {}
         BuildCards(tasks) {
             let out = ""
             for (let type in tasks) {
+                if (type == "results") continue
                 let content = ""
                 tasks[type].forEach(task => content += this.BuildCard(task))
+                const nameInfo = Primer.Utils.taskGroupNames[type]
                 out += Primer.Utils.Render(Primer.Templates.Course.TasksBox, {
-                    name: Primer.Utils.taskGroupNames[type][0],
-                    content
+                    name: nameInfo[0],
+                    content,
+                    order: ""+nameInfo[1],
+                    color: Primer.Templates.Logged.Sidebar.Colors[type]
                 }, true)
             }
             return out
@@ -642,12 +670,12 @@ let Primer = {}
             return tasks
         }
     }
-
-    Primer.Exam = class extends Primer.Logged {
-
+    
+    Primer.Task = class extends Primer.Logged {
+        
     }
 
-    Primer.Task = class extends Primer.Logged {
+    Primer.Exam = class extends Primer.Logged {
 
     }
 
