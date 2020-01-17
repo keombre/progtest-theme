@@ -234,6 +234,20 @@ let Primer = {}
     </div>
 </div>
 `
+    },
+    Task: {
+        Header: `
+<div class="pl-5 py-2 bg-gray position-relative border-bottom clearfix pagehead mb-0" style="z-index: 1">
+    <h1 class="f3 float-left">
+        <span class="author"><a href="<%link%>"><%subject%></a></span><span class="path-divider text-gray">/</span><strong><%name%></strong>
+    </h1>
+</div>
+        `,
+        Assignment: `
+<div class="markdown-body py-3 px-6 bg-white">
+    <%content%>
+</div>
+`
     }
 }
 
@@ -672,7 +686,38 @@ let Primer = {}
     }
     
     Primer.Task = class extends Primer.Logged {
-        
+
+        constructor() {
+            super()
+            Primer.Utils.Clear(this.container)
+            this.BuildHeader()
+            this.BuildBody()
+            this.HighlightCode()
+        }
+
+        BuildHeader() {
+            const link = this.currentDOM.querySelector('a.navLink[href*="Course"]')
+            Primer.Utils.Render(Primer.Templates.Task.Header, {
+                subject: link.innerText.split(' ')[0],
+                link: link.href,
+                name: this.currentDOM.querySelector(".navLink b").innerText
+            }, this.container)
+        }
+
+        BuildBody() {
+            Primer.Utils.Render(Primer.Templates.Task.Assignment, {
+                content: this.currentDOM.querySelector(".lrtbCell").innerHTML
+            }, this.container)
+        }
+
+        HighlightCode() {
+            this.container.querySelectorAll('pre, code, tt').forEach((block) => {
+                if (highlighting)
+                    hljs.highlightBlock(block)
+                else
+                    block.classList.add('hljs')
+            })
+        }
     }
 
     Primer.Exam = class extends Primer.Logged {
