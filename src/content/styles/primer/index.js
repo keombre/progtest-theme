@@ -181,20 +181,31 @@ let Primer = {}
 `,
             TasksBox: `
 <div class="Box Box--condensed col-3 float-left mx-1 my-2" style="order: <%order%>;width: 250px">
-    <div class="Box-header px-2 bg-<%color%>-1 border-<%color%>-light">
+    <div class="Box-row Box-header px-2 bg-<%color%>-1 border-<%color%>-light">
         <h3 class="Box-title">
             <%icon%>
             <span><%name%></span>
             <span class="Counter px-2 py-1 float-right bg-<%color%>-4 text-white"><%score%></span>
         </h3>
     </div>
-    <ul>
-        <%content%>
-    </ul>
+    <%content%>
+</div>
+`,
+            TaskStatic: `
+<div class="Box-row px-2 Box-row--gray <%active%>">
+    <div class="clearfix d-flex flex-items-center">
+        <div class="float-left col-9">
+            <h5 class="mb-1"><%name%></h5>
+            <span class="text-small text-gray"><%deadline%></span>
+        </div>
+        <div class="float-right col-3">
+            <span class="Counter bg-gray-2 f3-light px-2 float-right"><%score%></span>
+        </div>
+    </div>
 </div>
 `,
             Task: `
-<li class="Box-row px-2">
+<div class="Box-row px-2 <%active%>">
     <details class="details-reset details-overlay" taskSelector link="<%link%>">
         <summary class="clearfix user-select-none d-flex flex-items-center">
             <div class="float-left col-9">
@@ -207,9 +218,8 @@ let Primer = {}
         </summary>
         <div class="SelectMenu">
             <div class="SelectMenu-modal">
-                <header class="SelectMenu-header d-flex flex-items-center">
+                <header class="SelectMenu-header">
                     <h3 class="SelectMenu-title">Zadání</h3>
-                    <a href="<%link%>" class="btn btn-sm btn-outline py-0 float-right">Přejít</a>
                 </header>
                 <div class="SelectMenu-list" taskBody>
                     <div class="SelectMenu-loading">
@@ -227,7 +237,7 @@ let Primer = {}
             </div>
         </div>
     </details>
-</li>
+</div>
 `,
             TaskLink: `<a class="SelectMenu-item" role="menuitem" href="<%link%>"><%name%></a>
 `,
@@ -358,7 +368,8 @@ let Primer = {}
                     score: isNaN(score) ? 0 : score,
                     deadline: elem.parentElement.children[2].innerText,
                     name,
-                    type
+                    type,
+                    disabled: elem.firstElementChild.classList.contains("menuListDis")
                 }
             }
         },
@@ -687,13 +698,21 @@ let Primer = {}
         }
 
         BuildCard(task) {
-            // todo: print span if no link is found
-            return Primer.Utils.Render(Primer.Templates.Course.Task, {
-                name: task.name,
-                link: task.link,
-                deadline: (task.deadline ?? "").replace(" 23:59:59", ""),
-                score: (task.score ?? 0).toFixed(2)
-            }, true)
+            if (task.link)
+                return Primer.Utils.Render(Primer.Templates.Course.Task, {
+                    name: task.name,
+                    link: task.link,
+                    deadline: (task.deadline ?? "").replace(" 23:59:59", ""),
+                    score: (task.score ?? 0).toFixed(2),
+                    active: task.disabled ? "" : "Box-row--unread"
+                }, true)
+            else
+                return Primer.Utils.Render(Primer.Templates.Course.TaskStatic, {
+                    name: task.name,
+                    deadline: (task.deadline ?? "").replace(" 23:59:59", ""),
+                    score: (task.score ?? 0).toFixed(2),
+                    active: task.disabled ? "" : "Box-row--unread"
+                }, true)
         }
 
         BuildCards(tasks) {
