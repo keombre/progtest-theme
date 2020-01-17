@@ -183,6 +183,7 @@ let Primer = {}
 <div class="Box Box--condensed col-3 float-left mx-1 my-2" style="order: <%order%>;width: 250px">
     <div class="Box-header px-2 bg-<%color%>-1 border-<%color%>-light">
         <h3 class="Box-title">
+            <%icon%>
             <span><%name%></span>
             <span class="Counter px-2 py-1 float-right bg-<%color%>-4 text-white"><%score%></span>
         </h3>
@@ -194,7 +195,7 @@ let Primer = {}
 `,
             Task: `
 <li class="Box-row px-2">
-    <details class="details-reset details-overlay">
+    <details class="details-reset details-overlay" taskSelector link="<%link%>">
         <summary class="clearfix user-select-none d-flex flex-items-center">
             <div class="float-left col-9">
                 <h5 class="mb-1"><%name%></h5>
@@ -210,8 +211,18 @@ let Primer = {}
                     <h3 class="SelectMenu-title">Zadání</h3>
                     <a href="<%link%>" class="btn btn-sm btn-outline py-0 float-right">Přejít</a>
                 </header>
-                <div class="SelectMenu-list">
-                    <%content%>
+                <div class="SelectMenu-list" taskBody>
+                    <div class="SelectMenu-loading">
+                        <svg width="32" height="32" class="octicon anim-pulse"version="1.1" viewBox="0 0 36.375 34.407" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="translate(-93.945 -100.77)">
+                            <g transform="translate(15.769 -55.998)"><path transform="scale(.26458)" d="m345 592.52v130.04h22.191v-46.16h23.389c26.86-0.2507 42.835-24.438 42.367-45.045-0.42142-18.58-13.702-38.75-40-38.84zm22.191 17.232h19.506c15.165 0 22.945 12.225 23.125 23.125 0.18935 11.453-10.085 25.09-23.482 25.09h-19.148z"/></g>
+                            <rect x="93.945" y="100.77" width="10.156" height="10.156" rx="1.6068" ry="1.4499"/>
+                            <rect x="93.945" y="112.92" width="10.156" height="10.156" rx="1.6068" ry="1.4499"/>
+                            <rect x="94.012" y="125.02" width="10.156" height="10.156" rx="1.6068" ry="1.4499"/>
+                        </g>
+                        </svg>
+                    </div>
+                    <div class="SelectMenu-footer bg-gray">Načítání...</div>
                 </div>
             </div>
         </div>
@@ -235,22 +246,22 @@ let Primer = {}
     </div>
 </div>
 `
-    },
-    Task: {
-        Header: `
+        },
+        Task: {
+            Header: `
 <div class="pl-5 py-2 bg-gray position-relative border-bottom clearfix pagehead mb-0" style="z-index: 1">
     <h1 class="f3 float-left">
         <span class="author"><a href="<%link%>"><%subject%></a></span><span class="path-divider text-gray">/</span><strong><%name%></strong>
     </h1>
 </div>
         `,
-        Assignment: `
+            Assignment: `
 <div class="markdown-body py-3 px-6 bg-white">
     <%content%>
 </div>
 `
+        }
     }
-}
 
     Primer.Utils = {
         Clear: (target = document.body) => {
@@ -289,7 +300,9 @@ let Primer = {}
                 target.innerHTML += sour.length ? replArr(template, sour, resp) : template
         },
         Attach: (elements, scope, event = "click") => {
-            for (let e in elements)
+            if (Array.isArray(elements))
+                elements.forEach(e => e[0].addEventListener(event, e[1].bind(scope)))
+            else for (let e in elements)
                 document.getElementById(e).addEventListener(event, elements[e].bind(scope))
         },
         Fetch: async (url) => {
@@ -647,9 +660,34 @@ let Primer = {}
             Primer.Utils.Render(Primer.Templates.Course.Container, {
                 content: this.BuildCards(tasks)
             }, this.container)
+
+            Primer.Utils.Attach([...document.querySelectorAll("[taskSelector]")].map(e => [e, async () => await this.Popup(e)]), this, "toggle")
+        }
+
+        async Popup(elem) {
+            if (elem.open) {
+                const target = elem.querySelector("[taskBody]")
+                if (!target.querySelector(".SelectMenu-loading")) return
+
+                const link = elem.getAttribute("link")
+                const body = await Primer.Utils.Fetch(link)
+                const names = [...body.querySelectorAll(".tbSepCell")].map(e => e.innerText)
+                const links = [...body.querySelectorAll(".butLink")].map(e => e.href)
+                if (names.length == 0)
+                    window.location.assign(link)
+                else if (names.length == 1)
+                    window.location.assign(links[0])
+                
+                Primer.Utils.Clear(target)
+                names.forEach((e, i) => Primer.Utils.Render(Primer.Templates.Course.TaskLink, {
+                    name: e,
+                    link: links[i]
+                }, target))
+            }
         }
 
         BuildCard(task) {
+            // todo: print span if no link is found
             return Primer.Utils.Render(Primer.Templates.Course.Task, {
                 name: task.name,
                 link: task.link,
@@ -674,7 +712,8 @@ let Primer = {}
                     content,
                     order: nameInfo[1],
                     color: Primer.Templates.Logged.Sidebar.Colors[type],
-                    score: score.toFixed(2)
+                    score: score.toFixed(2),
+                    icon: Primer.Templates.Logged.Sidebar.Icons[type]
                 }, true)
             }
             return out
@@ -691,7 +730,7 @@ let Primer = {}
             return tasks
         }
     }
-    
+
     Primer.Task = class extends Primer.Logged {
 
         constructor() {
