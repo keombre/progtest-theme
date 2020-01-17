@@ -184,7 +184,10 @@ let Primer = {}
             TasksBox: `
 <div class="Box Box--condensed col-3 float-left mx-1 my-2" style="order: <%order%>;width: 250px">
     <div class="Box-header px-2 bg-<%color%>-1 border-<%color%>-light">
-        <h3 class="Box-title"><%name%></h3>
+        <h3 class="Box-title">
+            <span><%name%></span>
+            <span class="Counter px-2 py-1 float-right bg-<%color%>-4 text-white"><%score%></span>
+        </h3>
     </div>
     <ul>
         <%content%>
@@ -194,13 +197,13 @@ let Primer = {}
             Task: `
 <li class="Box-row px-2">
     <details class="details-reset details-overlay">
-        <summary class="clearfix user-select-none">
+        <summary class="clearfix user-select-none d-flex flex-items-center">
             <div class="float-left col-9">
                 <h5 class="mb-1"><%name%></h5>
                 <span class="text-small text-gray"><%deadline%></span>
             </div>
             <div class="float-right col-3">
-                <span class="Counter bg-gray f2-light px-2 float-right"><%score%></span>
+                <span class="Counter bg-gray f3-light px-2 float-right"><%score%></span>
             </div>
         </summary>
         <div class="SelectMenu">
@@ -271,7 +274,9 @@ let Primer = {}
             for (let p in args) {
                 if (args[p] === null) continue
                 sour.push("<%" + p + "%>")
-                if (typeof args[p] == "string")
+                if (typeof args[p] == "number")
+                    resp.push(args[p].toString())
+                else if (typeof args[p] == "string")
                     resp.push(args[p])
                 else if (Array.isArray(args[p])) {
                     let d = ""
@@ -651,8 +656,8 @@ let Primer = {}
             return Primer.Utils.Render(Primer.Templates.Course.Task, {
                 name: task.name,
                 link: task.link,
-                deadline: task.deadline ?? "",
-                score: ""+(task.score ?? "")
+                deadline: (task.deadline ?? "").replace(" 23:59:59", ""),
+                score: (task.score ?? 0).toFixed(2)
             }, true)
         }
 
@@ -661,13 +666,18 @@ let Primer = {}
             for (let type in tasks) {
                 if (type == "results") continue
                 let content = ""
-                tasks[type].forEach(task => content += this.BuildCard(task))
+                let score = 0
+                tasks[type].forEach(task => {
+                    content += this.BuildCard(task)
+                    score += task.score ?? 0
+                })
                 const nameInfo = Primer.Utils.taskGroupNames[type]
                 out += Primer.Utils.Render(Primer.Templates.Course.TasksBox, {
                     name: nameInfo[0],
                     content,
-                    order: ""+nameInfo[1],
-                    color: Primer.Templates.Logged.Sidebar.Colors[type]
+                    order: nameInfo[1],
+                    color: Primer.Templates.Logged.Sidebar.Colors[type],
+                    score: score.toFixed(2)
                 }, true)
             }
             return out
