@@ -99,7 +99,7 @@ html
 
 body
 {
-    overflow-y: scroll;
+    overflow-y: auto;
     margin: 0;
     height: 100%;
 }
@@ -224,4 +224,42 @@ code.hljs, tt.hljs {
 
 .hljs-strong {
     font-weight: bold;
+}
+
+.clusterize-scroll{
+    max-height: 100%;
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    padding-top: 21px;
+    font-size: 11px;
+}
+
+.clusterize-extra-row{
+    margin-top:0!important;
+    margin-bottom:0!important;
+}
+
+.clusterize-extra-row.clusterize-keep-parity{
+    display:none;
+}
+
+.clusterize-content{
+    outline:0;
+    text-align: center;
+    counter-reset:clusterize-counter;
+}
+
+.clusterize-no-data td{
+    text-align:center;
+}
+
+.clusterize-scroll tr {
+    border-top: 1px solid #dbdbdb;
+    height: 25px;
+}
+
+.clusterize-scroll tr:nth-child(even) {
+    background: #fff;
 }

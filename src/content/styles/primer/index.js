@@ -270,6 +270,32 @@ let Primer = {}
     <%content%>
 </div>
 `
+        },
+        Results: {
+            Table: `
+<div class="clusterize">
+    <table>
+        <thead>
+            <tr>
+                <th>Headers</th>
+            </tr>
+        </thead>
+    </table>
+    <div id="scrollArea" class="clusterize-scroll">
+        <table class="width-full" style="table-layout:fixed">
+            <thead style="visibility:collapse">
+                <td></td>
+                <td style="width: 150px"></td>
+            </thead>
+            <tbody id="contentArea" class="clusterize-content">
+                <tr class="clusterize-no-data">
+                    <td>Loading data…</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>            
+`
         }
     }
 
@@ -790,6 +816,115 @@ let Primer = {}
     }
 
     Primer.Results = class extends Primer.Logged {
+        constructor() {
+            super()
 
+            Primer.Utils.Clear(this.container)
+            Primer.Utils.Render(Primer.Templates.Results.Table, {}, this.container)
+
+            let clusterize = new Clusterize({
+                rows: this.createTable(this.loadData(), this.loadHeader()),
+                scrollId: 'scrollArea',
+                contentId: 'contentArea',
+                rows_in_block: 16,
+                keep_parity: true,
+                blocks_in_cluster: 8
+            })
+            clusterize.refresh(true)
+        }
+
+        loadHeader() {
+            const headers = this.currentDOM.querySelectorAll(".resHdr")
+            let out = []
+            let colId = 0
+            let childColId = 0
+            if (headers.length == 2) {
+                headers[0].childNodes.forEach(e => {
+                    let cols = e.getAttribute("colspan")
+                    if (cols === null) {
+                        out.push({text: e.innerText, colStart: colId, colEnd: colId})
+                        colId++
+                    } else {
+                        cols = parseInt(cols)
+                        let children = []
+                        for (let i = 0; i < cols; i++) {
+                            children.push({text: headers[1].childNodes[i+childColId].innerText, col: colId})
+                            colId++
+                        }
+                        childColId += cols
+                        out.push({text: e.innerText, colStart: colId - cols, colEnd: colId-1, children})
+                    }
+                })
+            }
+            return out
+        }
+
+        loadData() {
+            let out = []
+            this.currentDOM.querySelectorAll(".resRow").forEach(e => {
+                let row = []
+                e.childNodes.forEach(f => {
+                    const text = f.innerText
+
+                    let state = []
+                    if (f.classList.contains("yOk"))
+                        state.push("pass")
+                    if (f.classList.contains("nOk"))
+                        state.push("fail")
+                    if (f.childElementCount == 1 && f.childNodes[0].classList.contains("dupC"))
+                        state.push("duplicity")
+
+                    if (text == "×" || text == "...")
+                        row.push({data: null, state})
+                    else {
+                        const num = parseFloat(text)
+                        row.push({data: isNaN(num) ? text : num, state})
+                    }
+                })
+                out.push(row)
+            })
+            return out
+        }
+
+        createTable(data, headers) {
+            let borderCols = []
+            headers.forEach(e => borderCols[e.colStart] = true)
+
+            let out = []
+            data.forEach(e => {
+                let row = []
+                let rowInfo = ""
+
+                e.forEach((f, i) => {
+                    let cell = document.createElement("td")
+                    if (borderCols[i]) {
+                        cell.classList.add("border-left")
+                        cell.classList.add("text-bold")
+                    }
+                    if (f.state.includes("pass")) {
+                        cell.classList.add("bg-green-0")
+                        cell.classList.add("text-green")
+                    } else if (f.state.includes("fail")) {
+                        cell.classList.add("bg-orange-0")
+                        cell.classList.add("text-orange")
+                        rowInfo = rowInfo == "" ? "bg-orange-2" : rowInfo
+                    } else if (f.state.includes("duplicity")) {
+                        cell.classList.add("bg-red-0")
+                        cell.classList.add("text-red")
+                        rowInfo = "bg-red-3"
+                    }
+
+                    cell.innerText = f.data
+
+                    row.push(cell)
+                })
+
+                if (rowInfo != "")
+                    row[0].classList.add(rowInfo)
+                out.push("<tr>" + row.map(e => e.outerHTML).join("") + "</tr>")
+            })
+
+            return out
+        }
     }
 }

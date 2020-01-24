@@ -8,6 +8,7 @@
             "run_at": "document_start",
             "js": [
                 "content/start.js",
+                "content/clusterize/clusterize.min.js",
                 "content/highlightjs/highlight.pack.js"
             ],
             "matches": [
