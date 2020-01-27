@@ -29,5 +29,8 @@ chrome: source
 	find ./progtest-themes/ -type f | xargs zip ${out_dir}/chrome/progtest_themes.zip
 	rm progtest-themes
 
+dev: source
+	cp ${manifest_dir}/chrome.json ${build_dir}/manifest.json
+
 clean:
 	rm -r ${build_dir}/* 2>/dev/null || exit 0

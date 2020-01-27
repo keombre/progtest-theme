@@ -1237,6 +1237,7 @@ form > center > div:not(:nth-child(1)) .lrtbCell ul
 {
     list-style: none;
     padding-inline-start: 10px;
+    margin-top: 3px;
 }
 
 form > center > div:not(:nth-child(1)) .lrtbCell li
@@ -1244,6 +1245,7 @@ form > center > div:not(:nth-child(1)) .lrtbCell li
     font-weight: 500;
     letter-spacing: 0.1px;
     padding: 5px 0;
+    overflow: auto;
 }
 
 form > center > div:not(:nth-child(1)) .lrtbCell li:last-child
@@ -1318,6 +1320,52 @@ li.testRes:before
     display: inline-block;
     text-align: center;
     line-height: 15pt;
+}
+
+li.testRes > div.badges {
+    float: right;
+    display: flex;
+    flex-flow: row;
+    align-items: flex-end;
+}
+
+@media only screen and (max-width: 1000px)
+{
+    li.testRes > div.badges {
+        flex-flow: column;
+    }
+}
+
+li.testRes > div.badges > span.score_badge {
+    float: right;
+    border-radius: 3px;
+    padding: 3px 7px 4px 7px;
+    line-height: 1;
+    font-weight: 400;
+    color: #fff;
+    margin-left: 7px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+li.testRes > div.badges > span.ok_badge {
+    background: #28a745;
+}
+
+li.testRes > div.badges > span.aok_badge {
+    background: #ffc107;
+}
+
+li.testRes > div.badges > span.fail_badge {
+    background: #dc3545;
+}
+
+li.testRes > div.badges > span.unknown_badge {
+    background: #bdbdbd;
+}
+
+li.testRes > div.badges > span.stats_badge {
+    background: #343a40;
 }
 
 li.testAOK:before

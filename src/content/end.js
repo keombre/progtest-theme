@@ -476,25 +476,108 @@ class Task extends Logged {
         document.querySelectorAll('form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child').forEach(e => {
             let node = e.previousSibling
             let text = node.textContent
+            let state
             if (text.includes('Úspěch')) {
-                if (e.firstElementChild.innerHTML.includes('Dosaženo: 100.00 %'))
+                if (e.firstElementChild.innerHTML.includes('Dosaženo: 100.00 %')) {
                     node.parentElement.className += " testRes testOK"
-                else
+                    state = "ok"
+                }
+                else {
                     node.parentElement.className += " testRes testAOK"
+                    state = "aok"
+                }
             } else if (
                 text.includes('Neúspěch') ||
                 text.includes('Program provedl neplatnou operaci a byl ukončen') ||
                 text.includes('Program překročil přidělenou maximální')
             ) {
                 node.parentElement.className += " testRes testFailed"
+                state = "fail"
             } else {
                 node.parentElement.className += " testRes testUnknown"
+                state = "unknown"
             }
+
+            const badges = document.createElement("div")
+            badges.classList.add("badges")
+            e.parentElement.insertBefore(badges, e)
+            
+            const score = [...e.childNodes[0].innerText.matchAll(/Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g)]
+            if (score.length == 1 && score[0].length == 3) {
+                e.removeChild(e.childNodes[0])
+                let scoreElem = document.createElement("span")
+                scoreElem.classList.add("score_badge")
+                scoreElem.classList.add(state + "_badge")
+                scoreElem.setAttribute("title", "Dosaženo / požadováno")
+                scoreElem.innerHTML = "<b>" + parseFloat(score[0][1]).toFixed(0) + "</b> / " + parseFloat(score[0][2]).toFixed(0)
+                badges.appendChild(scoreElem)
+            } else {
+                let scoreElem = document.createElement("span")
+                scoreElem.classList.add("score_badge")
+                scoreElem.classList.add(state + "_badge")
+                scoreElem.setAttribute("title", "Dosaženo / požadováno")
+                scoreElem.innerHTML = "<b>0</b>"
+                badges.appendChild(scoreElem)
+            }
+
+            let markForRemove = []
+
+            e.childNodes.forEach(f => {
+                console.log(f.innerText)
+                if (f.innerText.includes('Celková doba běhu:')) {
+                    const time = [...f.innerText.matchAll(/(\d+.\d+)/g)]
+                    if (time.length != 0) {
+                        markForRemove.push(f)
+                        let timeElem = document.createElement("span")
+                        timeElem.classList.add("score_badge")
+                        timeElem.classList.add("stats_badge")
+                        if (time.length == 2) {
+                            const timeMe = parseFloat(time[0][1])
+                            const timeLimit = parseFloat(time[1][1])
+                            if (timeMe >= timeLimit)
+                                timeElem.classList.replace("stats_badge", "fail_badge")
+                            timeElem.setAttribute("title", "Celkový čas / limit")
+                            timeElem.innerHTML = "⏱️ <b>" + timeMe.toFixed(3) + "s</b> / " + timeLimit.toFixed(3) + "s"
+                        } else {
+                            timeElem.setAttribute("title", "Celkový čas")
+                            timeElem.innerHTML = "⏱️ <b>" + parseFloat(time[0][1]).toFixed(3) + "s</b>"
+                        }
+                        badges.insertBefore(timeElem, badges.firstChild)
+                    }
+                } else if (f.innerText.includes("Využití paměti:")) {
+                    const memory = [...f.innerText.matchAll(/(\d+)/g)]
+                    if (memory.length != 0) {
+                        markForRemove.push(f)
+                        let memElem = document.createElement("span")
+                        memElem.classList.add("score_badge")
+                        memElem.classList.add("stats_badge")
+                        if (memory.length == 2) {
+                            const memMe = parseFloat(memory[0][1])*1024
+                            const memLimit = parseFloat(memory[1][1])*1024
+                            if (memMe >= memLimit)
+                                memElem.classList.replace("stats_badge", "fail_badge")
+                            memElem.setAttribute("title", "Celková paměť / limit")
+                            memElem.innerHTML = "💾 <b>" + this.convertMemory(memMe) + "</b> / " + this.convertMemory(memLimit)
+                        } else {
+                            memElem.setAttribute("title", "Celková paměť")
+                            memElem.innerHTML = "💾 <b>" + this.convertMemory(parseFloat(memory[0][1])*1024) + "</b>"
+                        }
+                        badges.insertBefore(memElem, badges.firstChild)
+                    }
+                }
+            })
+
+            markForRemove.forEach(f => e.removeChild(f))
         })
 
         document.querySelectorAll('li.testRes a').forEach(e => {
             e.innerHTML = e.innerHTML.slice(1, -1)
         })
+    }
+
+    convertMemory(size) {
+        var i = Math.floor(Math.log(size) / Math.log(1024))
+        return (size / Math.pow(1024, i)).toFixed(0) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
     }
 
     autoHideResults() {
