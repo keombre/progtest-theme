@@ -549,12 +549,12 @@ class Task extends Logged {
                     if (time.length != 0) {
                         markForRemove.push(f)
                         let timeElem = document.createElement("badge")
-                        timeElem.classList.add("light")
+                        timeElem.classList.add("info")
                         if (time.length == 2) {
                             const timeMe = parseFloat(time[0][1])
                             const timeLimit = parseFloat(time[1][1])
                             if (timeMe >= timeLimit)
-                                timeElem.classList.replace("light", "danger")
+                                timeElem.classList.replace("info", "danger")
                             timeElem.setAttribute("title", "Celkový čas / limit")
                             timeElem.innerHTML = "<label>⏱️ <b>" + timeMe.toFixed(3) + "s</b> / " + timeLimit.toFixed(3) + "s</label>"
                         } else {
@@ -568,12 +568,12 @@ class Task extends Logged {
                     if (memory.length != 0) {
                         markForRemove.push(f)
                         let memElem = document.createElement("badge")
-                        memElem.classList.add("light")
+                        memElem.classList.add("info")
                         if (memory.length == 2) {
                             const memMe = parseFloat(memory[0][1])*1024
                             const memLimit = parseFloat(memory[1][1])*1024
                             if (memMe >= memLimit)
-                                memElem.classList.replace("light", "danger")
+                                memElem.classList.replace("info", "danger")
                             memElem.setAttribute("title", "Celková paměť / limit")
                             memElem.innerHTML = "<label>💾 <b>" + this.convertMemory(memMe) + "</b> / " + this.convertMemory(memLimit) + "</label>"
                         } else {
