@@ -544,7 +544,7 @@ class Task extends Logged {
                     multElem.innerText = scoreMult.toFixed(2)
                     scoreElem.appendChild(multElem)
                 }
-                else if (f.innerText.includes('Celková doba běhu:')) {
+                else if (f.innerText.includes('Celková doba běhu:') || f.innerText.includes("Vyčerpání limitu na celý test, program násilně ukončen")) {
                     const time = [...f.innerText.matchAll(/(\d+.\d+)/g)]
                     if (time.length != 0) {
                         markForRemove.push(f)
