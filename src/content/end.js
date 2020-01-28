@@ -309,11 +309,22 @@ class Main extends Logged {
                 push = settings
             ] = this.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
             orders[order] = footer
+            let link = {
+                "BI-AAG": "https://courses.fit.cvut.cz/BI-AAG/",
+                "BI-AG1": "https://courses.fit.cvut.cz/BI-AG1/",
+                "BI-OSY": "https://courses.fit.cvut.cz/BI-OSY/",
+                "BI-PA1": "https://moodle-vyuka.cvut.cz/course/view.php?id=2203",
+                "BI-PA2": "https://moodle.fit.cvut.cz/enrol/index.php?id=754",
+                "BI-PJV": "https://moodle-vyuka.cvut.cz/course/view.php?id=2265",
+                "BI-PS1": "https://courses.fit.cvut.cz/BI-PS1/",
+                "unknown": "https://courses.fit.cvut.cz/",
+            }[e[2]]
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}" pttorder="${order}">
     <div class="subject-title">${e[2]}</div>
     <div class="icon ${icon}"></div>
     <div class="subject-body">${text}</div>
+    ${link ? `<button class="updButton" onclick="window.open('${link}');return false;">Stránky předmětu</button>` : ''}
     ${footer ? `<div class="subject-footer">${footer}</div>` : ''}
 </a>`
         })
