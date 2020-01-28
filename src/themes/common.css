@@ -1245,7 +1245,6 @@ form > center > div:not(:nth-child(1)) .lrtbCell li
     font-weight: 500;
     letter-spacing: 0.1px;
     padding: 5px 0;
-    overflow: auto;
 }
 
 form > center > div:not(:nth-child(1)) .lrtbCell li:last-child
@@ -1320,6 +1319,7 @@ li.testRes:before
     display: inline-block;
     text-align: center;
     line-height: 15pt;
+    margin-right: -2px;
 }
 
 li.testRes > div.badges {
@@ -1333,38 +1333,61 @@ li.testRes > div.badges {
 {
     li.testRes > div.badges {
         flex-flow: column;
+        align-items: stretch;
     }
 }
 
-li.testRes > div.badges > span.score_badge {
-    float: right;
-    border-radius: 3px;
-    padding: 3px 7px 4px 7px;
-    line-height: 1;
-    font-weight: 400;
+badge {
+    font-family: monospace;
+    font-size: 13px;
+    display: inline-block;
     color: #fff;
-    margin-left: 7px;
-    margin-bottom: 2px;
-    white-space: nowrap;
+    line-height: 1;
+    margin: 1px 3px;
+    height: 13px;
+    padding-bottom: 6px;
 }
 
-li.testRes > div.badges > span.ok_badge {
+badge > label {
+    padding: 3px 7px;
+    display: inline-block;
+    height: 100%;
+}
+
+badge > *:first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+badge > *:last-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+badge > span {
+    background: #343a40;
+    padding: 3px 7px;
+    display: inline-block;
+    height: 100%;
+}
+
+badge.ok > label {
     background: #28a745;
 }
 
-li.testRes > div.badges > span.aok_badge {
+badge.warn > label {
     background: #ffc107;
 }
 
-li.testRes > div.badges > span.fail_badge {
+badge.danger > label {
     background: #dc3545;
 }
 
-li.testRes > div.badges > span.unknown_badge {
-    background: #bdbdbd;
+badge.light > label {
+    background: #777777;
 }
 
-li.testRes > div.badges > span.stats_badge {
+badge.dark > label {
     background: #343a40;
 }
 

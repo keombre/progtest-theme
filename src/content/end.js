@@ -484,7 +484,7 @@ class Task extends Logged {
                 }
                 else {
                     node.parentElement.className += " testRes testAOK"
-                    state = "aok"
+                    state = "warn"
                 }
             } else if (
                 text.includes('Neúspěch') ||
@@ -492,77 +492,95 @@ class Task extends Logged {
                 text.includes('Program překročil přidělenou maximální')
             ) {
                 node.parentElement.className += " testRes testFailed"
-                state = "fail"
+                state = "danger"
             } else {
                 node.parentElement.className += " testRes testUnknown"
-                state = "unknown"
+                state = "light"
+            }
+
+            const testName = text.match(/Test '(.*)': (Úspěch|Neúspěch|Nebylo testováno)/)
+            if (testName != null)
+                node.textContent = testName[1]
+            
+            const score = [...e.childNodes[0].innerText.matchAll(/Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g)]
+            let scoreElem
+            if (score.length == 1 && score[0].length == 3) {
+                e.removeChild(e.childNodes[0])
+                scoreElem = document.createElement("badge")
+                scoreElem.style.marginRight = "10px"
+                scoreElem.classList.add(state)
+                scoreElem.innerHTML = '<label title="Dosaženo / požadováno"><b>' + parseFloat(score[0][1]).toFixed(0) + "</b>/" + parseFloat(score[0][2]).toFixed(0) + "</label>"
+                e.parentElement.insertBefore(scoreElem, e.parentElement.firstChild)
+            } else {
+                scoreElem = document.createElement("badge")
+                scoreElem.style.marginRight = "10px"
+                scoreElem.classList.add(state)
+                scoreElem.innerHTML = '<label title="Dosaženo / požadováno"><b>0</b></label>'
+                e.parentElement.insertBefore(scoreElem, e.parentElement.firstChild)
             }
 
             const badges = document.createElement("div")
             badges.classList.add("badges")
             e.parentElement.insertBefore(badges, e)
-            
-            const score = [...e.childNodes[0].innerText.matchAll(/Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g)]
-            if (score.length == 1 && score[0].length == 3) {
-                e.removeChild(e.childNodes[0])
-                let scoreElem = document.createElement("span")
-                scoreElem.classList.add("score_badge")
-                scoreElem.classList.add(state + "_badge")
-                scoreElem.setAttribute("title", "Dosaženo / požadováno")
-                scoreElem.innerHTML = "<b>" + parseFloat(score[0][1]).toFixed(0) + "</b> / " + parseFloat(score[0][2]).toFixed(0)
-                badges.appendChild(scoreElem)
-            } else {
-                let scoreElem = document.createElement("span")
-                scoreElem.classList.add("score_badge")
-                scoreElem.classList.add(state + "_badge")
-                scoreElem.setAttribute("title", "Dosaženo / požadováno")
-                scoreElem.innerHTML = "<b>0</b>"
-                badges.appendChild(scoreElem)
-            }
 
             let markForRemove = []
 
             e.childNodes.forEach(f => {
-                console.log(f.innerText)
-                if (f.innerText.includes('Celková doba běhu:')) {
+                if (f.innerText.includes(', hodnocení')) {
+                    if (!scoreElem) return
+                    
+                    let scoreMult
+                    if (f.innerText.includes('Bonus nebude udělen'))
+                    scoreMult = 0
+                    else {
+                        let multText = f.innerText.match(/(\d{1,3}.\d{2}) %/)
+                        if (multText == null) return
+                        scoreMult = parseFloat(multText[1]) / 100
+                    }
+                    markForRemove.push(f)
+
+                    let multElem = document.createElement("span")
+                    multElem.setAttribute("title", "Skóre")
+                    multElem.innerText = scoreMult.toFixed(2)
+                    scoreElem.appendChild(multElem)
+                }
+                else if (f.innerText.includes('Celková doba běhu:')) {
                     const time = [...f.innerText.matchAll(/(\d+.\d+)/g)]
                     if (time.length != 0) {
                         markForRemove.push(f)
-                        let timeElem = document.createElement("span")
-                        timeElem.classList.add("score_badge")
-                        timeElem.classList.add("stats_badge")
+                        let timeElem = document.createElement("badge")
+                        timeElem.classList.add("light")
                         if (time.length == 2) {
                             const timeMe = parseFloat(time[0][1])
                             const timeLimit = parseFloat(time[1][1])
                             if (timeMe >= timeLimit)
-                                timeElem.classList.replace("stats_badge", "fail_badge")
+                                timeElem.classList.replace("light", "danger")
                             timeElem.setAttribute("title", "Celkový čas / limit")
-                            timeElem.innerHTML = "⏱️ <b>" + timeMe.toFixed(3) + "s</b> / " + timeLimit.toFixed(3) + "s"
+                            timeElem.innerHTML = "<label>⏱️ <b>" + timeMe.toFixed(3) + "s</b> / " + timeLimit.toFixed(3) + "s</label>"
                         } else {
                             timeElem.setAttribute("title", "Celkový čas")
-                            timeElem.innerHTML = "⏱️ <b>" + parseFloat(time[0][1]).toFixed(3) + "s</b>"
+                            timeElem.innerHTML = "<label>⏱️ <b>" + parseFloat(time[0][1]).toFixed(3) + "s</b></label>"
                         }
-                        badges.insertBefore(timeElem, badges.firstChild)
+                        badges.appendChild(timeElem)
                     }
                 } else if (f.innerText.includes("Využití paměti:")) {
                     const memory = [...f.innerText.matchAll(/(\d+)/g)]
                     if (memory.length != 0) {
                         markForRemove.push(f)
-                        let memElem = document.createElement("span")
-                        memElem.classList.add("score_badge")
-                        memElem.classList.add("stats_badge")
+                        let memElem = document.createElement("badge")
+                        memElem.classList.add("light")
                         if (memory.length == 2) {
                             const memMe = parseFloat(memory[0][1])*1024
                             const memLimit = parseFloat(memory[1][1])*1024
                             if (memMe >= memLimit)
-                                memElem.classList.replace("stats_badge", "fail_badge")
+                                memElem.classList.replace("light", "danger")
                             memElem.setAttribute("title", "Celková paměť / limit")
-                            memElem.innerHTML = "💾 <b>" + this.convertMemory(memMe) + "</b> / " + this.convertMemory(memLimit)
+                            memElem.innerHTML = "<label>💾 <b>" + this.convertMemory(memMe) + "</b> / " + this.convertMemory(memLimit) + "</label>"
                         } else {
                             memElem.setAttribute("title", "Celková paměť")
-                            memElem.innerHTML = "💾 <b>" + this.convertMemory(parseFloat(memory[0][1])*1024) + "</b>"
+                            memElem.innerHTML = "<label>💾 <b>" + this.convertMemory(parseFloat(memory[0][1])*1024) + "</b></label>"
                         }
-                        badges.insertBefore(memElem, badges.firstChild)
+                        badges.appendChild(memElem)
                     }
                 }
             })
