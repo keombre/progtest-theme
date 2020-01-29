@@ -3,18 +3,21 @@ var theme = 'light';
 var dropdown = true
 var displayNotifications = true
 var highlighting = true
+var sounds = true
 
 const updateConfig = () => {
     chrome.storage.sync.get({
         selectedTheme: 'light',
         autoHide: true,
         notifications: true,
-        highlighting: true
+        highlighting: true,
+        sounds: true
     }, (items) => {
         theme = items.selectedTheme;
         dropdown = items.autoHide;
         displayNotifications = items.notifications;
         highlighting = items.highlighting;
+        sounds = items.sounds;
     })
 }
 
@@ -29,7 +32,8 @@ chrome.runtime.onMessage.addListener(
                 theme: theme,
                 dropdown: dropdown,
                 displayNotifications: displayNotifications,
-                highlighting: highlighting
+                highlighting: highlighting,
+                sounds: sounds
             })
     })
 

@@ -2,6 +2,7 @@ var theme
 var dropdown
 var displayNotifications
 var highlighting
+var sounds
 var settingsLoaded = false
 var pttLoaded = new Event('ptt-loaded');
 
@@ -25,6 +26,7 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     dropdown = response.dropdown
     displayNotifications = response.displayNotifications
     highlighting = response.highlighting
+    sounds = response.sounds
 
     if (response.theme == 'orig' || response.theme == 'orig-dark')
         return

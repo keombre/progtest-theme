@@ -9,11 +9,13 @@ function save_options() {
   var hide = document.getElementById('dropdown').checked;
   var notify = document.getElementById('notifications').checked;
   var highlight = document.getElementById('highlighting').checked;
+  var sound = document.getElementById('sounds').checked;
   chrome.storage.sync.set({
     selectedTheme: theme,
     autoHide: hide,
     notifications: notify,
-    highlighting: highlight
+    highlighting: highlight,
+    sounds: sound
   }, function () {
     var status = document.getElementById('status');
     status.textContent = 'Option saved';
@@ -29,12 +31,14 @@ function restore_options() {
     selectedTheme: 'light',
     autoHide: true,
     notifications: true,
-    highlighting: true
+    highlighting: true,
+    sounds: true
   }, function (items) {
     document.getElementById('theme').value = items.selectedTheme;
     document.getElementById('dropdown').checked = items.autoHide;
     document.getElementById('notifications').checked = items.notifications;
     document.getElementById('highlighting').checked = items.highlighting;
+    document.getElementById('sounds').checked = items.sounds;
     hideDropdown()
   });
 }
