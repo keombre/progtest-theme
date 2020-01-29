@@ -1,25 +1,26 @@
 {
-  "name": "progtest-theme",
-  "version": "1.0.32",
-  "description": "Theme manager for ProgTest",
-  "main": "background.js",
-  "scripts": {
-    "lint": "web-ext lint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/keombre/progtest-theme.git"
-  },
-  "author": "keombre",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/keombre/progtest-theme/issues"
-  },
-  "homepage": "https://github.com/keombre/progtest-theme",
-  "devDependencies": {
-    "@babel/cli": "^7.6.4",
-    "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "web-ext": "^3.2.1"
-  }
+    "name": "progtest-theme",
+    "version": "1.0.34",
+    "description": "Theme manager for ProgTest",
+    "main": "background.js",
+    "scripts": {
+        "lint": "web-ext lint"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/keombre/progtest-theme.git"
+    },
+    "author": "keombre",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/keombre/progtest-theme/issues"
+    },
+    "homepage": "https://github.com/keombre/progtest-theme",
+    "devDependencies": {
+        "@babel/cli": "^7.6.4",
+        "@babel/core": "^7.6.4",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "github-api": "^3.3.0",
+        "web-ext": "^3.2.1"
+    }
 }
