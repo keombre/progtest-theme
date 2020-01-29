@@ -3,6 +3,7 @@ src_dir := "src"
 out_dir := "out"
 
 manifest_dir := "manifests"
+dev_dir := "dev"
 
 key_file := "keys.txt"
 api_key := $(shell head -n 1 ${key_file})
@@ -30,7 +31,8 @@ chrome: source
 	rm progtest-themes
 
 dev: source
-	cp ${manifest_dir}/chrome.json ${build_dir}/manifest.json
+	cp ${manifest_dir}/debug.json ${build_dir}/manifest.json
+	cp ${dev_dir}/reloader.js ${build_dir}/reloader.js
 
 clean:
 	rm -r ${build_dir}/* 2>/dev/null || exit 0
