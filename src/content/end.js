@@ -519,12 +519,14 @@ class Task extends Logged {
                 e.removeChild(e.childNodes[0])
                 scoreElem = document.createElement("badge")
                 scoreElem.style.marginRight = "10px"
+                scoreElem.style.minWidth = "120px"
                 scoreElem.classList.add(state)
                 scoreElem.innerHTML = '<label title="Dosaženo / požadováno"><b>' + parseFloat(score[0][1]).toFixed(0) + "</b>/" + parseFloat(score[0][2]).toFixed(0) + "</label>"
                 e.parentElement.insertBefore(scoreElem, e.parentElement.firstChild)
             } else {
                 scoreElem = document.createElement("badge")
                 scoreElem.style.marginRight = "10px"
+                scoreElem.style.minWidth = "120px"
                 scoreElem.classList.add(state)
                 scoreElem.innerHTML = '<label title="Dosaženo / požadováno"><b>0</b></label>'
                 e.parentElement.insertBefore(scoreElem, e.parentElement.firstChild)
@@ -548,7 +550,22 @@ class Task extends Logged {
                         if (multText == null) return
                         scoreMult = parseFloat(multText[1]) / 100
                     }
-                    markForRemove.push(f)
+                    let testType = ""
+                    if (f.innerText.includes("nepovinném testu")) {
+                        testType = "💝 Nepovinný test"
+                    } else if (f.innerText.includes("bonusovém testu")) {
+                        testType = "🎁 Bonusový test"
+                    } else if (f.innerText.includes("závazném testu")) {
+                        testType = "📜 Závazný test"
+                    }
+
+                    if (testType != "") {
+                        let testTypeElem = document.createElement("span")
+                        testTypeElem.classList.add("testType")
+                        testTypeElem.innerText = testType + ": "
+                        node.parentElement.insertBefore(testTypeElem, node)
+                        markForRemove.push(f)
+                    }
 
                     let multElem = document.createElement("span")
                     multElem.setAttribute("title", "Skóre")

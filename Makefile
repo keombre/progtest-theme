@@ -39,3 +39,6 @@ clean:
 
 version:
 	node ${utils_dir}/update_version.js
+
+deploy: version
+	node ${utils_dir}/github_upload.js

@@ -1,11 +1,9 @@
 ﻿@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap&subset=latin-ext');
 @import url("https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css");
-@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400,500,700&display=swap');
 
 @font-face {
     font-family: 'Noto Color Emoji';
-    src: url('assets/NotoColorEmoji.ttf')
-    format('truetype');
+    src: url("https://gitcdn.xyz/repo/googlefonts/noto-emoji/master/fonts/NotoColorEmoji.ttf");
 }
 
 :root
@@ -1422,6 +1420,10 @@ badge.dark > label {
     background: #343a40;
 }
 
+span.testType {
+    font-weight: 500;
+}
+
 li.testAOK:before
 {
     content: "\26A0";
@@ -1862,8 +1864,6 @@ a.butWarn
 .yOk:before
 {
     content: "✔️";
-    color: rgba(0, 0, 0, 0.15);
-    text-shadow: 0 0 0 #66d85e;
 }
 .oOk:before
 {
