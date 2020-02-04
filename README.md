@@ -1,27 +1,32 @@
-ProgTest Themes
-========
+# ProgTest Themes
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/stars/eoofjghfpdplnjhbfflfnfogdjnedgjf)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/eoofjghfpdplnjhbfflfnfogdjnedgjf)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/eoofjghfpdplnjhbfflfnfogdjnedgjf?label=chrome%20users&logo=google-chrome&logoColor=fff)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 [![GitHub All Releases](https://img.shields.io/github/downloads/keombre/progtest-theme/total?label=firefox%20download&logo=mozilla-firefox&logoColor=fff)](https://github.com/keombre/progtest-theme/releases/latest)
 
-**ProgTest Themes** is a WebExtension for Google Chrome and Mozilla Firefox which works as a theme manager for [ProgTest](https://progtest.fit.cvut.cz). It also adds other useful features to ProgTest, such as syntax highlighting or notifications.
+**ProgTest Themes** is a WebExtension for Google Chrome and Mozilla Firefox which works as a theme manager for [ProgTest](https://progtest.fit.cvut.cz). It adds other useful features, such as syntax highlighting or notifications.
 
-Download
---------
+## Download
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 
-[Firefox Addon](https://github.com/keombre/progtest-theme/releases/download/1.0.28/progtest_themes-1.0.28-an+fx.xpi)
+[Firefox Addon](https://github.com/keombre/progtest-theme/releases/latest)
 
-Building from source
---------
+[Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/knkajihkihfoadhcgjibkhlhdfdmliem)
+
+## Building from source
 
 In order to build from source, you are going to need `npm` and `make`.
 
 The current version of **ProgTest Themes** has been successfully compiled using `nodejs 12.12.0`, `npm 6.12.0` and `GNU Make 4.2.1`.
 
 1. Install all dev dependencies using `npm install`
-2. Run `make zip` to create an extension zip file in `web-ext-artifacts/` (Note: all code that is packaged in the zip file can also be found in the `build/` directory)
-3. Import the zip file into the browser of your choice (Note: for Firefox, you need to either use `about:debugging` to temporarily install the extension or modify `applications.gecko.id` in `manifest.json` and sign the extension yourself)
+2. Run `make dev` to create unpacked version of the extension in `build/`
+3. Load the extension to your browser. `chrome://extensions` in Chrome or `about:addons` in Firefox. (Note: the dev version uses `manifests/debug.json`, adjust it to suite your needs)
+
+## Creating new theme
+
+Checkout from [primer branch](https://github.com/keombre/progtest-theme/tree/primer). The project there is restructured to allow multiple theme engines. To see how it all works look at `src/content/end.js` and into `src\themes`.
+
+Good luck!
