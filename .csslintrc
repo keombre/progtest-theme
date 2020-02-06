@@ -1,0 +1,16 @@
+{
+    "ignore": [
+        "import",
+        "important",
+        "order-alphabetical",
+        "outline-none",
+        "overqualified-elements",
+        "box-model",
+        "fallback-colors",
+        "adjoining-classes",
+        "ids",
+        "universal-selector",
+        "bulletproof-font-face",
+        "font-sizes"
+    ]
+}
