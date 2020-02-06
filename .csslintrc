@@ -11,6 +11,8 @@
         "ids",
         "universal-selector",
         "bulletproof-font-face",
-        "font-sizes"
+        "font-sizes",
+        "known-properties",
+        "box-sizing"
     ]
 }
