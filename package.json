@@ -20,7 +20,9 @@
         "@babel/cli": "^7.6.4",
         "@babel/core": "^7.6.4",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "babel-eslint": "^10.0.3",
         "csslint": "^1.0.5",
+        "eslint": "^6.8.0",
         "github-api": "^3.3.0",
         "web-ext": "^3.2.1"
     }
