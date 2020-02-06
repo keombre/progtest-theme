@@ -4,6 +4,7 @@
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/eoofjghfpdplnjhbfflfnfogdjnedgjf)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/eoofjghfpdplnjhbfflfnfogdjnedgjf?label=chrome%20users&logo=google-chrome&logoColor=fff)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 [![GitHub All Releases](https://img.shields.io/github/downloads/keombre/progtest-theme/total?label=firefox%20download&logo=mozilla-firefox&logoColor=fff)](https://github.com/keombre/progtest-theme/releases/latest)
+[![CodeFactor](https://www.codefactor.io/repository/github/keombre/progtest-theme/badge)](https://www.codefactor.io/repository/github/keombre/progtest-theme/overview)
 
 **ProgTest Themes** is a WebExtension for Google Chrome and Mozilla Firefox which works as a theme manager for [ProgTest](https://progtest.fit.cvut.cz). It adds other useful features, such as syntax highlighting or notifications.
 

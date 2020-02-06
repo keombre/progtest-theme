@@ -1,0 +1,13 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "parser": "babel-eslint",
+    "rules": {
+        "complexity": 0
+    }
+}
