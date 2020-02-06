@@ -1,7 +1,4 @@
-:root
-{
-    --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-}
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap&subset=latin-ext");
 
 body
 {
@@ -11,7 +8,7 @@ body
 
 .e404
 {
-    font-family: var(--font);
+    font-family: "Open Sans","Noto Color Emoji";
     margin-top: 3rem;
     text-align: center;
 }

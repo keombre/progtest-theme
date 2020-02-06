@@ -6,5 +6,8 @@
         "browser": true,
         "es6": true
     },
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "rules": {
+        "complexity": 0
+    }
 }
