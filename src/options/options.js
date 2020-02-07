@@ -1,7 +1,7 @@
 chrome.tabs.query({ active: true, currentWindow: true }, function callback(tabs) {
   if (tabs[0].url.indexOf('://progtest.fit.cvut.cz') == -1 &&
       tabs[0].url.indexOf('://ptmock.localhost') == -1)
-    chrome.tabs.create({url: "https://progtest.fit.cvut.cz/"})
+    {chrome.tabs.create({url: "https://progtest.fit.cvut.cz/"})}
 })
 
 function save_options() {

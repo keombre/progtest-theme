@@ -1,5 +1,11 @@
 'use strict';
 
+/* global theme, uniChange, moveInputLabel, loginFocus, loginFocusOut, displayNotifications, highlighting,
+hljs, dropdown, toggleDropDown, sounds, settingsLoaded
+*/
+
+/* exported parser */
+
 class Err404 {
     site_body = `
 <div class="e404">
@@ -87,7 +93,7 @@ class Logged {
         document.body.innerHTML += this.topButton
         this.tButton = document.getElementById('upTop')
         if (this.tButton) {
-            this.tButton.addEventListener('click', (e) => {
+            this.tButton.addEventListener('click', () => {
                 this.tButton.removeAttribute('style')
                 document.body.scrollIntoView({ block: "start", behavior: "smooth" })
             })
@@ -101,24 +107,22 @@ class Logged {
         }
 
         window.addEventListener('beforeunload', this.scrollHigh.bind(this))
-        
+
         this.displayBell()
-        this.highlightCode()
+        Logged.highlightCode()
         this.notifications()
     }
 
     displayBell() {
-        if (!window.localStorage || !displayNotifications)
-            return
+        if (!window.localStorage || !displayNotifications) { return }
         let bell = document.createElement('div')
         bell.classList.add('notify', 'off')
-        bell.addEventListener('click', this.notifyToggle.bind(this))
+        bell.addEventListener('click', Logged.notifyToggle.bind(this))
         let logout = document.querySelector('.navLink[href*="Logout"]')
         logout.parentNode.insertBefore(bell, logout)
 
         document.addEventListener('click', e => {
-            if (e.target != bell)
-                document.getElementsByClassName('notifications')[0].classList.add('notifications-hide')
+            if (e.target != bell) { document.getElementsByClassName('notifications')[0].classList.add('notifications-hide') }
         })
 
         let notify = document.createElement('div')
@@ -128,55 +132,46 @@ class Logged {
     }
 
     scrollCheck() {
-        if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40)
-            this.scrollLow()
-        else
-            this.scrollHigh()
+        if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) { this.scrollLow() }
+        else { this.scrollHigh() }
 
         this.oldScroll = window.scrollY;
     }
 
     scrollHigh() {
-        if (this.header && this.header.getAttribute('style'))
-            this.header.removeAttribute("style")
-        if (this.tButton && this.tButton.getAttribute('style'))
-            this.tButton.removeAttribute('style')
+        if (this.header && this.header.getAttribute('style')) { this.header.removeAttribute("style") }
+        if (this.tButton && this.tButton.getAttribute('style')) { this.tButton.removeAttribute('style') }
     }
 
     scrollLow() {
-        if (this.header && !this.header.getAttribute('style'))
-            this.header.style.padding = "0px 16px";
-        if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll))
-            this.tButton.style.transform = "scale(1)"
+        if (this.header && !this.header.getAttribute('style')) { this.header.style.padding = "0px 16px"; }
+        if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll)) { this.tButton.style.transform = "scale(1)" }
     }
 
-    highlightCode() {
+    static highlightCode() {
         document.querySelectorAll('pre, code, tt').forEach((block) => {
-            if (highlighting)
-                hljs.highlightBlock(block)
-            else
-                block.classList.add('hljs')
+            if (highlighting) { hljs.highlightBlock(block) }
+            else { block.classList.add('hljs') }
         })
     }
 
     async notifications() {
-        if (!window.localStorage || !displayNotifications) return
+        if (!window.localStorage || !displayNotifications) { return }
 
-        let tasks = await this.taskSpider()
+        let tasks = await Logged.taskSpider()
 
         if (!localStorage.tasks) {
-            localStorage.tasks = JSON.stringify(tasks.map(e => {e['seen'] = true; return e}))
+            localStorage.tasks = JSON.stringify(tasks.map(e => { e['seen'] = true; return e }))
         } else {
             let localTasks = JSON.parse(localStorage.tasks)
-            let notify = tasks.filter(t => {return !localTasks.some(e => e.link === t.link)})
+            let notify = tasks.filter(t => { return !localTasks.some(e => e.link === t.link) })
             this.displayNotifications(notify.concat(localTasks.filter(e => e.seen == false)))
             localStorage.tasks = JSON.stringify(localTasks.concat(notify))
         }
     }
 
     displayNotifications(elems) {
-        if (!elems.length)
-            return
+        if (!elems.length) { return }
         document.getElementsByClassName('notify')[0].classList.replace('off', 'on')
         let frame = document.getElementsByClassName('notifications')[0]
         frame.innerHTML = ""
@@ -184,35 +179,33 @@ class Logged {
             let node = document.createElement('a')
             node.href = e.link
             node.innerHTML = `<i>${e.subject}</i> Nová úloha:<br /><b>${e.name}</b>`
-            node.addEventListener('click', this.notifySeen.bind(this))
+            node.addEventListener('click', Logged.notifySeen.bind(this))
             frame.appendChild(node)
         })
     }
 
-    getLinksFromHTML(text, href) {
+    static getLinksFromHTML(text, href) {
         text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
         let doc = new DOMParser().parseFromString(text, 'text/html')
         return doc.querySelectorAll(`.butLink[href*="${href}"]`)
     }
 
-    async taskSpider() {
+    static async taskSpider() {
         let main = await fetch("/index.php?X=Main")
-        if (!main.ok || main.redirected) return []
-        
+        if (!main.ok || main.redirected) { return [] }
+
         let mainText = await main.text()
-        let subjects = this.getLinksFromHTML(mainText, 'Course')
-        if (!subjects) return []
+        let subjects = Logged.getLinksFromHTML(mainText, 'Course')
+        if (!subjects) { return [] }
         let tasks = []
 
         for (let e of subjects) {
             let course = await fetch(e.href)
-            if (!course.ok || course.redirected)
-                return
+            if (!course.ok || course.redirected) { return }
             let text = await course.text()
-            let taskLinks = this.getLinksFromHTML(text, 'TaskGrp')
-            if (!taskLinks)
-                return
-            
+            let taskLinks = Logged.getLinksFromHTML(text, 'TaskGrp')
+            if (!taskLinks) { return }
+
             taskLinks.forEach(f => {
                 let url = new URL(f.href)
                 tasks.push({
@@ -226,17 +219,16 @@ class Logged {
         return tasks
     }
 
-    notifyToggle() {
+    static notifyToggle() {
         document.getElementsByClassName('notifications')[0].classList.toggle('notifications-hide')
     }
 
-    notifySeen(event) {
+    static notifySeen(event) {
         let localTasks = JSON.parse(localStorage.tasks)
         let linkNode = event.target.nodeName == "A" ? event.target : event.target.parentElement
         let link = new URL(linkNode.href)
         localTasks.map(e => {
-            if (e.link == '/' + link.search)
-                e.seen = true
+            if (e.link == '/' + link.search) { e.seen = true }
             return e
         })
         localStorage.tasks = JSON.stringify(localTasks)
@@ -259,7 +251,7 @@ class Exam extends Logged {
             form[name="form1"] table tr:nth-child(n+4) td.rbCell`
         ).forEach(e => {
             let radio = e.querySelector('input[type="radio"]')
-            if (!radio) return
+            if (!radio) { return }
             let dot = e.previousElementSibling.querySelector('.redBox')
             if (dot) {
                 dot.parentElement.removeChild(dot)
@@ -299,7 +291,7 @@ class Main extends Logged {
         let orders = {}
 
         // collect all elements
-        this.getSubjects().forEach(e => {
+        Main.getSubjects().forEach(e => {
 
             const [
                 order,
@@ -307,7 +299,7 @@ class Main extends Logged {
                 text = e[0],
                 footer = "",
                 push = settings
-            ] = this.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
+            ] = Main.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
             orders[order] = footer
             let link = {
                 "BI-AAG": "https://courses.fit.cvut.cz/BI-AAG/",
@@ -330,13 +322,13 @@ class Main extends Logged {
         })
 
         for (let order in orders) {
-            if (order >=1000) continue
+            if (order >= 1000) { continue }
             let header = document.createElement('span')
             header.classList.add('subjectHeader')
             header.style.order = order - 1
             header.setAttribute('pttcolorder', order)
-            header.innerHTML = (order%20?'Letní':'Zimní') + ' semestr <b>' + orders[order].substr(0, 7) + '</b>'
-            header.addEventListener('click', this.collapseSem.bind(this))
+            header.innerHTML = (order % 20 ? 'Letní' : 'Zimní') + ' semestr <b>' + orders[order].substr(0, 7) + '</b>'
+            header.addEventListener('click', Main.collapseSem.bind(this))
             subjects.appendChild(header)
         }
         let cent = document.querySelector('center')
@@ -346,21 +338,19 @@ class Main extends Logged {
         let min = Math.min(...Object.keys(orders))
         for (let order in orders) {
             let elm = document.querySelector('[pttcolorder="' + order + '"]')
-            if (elm && order != min)
-                elm.click()
+            if (elm && order != min) { elm.click() }
         }
     }
 
-    collapseSem(event) {
+    static collapseSem(event) {
         let elm = event.target
-        if (elm.nodeName == 'B')
-            elm = elm.parentNode
+        if (elm.nodeName == 'B') { elm = elm.parentNode }
         document.querySelectorAll('[pttorder="' + elm.getAttribute('pttcolorder') + '"]').forEach(e => {
             e.classList.toggle('subject-hidden')
         })
     }
 
-    parseSettings(title) {
+    static parseSettings(title) {
         return ({
             "Nastavení": [10001, 'icon-setting', ""],
             "Překladače": [10000, 'icon-compile'],
@@ -371,18 +361,18 @@ class Main extends Logged {
     parseSubject(title, text) {
 
         const bracketPos = text.lastIndexOf('(')
-        if (bracketPos == -1)
-            return [this.orderC++, 'icon-unknown', text, ""]
-        else
+        if (bracketPos == -1) { return [this.orderC++, 'icon-unknown', text, ""] }
+        else {
             return [
                 (100 - (text.substr(bracketPos + 1, 2) * 2) - text.includes('LS)')) * 10,
-                this.getSubjectIcon(title),
+                Main.getSubjectIcon(title),
                 text.substr(0, bracketPos - 1),
                 "20" + text.slice(bracketPos + 1, -1)
             ]
+        }
     }
 
-    getSubjectIcon(title) {
+    static getSubjectIcon(title) {
         return ({
             "BI-PA1": "icon-pa1",
             "BI-PA2": "icon-pa2",
@@ -394,11 +384,11 @@ class Main extends Logged {
         })[title] || "icon-unknown"
     }
 
-    getSubjects() {
-        return [...document.querySelectorAll("body > center > table > tbody > tr")].map(this.getSubjectNames)
+    static getSubjects() {
+        return [...document.querySelectorAll("body > center > table > tbody > tr")].map(Main.getSubjectNames)
     }
 
-    getSubjectNames(e) {
+    static getSubjectNames(e) {
         const ch = e.children[1].children[0].children[0].children[0]
         return [e.children[0].innerText, ch.href, ch.innerText]
     }
@@ -408,42 +398,40 @@ class Task extends Logged {
     constructor() {
         super()
 
-        this.fixLinks()
+        Task.fixLinks()
 
         // autohide result tables
-        if (dropdown)
-            this.autoHideResults()
+        if (dropdown) { Task.autoHideResults() }
 
         // mark help checkboxes for grid
         document.querySelectorAll('input[type="checkbox"][name]').forEach(e => {
             e.parentNode.className += " gridHelp"
         })
 
-        this.markResultsTable()
+        Task.markResultsTable()
 
         // nicer progress bar
         let progress = document.getElementById('refVal')
-        if (progress)
-            setTimeout(() => progress.scrollIntoView({ block: "center" }), 10)
+        if (progress) { setTimeout(() => progress.scrollIntoView({ block: "center" }), 10) }
 
         this.replaceCountdown()
-        
-        this.easterEgg()
+
+        Task.easterEgg()
     }
 
-    fixLinks() {
+    static fixLinks() {
         document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"], [href*="?X=DryRunD&"], [href*="?X=DryRunO&"], [href*="?X=DryRunI&"], [href*="?X=CompileD&"]').forEach(e => {
             e.setAttribute('target', '_blank')
         })
     }
 
     replaceCountdown() {
-        if (!document.getElementById('countdown')) return
+        if (!document.getElementById('countdown')) { return }
         // block setTimeout calls
         let elt = document.createElement("script")
         elt.innerHTML = "window.setCountdown();window.setCountdown = function () {};"
         document.head.appendChild(elt)
-        
+
         // rename element
         document.getElementById('countdown').setAttribute('id', 'ptt-countdown')
 
@@ -454,7 +442,7 @@ class Task extends Logged {
         document.head.appendChild(hide)
 
         let elm = document.getElementById('ptt-countdown')
-        if (elm.innerHTML == '&nbsp;') return;
+        if (elm.innerHTML == '&nbsp;') { return; }
         elm.style.minWidth = "200px"
         let deadline = parseInt(elm.innerHTML.slice(0, -4)) * 1000 + new Date().getTime()
 
@@ -471,19 +459,18 @@ class Task extends Logged {
                     "ají <b>{} dny"
                 ][remaining / 86400] || "á <b>{} dní").replace('{}', days)
                 t += ", "
-            } else
-                t += "á <b>"
+            } else { t += "á <b>" }
             let hours = remaining % 86400
             let minutes = hours % 3600
             t += parseInt(hours / 3600) + "h, " + parseInt(minutes / 60) + "m a " + parseInt(minutes % 60) + "s</b>"
             elm.innerHTML = t
         }
-        
+
         loop()
         this.timerLoop = setInterval(loop, 900)
     }
 
-    markResultsTable() {
+    static markResultsTable() {
         document.querySelectorAll('form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child').forEach(e => {
             let node = e.previousSibling
             let text = node.textContent
@@ -510,9 +497,8 @@ class Task extends Logged {
             }
 
             const testName = text.match(/Test '(.*)': (Úspěch|Neúspěch|Nebylo testováno)/)
-            if (testName != null)
-                node.textContent = testName[1]
-            
+            if (testName != null) { node.textContent = testName[1] }
+
             const score = [...e.childNodes[0].innerText.matchAll(/Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g)]
             let scoreElem
             if (score.length == 1 && score[0].length == 3) {
@@ -540,14 +526,13 @@ class Task extends Logged {
 
             e.childNodes.forEach(f => {
                 if (f.innerText.includes(', hodnocení')) {
-                    if (!scoreElem) return
-                    
+                    if (!scoreElem) { return }
+
                     let scoreMult
-                    if (f.innerText.includes('Bonus nebude udělen'))
-                    scoreMult = 0
+                    if (f.innerText.includes('Bonus nebude udělen')) { scoreMult = 0 }
                     else {
                         let multText = f.innerText.match(/(\d{1,3}.\d{2}) %/)
-                        if (multText == null) return
+                        if (multText == null) { return }
                         scoreMult = parseFloat(multText[1]) / 100
                     }
                     let testType = ""
@@ -585,8 +570,7 @@ class Task extends Logged {
                         if (time.length == 2) {
                             const timeMe = parseFloat(time[0][1])
                             const timeLimit = parseFloat(time[1][1])
-                            if (timeMe >= timeLimit)
-                                timeElem.classList.replace("info", "danger")
+                            if (timeMe >= timeLimit) { timeElem.classList.replace("info", "danger") }
                             timeElem.setAttribute("title", "Celkový čas / limit")
                             timeElem.innerHTML = "<label>⏱️ <b>" + timeMe.toFixed(3) + "s</b> / " + timeLimit.toFixed(3) + "s</label>"
                         } else {
@@ -602,15 +586,14 @@ class Task extends Logged {
                         let memElem = document.createElement("badge")
                         memElem.classList.add("info")
                         if (memory.length == 2) {
-                            const memMe = parseFloat(memory[0][1])*1024
-                            const memLimit = parseFloat(memory[1][1])*1024
-                            if (memMe >= memLimit)
-                                memElem.classList.replace("info", "danger")
+                            const memMe = parseFloat(memory[0][1]) * 1024
+                            const memLimit = parseFloat(memory[1][1]) * 1024
+                            if (memMe >= memLimit) { memElem.classList.replace("info", "danger") }
                             memElem.setAttribute("title", "Celková paměť / limit")
-                            memElem.innerHTML = "<label>💾 <b>" + this.convertMemory(memMe) + "</b> / " + this.convertMemory(memLimit) + "</label>"
+                            memElem.innerHTML = "<label>💾 <b>" + Task.convertMemory(memMe) + "</b> / " + Task.convertMemory(memLimit) + "</label>"
                         } else {
                             memElem.setAttribute("title", "Celková paměť")
-                            memElem.innerHTML = "<label>💾 <b>" + this.convertMemory(parseFloat(memory[0][1])*1024) + "</b></label>"
+                            memElem.innerHTML = "<label>💾 <b>" + Task.convertMemory(parseFloat(memory[0][1]) * 1024) + "</b></label>"
                         }
                         badges.appendChild(memElem)
                     }
@@ -625,12 +608,12 @@ class Task extends Logged {
         })
     }
 
-    convertMemory(size) {
+    static convertMemory(size) {
         var i = Math.floor(Math.log(size) / Math.log(1024))
         return (size / Math.pow(1024, i)).toFixed(0) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
     }
 
-    autoHideResults() {
+    static autoHideResults() {
         // make ref solution clickable
         let checkbox = document.querySelector('input[name="SHOW_REF"]')
         if (checkbox) {
@@ -666,10 +649,10 @@ class Task extends Logged {
         })
     }
 
-    easterEgg() {
+    static easterEgg() {
         // play Portal 2 turrent sound on successful task submission (you are welcome ;) )
         let storage = window.localStorage
-        if (!storage) return
+        if (!storage) { return }
 
         let params = window.location.search.split('&')
         let task = btoa((params[1] || '') + (params[2] || '') + (params[3] || ''))
@@ -683,7 +666,7 @@ class Task extends Logged {
             if (sounds && document.querySelector("form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell")) {
                 try {
                     new Audio(chrome.runtime.getURL("./themes/assets/turret.ogg")).play()
-                } catch {}
+                } catch { }
             }
         }
         storage.setItem('upload', false)
@@ -727,39 +710,39 @@ class Course extends Logged {
 
         this.createContainers()
 
-        this.getTasks().forEach(e =>
+        Course.getTasks().forEach(e =>
             eval(`this.${e.type}`).appendChild(this.createLink(e))
         )
 
         let container = document.createElement('div')
         container.classList.add('course_container')
-        
+
         this.writeContainers(container)
         this.writeContainerSum()
         document.body.replaceChild(container, document.querySelector('center'))
 
         document.addEventListener('keydown', e => {
-            if (e.key == "Escape")
-                this.hideModal()
+            if (e.key == "Escape") { Course.hideModal() }
         })
 
-        document.addEventListener('click', _ => this.hideModal())
+        document.addEventListener('click', () => Course.hideModal())
 
         let styleSheet = document.createElement("style")
         styleSheet.type = "text/css"
-        styleSheet.innerText = this.createSpanningStylesheet(container)
+        styleSheet.innerText = Course.createSpanningStylesheet(container)
         document.head.appendChild(styleSheet)
     }
 
+    /* eslint-disable class-methods-use-this */
     writeContainerSum() {
-        this.getContainerNames().forEach(e => {
-            if (e == "results") return
+        Course.getContainerNames().forEach(e => {
+            if (e == "results") { return }
             const text = eval(`this.${e}`)
-            if (text.childElementCount <= 1) return
+            if (text.childElementCount <= 1) { return }
             let sum = 0
-            text.querySelectorAll('.course_link_score').forEach(e => {
-                let score = parseFloat(e.innerText)
-                if (!isNaN(score)) sum += score
+            text.querySelectorAll('.course_link_score').forEach(f => {
+                let score = parseFloat(f.innerText)
+                if (!isNaN(score)) { sum += score }
             })
             let sumElem = document.createElement("span")
             sumElem.innerText = sum.toFixed(2)
@@ -768,29 +751,32 @@ class Course extends Logged {
             text.appendChild(sumElem)
         })
     }
+    /* eslint-enable class-methods-use-this */
 
-    createSpanningStylesheet(container) {
+    static createSpanningStylesheet(container) {
         let stylesheet = ""
-        for (let elm of container.children)
-            if (elm.classList.item(0) != "course_results_grp")
-                stylesheet += `.${elm.classList.item(0)} {grid-row: span ${elm.childElementCount};}`
+        for (let elm of container.children) {
+            if (elm.classList.item(0) != "course_results_grp") { stylesheet += `.${elm.classList.item(0)} {grid-row: span ${elm.childElementCount};}` }
+        }
         return stylesheet
     }
 
-    getContainerNames() {
+    static getContainerNames() {
         return ["tasks", "tasks_extra", "exams", "sem", "tests", "results", "extras", "unknown"]
     }
 
+    /* eslint-disable class-methods-use-this */
     createContainers() {
-        this.getContainerNames().forEach(e => {
+        Course.getContainerNames().forEach(e => {
             eval(`this.${e} = document.createElement('div')`)
             eval(`this.${e}`).classList.add(`course_${e}_grp`)
             eval(`this.${e}`).classList.add(`course_grp`)
-            eval(`this.${e}`).appendChild(this.createTitle(e))
+            eval(`this.${e}`).appendChild(Course.createTitle(e))
         })
     }
+    /* eslint-enable class-methods-use-this */
 
-    createTitle(name) {
+    static createTitle(name) {
         const text = ({
             "tasks": "Domácí úlohy",
             "tasks_extra": "Soutěžní úlohy",
@@ -808,13 +794,14 @@ class Course extends Logged {
         return elem
     }
 
+    /* eslint-disable class-methods-use-this */
     writeContainers(elem) {
-        this.getContainerNames().forEach(e => {
+        Course.getContainerNames().forEach(e => {
             const text = eval(`this.${e}`)
-            if (text.childElementCount > 1)
-                elem.appendChild(text)
+            if (text.childElementCount > 1) { elem.appendChild(text) }
         })
     }
+    /* eslint-enable class-methods-use-this */
 
     createLink(entry) {
         let ret
@@ -826,7 +813,7 @@ class Course extends Logged {
             ret = document.createElement('span')
         }
         let d = new Date()
-        let datestr = ("0" + d.getDate()).slice(-2) + "." + ("0"+(d.getMonth()+1)).slice(-2) + "." + d.getFullYear()
+        let datestr = ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear()
         ret.classList.add(
             'course_link',
             entry.active ? 'course_link' : 'course_disabled',
@@ -838,7 +825,7 @@ class Course extends Logged {
         return ret
     }
 
-    getTasks() {
+    static getTasks() {
         return [...document.querySelectorAll("table.topLayout > tbody > tr")].map(e => {
             const name = e.children[0].innerText
             let type = ({
@@ -857,23 +844,18 @@ class Course extends Logged {
                 "Programovací": "tasks"
             })[name.replace(/ .*/, '')] || "unknown"
 
-            if (name.includes('Teorie') || name.includes('Test'))
-                type = "exams"
+            if (name.includes('Teorie') || name.includes('Test')) { type = "exams" }
 
             // PS1 naming scheme
-            else if (name.includes('. test'))
-                type = "tests"
-            else if (name.includes('domácí cvičení'))
-                type = "tasks"
-            else if (name.includes('Checkpoint'))
-                type = "sem"
-            else if (name.includes('Úloha'))
-                type = "tasks"
+            else if (name.includes('. test')) { type = "tests" }
+            else if (name.includes('domácí cvičení')) { type = "tasks" }
+            else if (name.includes('Checkpoint')) { type = "sem" }
+            else if (name.includes('Úloha')) { type = "tasks" }
 
             const active = !e.children[0].children[0].classList.contains('menuListDis')
             if (e.childElementCount == 4) {
                 let link = e.children[3].querySelector('a.butLink')
-                let deadline = this.trimDeadline(e.children[2].innerText)
+                let deadline = Course.trimDeadline(e.children[2].innerText)
 
                 return {
                     type,
@@ -894,16 +876,16 @@ class Course extends Logged {
                     "link": link && link.href
                 }
             }
+            return null
         })
     }
 
-    trimDeadline(text) {
-        if (text.includes(' 23:59:59'))
-            return text.substr(0, text.lastIndexOf(' '))
+    static trimDeadline(text) {
+        if (text.includes(' 23:59:59')) { return text.substr(0, text.lastIndexOf(' ')) }
         return text
     }
 
-    hideModal() {
+    static hideModal() {
         let modal = document.querySelector('.modal')
         if (modal) {
             modal.classList.remove('modal-show')
@@ -913,9 +895,8 @@ class Course extends Logged {
 
     taskLink(event) {
         // skip middle button & control+click
-        if (event.which != 1 || event.ctrlKey)
-            return true
-        
+        if (event.which != 1 || event.ctrlKey) { return true }
+
         let target = event.target
         while (target.getAttribute('href') == null) {
             target = target.parentElement
@@ -931,40 +912,38 @@ class Course extends Logged {
             window.location.assign(link)
             return
         }
-        this.displaySpinner()
+        Course.displaySpinner()
         fetch(link).then(e => {
-            if (!e.ok || e.redirected)
-                return Promise.reject()
+            if (!e.ok || e.redirected) { return Promise.reject() }
             return e.text()
         })
-        .then(this.parseTaskGrp.bind(this))
-        //.then(this.checkSingleLink.bind(this))
-        .then(this.createModal.bind(this))
-        .catch(() => {
-            window.location.assign(link)
-            this.hideSpinner()
-        })
+            .then(Course.parseTaskGrp.bind(this))
+            //.then(this.checkSingleLink.bind(this))
+            .then(this.createModal.bind(this))
+            .catch(() => {
+                window.location.assign(link)
+                Course.hideSpinner()
+            })
     }
 
-    hideSpinner() {
+    static hideSpinner() {
         let spinner = document.getElementsByClassName("modal-spinner")[0]
-        if (spinner)
-            spinner.parentNode.removeChild(spinner)
+        if (spinner) { spinner.parentNode.removeChild(spinner) }
     }
 
-    displaySpinner() {
+    static displaySpinner() {
         let spinner = document.createElement("div")
         spinner.classList.add("modal-spinner")
         document.body.insertBefore(spinner, document.querySelector('.course_container'))
     }
-/*
-    // not stable enough
-    checkSingleLink(data) {
-        if (data.tasks.length == 1)
-            window.location.assign(data.tasks[0].link)
-        Promise.resolve(data)
-    }
-*/
+    /*
+        // not stable enough
+        checkSingleLink(data) {
+            if (data.tasks.length == 1)
+                window.location.assign(data.tasks[0].link)
+            Promise.resolve(data)
+        }
+    */
     createModal(data) {
         // create/get modal
         let modal = document.querySelector('.modal')
@@ -979,7 +958,7 @@ class Course extends Logged {
         let modalClose = document.createElement('div')
         modalClose.classList.add('modal-close')
         modalClose.innerText = '✖️'
-        modalClose.addEventListener('click', this.hideModal.bind(this))
+        modalClose.addEventListener('click', Course.hideModal.bind(this))
         modal.appendChild(modalClose)
 
         let modalHeader = document.createElement('div')
@@ -1012,11 +991,11 @@ class Course extends Logged {
 `
             modalBody.appendChild(modalLine)
         })
-        this.hideSpinner()
+        Course.hideSpinner()
         modal.appendChild(modalBody)
     }
 
-    parseTaskGrp(text) {
+    static parseTaskGrp(text) {
         // sanitize page
         text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
         let doc = new DOMParser().parseFromString(text, 'text/html')
@@ -1051,10 +1030,10 @@ class Course extends Logged {
 
         // gather global task info
         data.info['title'] = doc.querySelector("body > center").innerText.trim()
-        data.info['deadline'] = this.trimDeadline(doc.querySelector("#maintable > tbody > tr:nth-child(1) > td.tCell").innerText)
+        data.info['deadline'] = Course.trimDeadline(doc.querySelector("#maintable > tbody > tr:nth-child(1) > td.tCell").innerText)
         let deadline = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rCell > b"), score
         if (deadline) {
-            data.info['lateDeadline'] = '(' + this.trimDeadline(deadline.innerText) + ')'
+            data.info['lateDeadline'] = '(' + Course.trimDeadline(deadline.innerText) + ')'
             data.info['lateDeadlineInfo'] = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rCell").innerText.slice(data.info['lateDeadline'].length + 2, -1)
             score = doc.querySelector("#maintable > tbody > tr:nth-child(3) > td.rbCell > b").innerText
         } else {
@@ -1069,7 +1048,7 @@ class Course extends Logged {
 
         // gather info about individual assignments
         doc.querySelectorAll('#maintable').forEach((e, i) => {  // Why are there multiple elements with same id?! :-(
-            if (!i) return
+            if (!i) { return }
             let task = {}
             task['title'] = e.querySelector("tbody > tr:nth-child(1) > td.tbSepCell").innerText
             task['link'] = e.querySelector("tbody > tr:nth-child(5) > td > div > div > a").href
@@ -1105,12 +1084,10 @@ const preload = () => {
     document.body.removeAttribute('text')
 
     // 404
-    if (document.body.innerHTML == "")
-        parser = new Err404()
+    if (document.body.innerHTML == "") { parser = new Err404() }
     // login
-    else if (document.querySelector('select[name=UID_UNIVERSITY]') != null)
-        parser = new Login()
-    else if ('X' in args)
+    else if (document.querySelector('select[name=UID_UNIVERSITY]') != null) { parser = new Login() }
+    else if ('X' in args) {
         switch (args['X']) {
             case "FAQ":
             case "Preset":
@@ -1138,23 +1115,20 @@ const preload = () => {
             case "Main":
                 parser = new Main()
                 break
-            default:
+            default: {
                 // determine if site is really main
                 let navlink = document.querySelector("span.navlink") // first time login
                 if (
                     document.querySelector('span.navLink > a.navLink[href="?X=Main"]') || (
-                    navlink && navlink.innerText.includes("Než")
-                ))
-                    parser = new Logged()
-                else
-                    parser = new Main()
+                        navlink && navlink.innerText.includes("Než")
+                    )) { parser = new Logged() }
+                else { parser = new Main() }
+            }
 
         }
-    else
-        parser = new Main()
+    }
+    else { parser = new Main() }
 }
 
-if (!settingsLoaded)
-    window.addEventListener('ppt-loaded', preload)
-else
-    preload()
+if (!settingsLoaded) { window.addEventListener('ppt-loaded', preload) }
+else { preload() }

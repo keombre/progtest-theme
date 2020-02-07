@@ -1,3 +1,8 @@
+'use strict';
+
+/* exported theme, dropdown, displayNotifications, highlighting, sounds, settingsLoaded, toggleDropDown, 
+uniChange, moveInputLabel, loginFocusOut, loginFocus */
+
 var theme
 var dropdown
 var displayNotifications
@@ -18,43 +23,12 @@ const loader = `
     </svg>
 </div>`
 
-
-chrome.runtime.sendMessage({ type: "config" }, function (response) {
-
-    // load user config and dispatch event when ready
-    theme = response.theme
-    dropdown = response.dropdown
-    displayNotifications = response.displayNotifications
-    highlighting = response.highlighting
-    sounds = response.sounds
-
-    if (response.theme == 'orig' || response.theme == 'orig-dark')
-        return
-    
-    errorReporter()
-    
-    settingsLoaded = true
-    window.dispatchEvent(pttLoaded)
-    
-    // add favicon
-    var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
-    favicon.type = 'image/x-icon';
-    favicon.rel = 'shortcut icon';
-    favicon.href = chrome.extension.getURL('./themes/assets/favicon.ico');
-    document.getElementsByTagName('head')[0].appendChild(favicon);
-
-    // change page title
-    document.title = document.title.replace("@progtest.fit.cvut.cz -", " |").replace("progtest.fit.cvut.cz - ", "")
-
-    addLoader()
-})
-
 const errorReporter = () => {
     window.onerror = (event, source, lineno) => {
         if (document.body == null)
-            return true
+            {return true}
         if (!source.includes('chrome-extension:'))
-            return true
+            {return true}
         let err = document.createElement('div')
         err.innerHTML = event + " at " + source.substr(source.lastIndexOf('/') + 1) + ":" + lineno
         err.classList.add('errorReporter')
@@ -69,7 +43,7 @@ const addLoader = () => {
     document.children[0].appendChild(ld)
     window.addEventListener('load', () => {
         document.getElementById('loadWrapper').classList.add('loadWrapperHide')
-        setTimeout(() => document.getElementById('loadWrapper').style.visibility = 'hidden', 200)
+        setTimeout(() => {document.getElementById('loadWrapper').style.visibility = 'hidden'}, 200)
     })
 
     window.addEventListener('beforeunload', () => {
@@ -81,17 +55,17 @@ const addLoader = () => {
 
 const toggleDropDown = (e) => {
     if (e.button == 2)
-        return
+        {return}
     if (e.target.nodeName == "A" || e.target.nodeName == "BUTTON")
-        return
+        {return}
     let id = 0
     for (let node of e.currentTarget.parentNode.children) {
         if (id++ == 0)
-            continue
+            {continue}
         if (node.className.indexOf("dropDownHide") == -1)
-            node.className += " dropDownHide"
+            {node.className += " dropDownHide"}
         else
-            node.className = node.className.replace(" dropDownHide", "")
+            {node.className = node.className.replace(" dropDownHide", "")}
     }
 }
 
@@ -100,7 +74,7 @@ const uniChange = (event) => {
     document.getElementById('uniSel').childNodes.forEach(e => {
         e.removeAttribute('active')
         if (e == event.target)
-            i = c
+            {i = c}
         c++
     })
 
@@ -119,9 +93,39 @@ const moveInputLabel = (event) => {
 
 const loginFocusOut = (event) => {
     if (event.target.value == "")
-        event.target.parentNode.parentNode.children[0].children[0].removeAttribute('moved')
+        {event.target.parentNode.parentNode.children[0].children[0].removeAttribute('moved')}
 }
 
 const loginFocus = (event) => {
     event.target.parentNode.parentNode.children[0].children[0].click()
 }
+
+chrome.runtime.sendMessage({ type: "config" }, function (response) {
+
+    // load user config and dispatch event when ready
+    theme = response.theme
+    dropdown = response.dropdown
+    displayNotifications = response.displayNotifications
+    highlighting = response.highlighting
+    sounds = response.sounds
+
+    if (response.theme == 'orig' || response.theme == 'orig-dark')
+        {return}
+    
+    errorReporter()
+    
+    settingsLoaded = true
+    window.dispatchEvent(pttLoaded)
+    
+    // add favicon
+    var favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    favicon.type = 'image/x-icon';
+    favicon.rel = 'shortcut icon';
+    favicon.href = chrome.extension.getURL('./themes/assets/favicon.ico');
+    document.getElementsByTagName('head')[0].appendChild(favicon);
+
+    // change page title
+    document.title = document.title.replace("@progtest.fit.cvut.cz -", " |").replace("progtest.fit.cvut.cz - ", "")
+
+    addLoader()
+})
