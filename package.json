@@ -4,7 +4,7 @@
     "description": "Theme manager for ProgTest",
     "main": "background.js",
     "scripts": {
-        "lint": "web-ext lint"
+        "lint": "npx csslint --quiet src/themes/*.css & npx eslint src"
     },
     "repository": {
         "type": "git",
