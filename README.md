@@ -1,4 +1,4 @@
-# ProgTest Themes
+# <img src="https://raw.githubusercontent.com/keombre/progtest-theme/stable/src/themes/assets/favicon.ico" style="width: 25px" />rogtest Themes
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/stars/eoofjghfpdplnjhbfflfnfogdjnedgjf)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/eoofjghfpdplnjhbfflfnfogdjnedgjf)](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
