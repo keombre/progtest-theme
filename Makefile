@@ -44,5 +44,4 @@ deploy: version
 	node ${utils_dir}/github_upload.js
 
 lint:
-	npx csslint src/themes/*.css
-	npx eslint src
+	npm run lint
