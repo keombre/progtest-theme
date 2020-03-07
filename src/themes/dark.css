@@ -278,7 +278,6 @@ table.header {
 
 .lrtbCell img {
     filter: invert(100%);
-    background-color: #212121;
     transition: filter 0.2s ease, background 0.2s ease;
 }
 
