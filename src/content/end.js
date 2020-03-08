@@ -345,6 +345,7 @@ class Main extends Logged {
     static collapseSem(event) {
         let elm = event.target
         if (elm.nodeName == 'B') { elm = elm.parentNode }
+        elm.classList.toggle('active')
         document.querySelectorAll('[pttorder="' + elm.getAttribute('pttcolorder') + '"]').forEach(e => {
             e.classList.toggle('subject-hidden')
         })
