@@ -29,6 +29,10 @@
                 {
                     "version": "1.0.34",
                     "update_link": "https://github.com/keombre/progtest-theme/releases/download/1.0.34/progtest_themes-1.0.34-an+fx.xpi"
+                },
+                {
+                    "version": "1.0.35",
+                    "update_link": "https://github.com/keombre/progtest-theme/releases/download/1.0.35/progtest_themes-1.0.35-an+fx.xpi"
                 }
             ]
         }
