@@ -608,7 +608,7 @@ div.subjectSelect > span.subjectHeader {
     height: 35px;
     background: linear-gradient(to right, #343a40 20%,rgba(0,0,0,0) 99%);
     line-height: 35px;
-    padding-left: 14px;
+    padding-left: 34px;
     font-size: 22px;
     border-bottom-left-radius: 8px;
     border-top-left-radius: 8px;
@@ -617,6 +617,25 @@ div.subjectSelect > span.subjectHeader {
     font-weight: 100;
     cursor: pointer;
     user-select: none;
+}
+
+div.subjectSelect > span.subjectHeader:before {
+    content: '';
+    position: absolute;
+    margin-top: 13px;
+    margin-left: -21px;
+    border: solid #c7c7c7;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    transition: all 0.1s ease;
+}
+
+div.subjectSelect > span.subjectHeader.active:before {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
 
 .subject-hidden {
