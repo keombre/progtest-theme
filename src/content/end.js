@@ -902,16 +902,22 @@ class Course extends Logged {
         while (target.getAttribute('href') == null) {
             target = target.parentElement
         }
-        this.getTaskGroups(target.getAttribute('href'))
-        event.preventDefault()
-        event.stopPropagation()
-        return false
+        // only prevent default action if anything
+        // is going to be done with the link
+        if (this.getTaskGroups(target.getAttribute('href'))) {
+            event.preventDefault()
+            event.stopPropagation()
+            return false
+        }
     }
 
     getTaskGroups(link) {
         if (link.includes('Results')) {
             window.location.assign(link)
-            return
+            return true
+        }
+        if (link.includes('javascript:')) {
+            return false
         }
         Course.displaySpinner()
         fetch(link).then(e => {
@@ -925,6 +931,7 @@ class Course extends Logged {
                 window.location.assign(link)
                 Course.hideSpinner()
             })
+        return true
     }
 
     static hideSpinner() {
