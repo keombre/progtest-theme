@@ -191,7 +191,7 @@ class Logged {
     }
 
     static async taskSpider() {
-        let main = await fetch("/index.php?X=Main")
+        let main = await fetch(new URL('index.php?X=Main', window.location.protocol + '//' + window.location.hostname))
         if (!main.ok || main.redirected) { return [] }
 
         let mainText = await main.text()
