@@ -766,6 +766,7 @@ span.course_link_score_sum {
 
 span.course_link_name {
     display: block;
+    max-width: calc(100% - 80px);
 }
 
 span.course_link_score {

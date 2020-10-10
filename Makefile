@@ -30,6 +30,14 @@ chrome: source
 	find ./progtest-themes/ -type f | xargs zip ${out_dir}/chrome/progtest_themes.zip
 	rm progtest-themes
 
+firefox-zip: source
+	cp ${manifest_dir}/firefox.json ${build_dir}/manifest.json
+	mkdir -p ${out_dir}/firefox || exit 0
+	ln -s ${build_dir} progtest-themes
+	rm ${out_dir}/firefox/* || exit 0
+	find ./progtest-themes/ -type f | xargs zip ${out_dir}/firefox/progtest_themes.zip
+	rm progtest-themes
+
 dev: source
 	cp ${manifest_dir}/debug.json ${build_dir}/manifest.json
 	cp ${utils_dir}/reloader.js ${build_dir}/reloader.js
