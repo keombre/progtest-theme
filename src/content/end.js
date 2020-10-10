@@ -842,7 +842,8 @@ class Course extends Logged {
                 "Code": "extras",
                 "Výsledky": "results",
                 "Úlohy": "extras",
-                "Programovací": "tasks"
+                "Programovací": "tasks",
+                "Semináře": "tasks"
             })[name.replace(/ .*/, '')] || "unknown"
 
             if (name.includes('Teorie') || name.includes('Test')) { type = "exams" }
