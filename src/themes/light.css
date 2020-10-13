@@ -141,6 +141,10 @@ span.course_link {
     color: #b1b1b1;
 }
 
+.course_unknown_grp > span.course_title {
+    color: #404040;
+}
+
 span span.course_link_score {
     background: #B0BEC5;
 }
