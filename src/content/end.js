@@ -309,6 +309,7 @@ class Main extends Logged {
                 "BI-PA2": "https://courses.fit.cvut.cz/BI-PA2/",
                 "BI-PJV": "https://moodle-vyuka.cvut.cz/course/view.php?id=2265",
                 "BI-PS1": "https://courses.fit.cvut.cz/BI-PS1/",
+                "BI-PYT": "https://courses.fit.cvut.cz/BI-PYT/",
                 "unknown": "https://courses.fit.cvut.cz/",
             }[e[2]]
             push.innerHTML += `
