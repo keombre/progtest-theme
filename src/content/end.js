@@ -838,9 +838,11 @@ class Course extends Logged {
 
         ret.classList.add(
             'course_link',
-            Course.isToday(entry.closes) && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link',
             'course_link_type_' + entry.type
         )
+
+        if (entry.closes && entry.score)
+            ret.classList.add(Course.isToday(entry.closes) && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link')
 
         ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
         ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
