@@ -150,8 +150,8 @@ span span.course_link_score {
 }
 
 span.course_link_score_sum {
-    color: #807a85 !important;
-    border-top: thin solid rgba(0, 0, 0, 0.1) !important;
+    color: #464248 !important;
+    border-bottom: thin solid rgba(0, 0, 0, 0.1) !important;
 }
 
 a.course_link:hover {

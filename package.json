@@ -1,6 +1,6 @@
 {
     "name": "progtest-theme",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "Theme manager for ProgTest",
     "main": "background.js",
     "scripts": {

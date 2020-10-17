@@ -710,100 +710,121 @@ class Course extends Logged {
     constructor() {
         super()
 
-        this.createContainers()
+        this.GetTasks().then(tasks => {
+            const cts = this.createContainers(tasks)
+            
+            let container = document.createElement('div')
+            container.classList.add('course_container')
 
-        Course.getTasks().forEach(e =>
-            eval(`this.${e.type}`).appendChild(this.createLink(e))
-        )
+            cts.forEach(e => container.appendChild(e))
+            document.body.replaceChild(container, document.querySelector('center'))
 
-        let container = document.createElement('div')
-        container.classList.add('course_container')
-
-        this.writeContainers(container)
-        this.writeContainerSum()
-        document.body.replaceChild(container, document.querySelector('center'))
-
-        document.addEventListener('keydown', e => {
-            if (e.key == "Escape") { Course.hideModal() }
-        })
-
-        document.addEventListener('click', () => Course.hideModal())
-
-        let styleSheet = document.createElement("style")
-        styleSheet.type = "text/css"
-        styleSheet.innerText = Course.createSpanningStylesheet(container)
-        document.head.appendChild(styleSheet)
-    }
-
-    /* eslint-disable class-methods-use-this */
-    writeContainerSum() {
-        Course.getContainerNames().forEach(e => {
-            if (e == "results") { return }
-            const text = eval(`this.${e}`)
-            if (text.childElementCount <= 1) { return }
-            let sum = 0
-            text.querySelectorAll('.course_link_score').forEach(f => {
-                let score = parseFloat(f.innerText)
-                if (!isNaN(score)) { sum += score }
+            document.addEventListener('keydown', e => {
+                if (e.key == "Escape") { Course.hideModal() }
             })
-            let sumElem = document.createElement("span")
-            sumElem.innerText = sum.toFixed(2)
-            sumElem.classList.add("course_link")
-            sumElem.classList.add("course_link_score_sum")
-            text.appendChild(sumElem)
+
+            document.addEventListener('click', () => Course.hideModal())
         })
     }
-    /* eslint-enable class-methods-use-this */
 
-    static createSpanningStylesheet(container) {
-        let stylesheet = ""
-        for (let elm of container.children) {
-            if (elm.classList.item(0) != "course_results_grp") { stylesheet += `.${elm.classList.item(0)} {grid-row: span ${elm.childElementCount};}` }
-        }
-        return stylesheet
-    }
-
-    static getContainerNames() {
-        return ["tasks", "tasks_extra", "exams", "sem", "tests", "results", "extras", "unknown"]
-    }
-
-    /* eslint-disable class-methods-use-this */
-    createContainers() {
-        Course.getContainerNames().forEach(e => {
-            eval(`this.${e} = document.createElement('div')`)
-            eval(`this.${e}`).classList.add(`course_${e}_grp`)
-            eval(`this.${e}`).classList.add(`course_grp`)
-            eval(`this.${e}`).appendChild(Course.createTitle(e))
+    async GetTasks() {
+        const page = await fetch(buildLink('X=CourseOverview&Cou=' + args.Cou))
+        const tree = (new DOMParser()).parseFromString(await page.text(), 'text/xml')
+        const ret = []
+        const scores = []
+        document.querySelectorAll('table.topLayout > tbody > tr > .lBox > span').forEach(e => {
+            const row = e.parentElement.parentElement
+            scores.push({
+                "name": e.innerText,
+                "score": row.childElementCount == 4 ? row.children[1].innerText : '--'
+            })
         })
+
+        tree.querySelectorAll('AssessmentGrp').forEach(e => {
+            const groups = []
+            e.querySelectorAll('TaskGrp, KNTest, ExtraPoints').forEach(f => {
+                let link = null
+
+                if (document.querySelector(`a[href="?X=TaskGrp&Cou=${args.Cou}&Tgr=${f.getAttribute('id')}"]`))
+                    link = buildLink(`X=TaskGrp&Cou=${args.Cou}&${{'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'Ex': 'extra'}[f.tagName]}=${f.getAttribute('id')}`)
+
+                let type = {'TaskGrp': 'task', 'KNTest': 'test', 'ExtraPoints': 'extra'}[f.tagName];
+                if (type == 'test' && ['Training', 'eLearning'].includes(f.getAttribute('assignType')))
+                    type = 'test-demo'
+
+                groups.push({
+                    'id': f.getAttribute('id'),
+                    'name': f.getAttribute('name'),
+                    'type': type,
+                    'link': link,
+                    'opens': new Date(f.getAttribute('openDate')),
+                    'closes': new Date(f.getAttribute('deadlineDate')),
+                    'score': scores.reduce((r, e) => r = e.name.includes(f.getAttribute('name')) ? e.score : r, null)
+                })
+            })
+            ret.push({
+                'name': e.getAttribute('name'),
+                'taskGrp': groups
+            })
+        })
+        return ret
     }
-    /* eslint-enable class-methods-use-this */
+
+    createContainers(tasks) {
+        const ret = []
+
+        ret.push(Course.buildResultsLink())
+
+        tasks.forEach(t => {
+            if (t.taskGrp.length == 0)
+                return
+            const elem = document.createElement('div')
+            elem.classList.add(`course_grp`)
+            elem.appendChild(Course.createTitle(t.name))
+            let lastType = t.taskGrp[0].type
+            const prev = []
+            t.taskGrp.forEach(e => {
+                if (e.type == lastType)
+                    prev.push(e)
+                else {
+                    elem.appendChild(Course.writeContainerSum(prev))
+                    prev.length = 0
+                    prev.push(e)
+                    lastType = e.type
+                }
+                elem.appendChild(this.createLink(e))
+            })
+            if (prev.length)
+                elem.appendChild(Course.writeContainerSum(prev))
+            ret.push(elem)
+        })
+
+        return ret
+    }
 
     static createTitle(name) {
-        const text = ({
-            "tasks": "Domácí úlohy",
-            "tasks_extra": "Soutěžní úlohy",
-            "exams": "Zkouška",
-            "sem": "Semestrální práce",
-            "tests": "Znalostní testy",
-            "extras": "Extra",
-            "unknown": "Neznámá kategorie"
-        })[name]
-        let elem = document.createElement('span')
-        if (text) {
-            elem.classList.add('course_title')
-            elem.innerText = text
-        }
+        const elem = document.createElement('span')
+        elem.classList.add('course_title')
+        elem.innerText = name
         return elem
     }
 
-    /* eslint-disable class-methods-use-this */
-    writeContainers(elem) {
-        Course.getContainerNames().forEach(e => {
-            const text = eval(`this.${e}`)
-            if (text.childElementCount > 1) { elem.appendChild(text) }
-        })
+    static buildResultsLink() {
+        const res = document.createElement('div')
+        res.classList.add('course_results_grp', 'course_grp')
+
+        const lin = document.createElement('a')
+        lin.href = buildLink("X=Results&Cou=" + args.Cou)
+        lin.classList.add('course_link')
+
+        const span = document.createElement('span')
+        span.classList.add('course_link_name')
+        span.innerText = "Výsledky"
+
+        lin.appendChild(span)
+        res.appendChild(lin)
+        return res
     }
-    /* eslint-enable class-methods-use-this */
 
     createLink(entry) {
         let ret
@@ -814,81 +835,40 @@ class Course extends Logged {
         } else {
             ret = document.createElement('span')
         }
-        let d = new Date()
-        let datestr = ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear()
+
         ret.classList.add(
             'course_link',
-            entry.active ? 'course_link' : 'course_disabled',
-            entry.deadline == datestr && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link'
+            Course.isToday(entry.closes) && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link',
+            'course_link_type_' + entry.type
         )
+
         ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
         ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
-        ret.innerHTML += entry.deadline ? `<span class="course_link_deadline">${entry.deadline}</span>` : ''
+        ret.innerHTML += entry.opens ? `<span class="course_link_deadline">${entry.opens.toLocaleDateString("cs-CZ")}</span><br />` : ''
+        ret.innerHTML += entry.closes ? `<span class="course_link_deadline" style="font-weight: 600">🏁 ${entry.closes.toLocaleDateString("cs-CZ")} ${entry.closes.toLocaleTimeString("cs-CZ")}</span>` : ''
         return ret
     }
 
-    static getTasks() {
-        return [...document.querySelectorAll("table.topLayout > tbody > tr")].map(e => {
-            const name = e.children[0].innerText
-            let type = ({
-                "Zahřívací": "tasks",
-                "Domácí": "tasks",
-                "Soutěžní": "tasks_extra",
-                "Semestrální": "sem",
-                "Znalostní": "tests",
-                "Zkouška": "exams",
-                "Cvičení": "extras",
-                "Práce": "extras",
-                "Checkpoint": "extras",
-                "Code": "extras",
-                "Výsledky": "results",
-                "Úlohy": "extras",
-                "Programovací": "tasks",
-                "Semináře": "tasks",
-                "Nebodované": "tasks",
-                "Procvičovací": "tasks",
-                "Bodovaný": "tasks"
-            })[name.replace(/ .*/, '')] || "unknown"
-
-            if (name.includes('Teorie') || name.includes('Test')) { type = "exams" }
-
-            // PS1 naming scheme
-            else if (name.includes('. test')) { type = "tests" }
-            else if (name.includes('domácí cvičení')) { type = "tasks" }
-            else if (name.includes('Checkpoint')) { type = "sem" }
-            else if (name.includes('Úloha')) { type = "tasks" }
-
-            const active = !e.children[0].children[0].classList.contains('menuListDis')
-            if (e.childElementCount == 4) {
-                let link = e.children[3].querySelector('a.butLink')
-                let deadline = Course.trimDeadline(e.children[2].innerText)
-
-                return {
-                    type,
-                    name,
-                    active,
-                    "score": e.children[1].innerText,
-                    deadline,
-                    "link": link && link.href
-                }
-            } else if (e.childElementCount == 2) {
-                let link = e.children[1].querySelector('a.butLink')
-                return {
-                    type,
-                    name,
-                    active,
-                    "score": null,
-                    "deadline": null,
-                    "link": link && link.href
-                }
-            }
-            return null
-        })
+    static isToday(d) {
+        const today = new Date()
+        return d.getDate() == today.getDate() &&
+            d.getMonth() == today.getMonth() &&
+            d.getFullYear() == today.getFullYear()
     }
 
-    static trimDeadline(text) {
-        if (text.includes(' 23:59:59')) { return text.substr(0, text.lastIndexOf(' ')) }
-        return text
+    static writeContainerSum(tasks) {
+        let sum = 0;
+        tasks.forEach(e => {
+            if (e.score && e.score != '--')
+                sum += parseFloat(e.score)
+        })
+
+        let sumElem = document.createElement("span")
+        sumElem.innerText = sum.toFixed(2)
+        sumElem.classList.add("course_link")
+        sumElem.classList.add("course_link_score_sum")
+        sumElem.classList.add('course_link_type_' + tasks[0].type)
+        return sumElem
     }
 
     static hideModal() {
@@ -917,10 +897,6 @@ class Course extends Logged {
     }
 
     getTaskGroups(link) {
-        if (link.includes('Results')) {
-            window.location.assign(link)
-            return true
-        }
         if (link.includes('javascript:')) {
             return false
         }
@@ -942,6 +918,11 @@ class Course extends Logged {
     static hideSpinner() {
         let spinner = document.getElementsByClassName("modal-spinner")[0]
         if (spinner) { spinner.parentNode.removeChild(spinner) }
+    }
+
+    static trimDeadline(text) {
+        if (text.includes(' 23:59:59')) { return text.substr(0, text.lastIndexOf(' ')) }
+        return text
     }
 
     static displaySpinner() {
@@ -1088,6 +1069,8 @@ const args = window.location.search.substr(1).split("&").reduce((f, e) => {
     f[k[0]] = k[1]
     return f
 }, {})
+
+const buildLink = (arg) => new URL('index.php?' + arg, window.location.protocol + '//' + window.location.hostname)
 
 let parser
 
