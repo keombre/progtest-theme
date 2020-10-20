@@ -745,8 +745,11 @@ class Course extends Logged {
             e.querySelectorAll('TaskGrp, KNTest, ExtraPoints').forEach(f => {
                 let link = null
 
-                if (document.querySelector(`a[href="?X=TaskGrp&Cou=${args.Cou}&Tgr=${f.getAttribute('id')}"]`))
-                    link = buildLink(`X=TaskGrp&Cou=${args.Cou}&${{'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'Ex': 'extra'}[f.tagName]}=${f.getAttribute('id')}`)
+                const origLinkBase = {'TaskGrp': 'TaskGrp', 'KNTest': 'KNT', 'ExtraPoints': 'Extra'}[f.tagName]
+                const origLinkPart = {'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'ExtraPoints': 'Ex'}[f.tagName]
+
+                if (document.querySelector(`a[href="?X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}"]`))
+                    link = buildLink(`X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}`)
 
                 let type = {'TaskGrp': 'task', 'KNTest': 'test', 'ExtraPoints': 'extra'}[f.tagName];
                 if (type == 'test' && ['Training', 'eLearning'].includes(f.getAttribute('assignType')))
