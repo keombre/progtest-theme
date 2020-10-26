@@ -747,7 +747,7 @@ span.course_title {
     font-size: 13pt;
     position: relative;
     padding: 6px 0 6px 6px;
-    border-left: 5px solid transparent;
+    border-left: 3px solid transparent;
     font-weight: 500;
 }
 

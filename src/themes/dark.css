@@ -169,8 +169,13 @@ div.subjectSelect > a > div.subject-footer {
     color: #fff;
 }
 
+.course_link.course_disabled span.course_link_name,
 span.course_link {
     color: #6f6f6f;
+}
+
+.course_link.course_disabled {
+    border-color: #676767;
 }
 
 span span.course_link_score {
@@ -183,11 +188,6 @@ span.course_link_score_sum {
 
 a.course_link:hover {
     background-color: rgba(0, 0, 0, 0.2);
-}
-
-.course_link.course_disabled {
-    border-left: 2px solid #424242;
-    color: #9E9E9E;
 }
 
 .modal {

@@ -736,33 +736,47 @@ class Course extends Logged {
             const row = e.parentElement.parentElement
             scores.push({
                 "name": e.innerText,
-                "score": row.childElementCount == 4 ? row.children[1].innerText : '--'
+                "score": row.childElementCount == 4 ? row.children[1].innerText : '--',
+                "disabled": e.classList.contains("menuListDis"),
+                "link": row.querySelector('.butLink')?.href
             })
         })
 
         tree.querySelectorAll('AssessmentGrp').forEach(e => {
             const groups = []
             e.querySelectorAll('TaskGrp, KNTest, ExtraPoints').forEach(f => {
-                let link = null
-
-                const origLinkBase = {'TaskGrp': 'TaskGrp', 'KNTest': 'KNT', 'ExtraPoints': 'Extra'}[f.tagName]
-                const origLinkPart = {'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'ExtraPoints': 'Ex'}[f.tagName]
-
-                if (document.querySelector(`a[href="?X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}"]`))
-                    link = buildLink(`X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}`)
+                
+                // const origLinkBase = {'TaskGrp': 'TaskGrp', 'KNTest': 'KNT', 'ExtraPoints': 'Extra'}[f.tagName]
+                // const origLinkPart = {'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'ExtraPoints': 'Ex'}[f.tagName]
+                // 
+                // if (document.querySelector(`a[href="?X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}"]`))
+                // link = buildLink(`X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}`)
 
                 let type = {'TaskGrp': 'task', 'KNTest': 'test', 'ExtraPoints': 'extra'}[f.tagName];
                 if (type == 'test' && ['Training', 'eLearning'].includes(f.getAttribute('assignType')))
                     type = 'test-demo'
 
+                const name = f.getAttribute('name')
+                let link = null
+                let score = 0
+                let disabled = false
+                scores.forEach(g => {
+                    if (g.name == name || g.name == "Znalostní test - " + name) {
+                        score = g.score
+                        disabled = g.disabled
+                        link = g.link ?? null
+                    }
+                })
+
                 groups.push({
                     'id': f.getAttribute('id'),
-                    'name': f.getAttribute('name'),
+                    'name': name,
                     'type': type,
                     'link': link,
-                    'opens': new Date(f.getAttribute('openDate')),
-                    'closes': new Date(f.getAttribute('deadlineDate')),
-                    'score': scores.reduce((r, e) => r = e.name.includes(f.getAttribute('name')) ? e.score : r, null)
+                    'opens': new Date(f.getAttribute('openDate') + "+0000"),
+                    'closes': new Date(f.getAttribute('deadlineDate') + "+0000"),
+                    'score': score,
+                    'disabled': disabled
                 })
             })
             ret.push({
@@ -834,7 +848,8 @@ class Course extends Logged {
         if (entry.link) {
             ret = document.createElement('a')
             ret.href = entry.link
-            ret.addEventListener('click', this.taskLink.bind(this))
+            if (entry.type == "task")
+                ret.addEventListener('click', this.taskLink.bind(this))
         } else {
             ret = document.createElement('span')
         }
@@ -843,6 +858,9 @@ class Course extends Logged {
             'course_link',
             'course_link_type_' + entry.type
         )
+
+        if (entry.disabled)
+            ret.classList.add('course_disabled')
 
         if (entry.closes && entry.score)
             ret.classList.add(Course.isToday(entry.closes) && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link')
