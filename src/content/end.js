@@ -4,6 +4,14 @@
 hljs, dropdown, toggleDropDown, sounds, settingsLoaded
 */
 
+const args = window.location.search.substr(1).split("&").reduce((f, e) => {
+    let k = e.split("=")
+    f[k[0]] = k[1]
+    return f
+}, {})
+
+const buildLink = (arg) => new URL('index.php?' + arg, window.location.protocol + '//' + window.location.hostname)
+
 /* exported parser */
 
 class Err404 {
@@ -710,7 +718,7 @@ class Course extends Logged {
     constructor() {
         super()
 
-        this.GetTasks().then(tasks => {
+        Course.GetTasks().then(tasks => {
             const cts = this.createContainers(tasks)
             
             let container = document.createElement('div')
@@ -727,7 +735,7 @@ class Course extends Logged {
         })
     }
 
-    async GetTasks() {
+    static async GetTasks() {
         const page = await fetch(buildLink('X=CourseOverview&Cou=' + args.Cou))
         const tree = (new DOMParser()).parseFromString(await page.text(), 'text/xml')
         const ret = []
@@ -753,8 +761,9 @@ class Course extends Logged {
                 // link = buildLink(`X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}`)
 
                 let type = {'TaskGrp': 'task', 'KNTest': 'test', 'ExtraPoints': 'extra'}[f.tagName];
-                if (type == 'test' && ['Training', 'eLearning'].includes(f.getAttribute('assignType')))
+                if (type == 'test' && ['Training', 'eLearning'].includes(f.getAttribute('assignType'))) {
                     type = 'test-demo'
+                }
 
                 const name = f.getAttribute('name')
                 let link = null
@@ -793,17 +802,18 @@ class Course extends Logged {
         ret.push(Course.buildResultsLink())
 
         tasks.forEach(t => {
-            if (t.taskGrp.length == 0)
+            if (t.taskGrp.length == 0) {
                 return
+            }
             const elem = document.createElement('div')
             elem.classList.add(`course_grp`)
             elem.appendChild(Course.createTitle(t.name))
             let lastType = t.taskGrp[0].type
             const prev = []
             t.taskGrp.forEach(e => {
-                if (e.type == lastType)
+                if (e.type == lastType) {
                     prev.push(e)
-                else {
+                } else {
                     elem.appendChild(Course.writeContainerSum(prev))
                     prev.length = 0
                     prev.push(e)
@@ -811,8 +821,9 @@ class Course extends Logged {
                 }
                 elem.appendChild(this.createLink(e))
             })
-            if (prev.length)
+            if (prev.length) {
                 elem.appendChild(Course.writeContainerSum(prev))
+            }
             ret.push(elem)
         })
 
@@ -848,8 +859,9 @@ class Course extends Logged {
         if (entry.link) {
             ret = document.createElement('a')
             ret.href = entry.link
-            if (entry.type == "task")
+            if (entry.type == "task") {
                 ret.addEventListener('click', this.taskLink.bind(this))
+            }
         } else {
             ret = document.createElement('span')
         }
@@ -859,11 +871,13 @@ class Course extends Logged {
             'course_link_type_' + entry.type
         )
 
-        if (entry.disabled)
+        if (entry.disabled) {
             ret.classList.add('course_disabled')
+        }
 
-        if (entry.closes && entry.score)
+        if (entry.closes && entry.score) {
             ret.classList.add(Course.isToday(entry.closes) && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link')
+        }
 
         ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
         ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
@@ -882,8 +896,9 @@ class Course extends Logged {
     static writeContainerSum(tasks) {
         let sum = 0;
         tasks.forEach(e => {
-            if (e.score && e.score != '--')
+            if (e.score && e.score != '--') {
                 sum += parseFloat(e.score)
+            }
         })
 
         let sumElem = document.createElement("span")
@@ -1086,14 +1101,6 @@ class Course extends Logged {
         return Promise.resolve(data)
     }
 }
-
-const args = window.location.search.substr(1).split("&").reduce((f, e) => {
-    let k = e.split("=")
-    f[k[0]] = k[1]
-    return f
-}, {})
-
-const buildLink = (arg) => new URL('index.php?' + arg, window.location.protocol + '//' + window.location.hostname)
 
 let parser
 

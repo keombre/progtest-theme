@@ -630,12 +630,14 @@ div.subjectSelect > span.subjectHeader:before {
     display: inline-block;
     padding: 3px;
     -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
     transform: rotate(45deg);
     transition: all 0.1s ease;
 }
 
 div.subjectSelect > span.subjectHeader.active:before {
     -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
     transform: rotate(-45deg);
 }
 
