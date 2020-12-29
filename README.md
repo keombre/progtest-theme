@@ -26,6 +26,9 @@ The current version of **ProgTest Themes** has been successfully compiled using 
 2. Run `make dev` to create unpacked version of the extension in `build/`
 3. Load the extension to your browser. `chrome://extensions` in Chrome or `about:addons` in Firefox. (Note: the dev version uses `manifests/debug.json`, adjust it to suite your needs)
 
+## Privacy policy
+In short, we don't collect any data, but you can read it in full [here](https://github.com/keombre/progtest-theme/blob/stable/privacy_policy.md).
+
 ## Creating new theme
 
 Checkout from [primer branch](https://github.com/keombre/progtest-theme/tree/primer). The project there is restructured to allow multiple theme engines. To see how it all works look at `src/content/end.js` and into `src\themes`.
