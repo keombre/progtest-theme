@@ -306,7 +306,6 @@ class Main extends Logged {
             mode: 'cors',
             credentials: 'omit'
         }).then(response => response.json())
-            .catch(error => console.error(error))
 
         // collect all elements
         Main.getSubjects().forEach(e => {
@@ -323,7 +322,12 @@ class Main extends Logged {
             let link = null
             try {
                 link = subjectInfo["courses"][e[2]]["homepage"]
-            } catch (_) {}
+            } catch (_) { }
+            
+            // construct fallback URL
+            if (link === null && !["Překladače", "Nastavení", "FAQ"].includes(e[2])) {
+                link = "https://courses.fit.cvut.cz/" + e[2]
+            }
             
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}" pttorder="${order}">
