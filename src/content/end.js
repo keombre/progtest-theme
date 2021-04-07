@@ -393,13 +393,14 @@ class Main extends Logged {
 
     static getSubjectIcon(title) {
         return ({
+            "BI-AAG": "icon-aag",
+            "BI-AG1": "icon-ag1",
+            "BI-OSY": "icon-osy",
             "BI-PA1": "icon-pa1",
             "BI-PA2": "icon-pa2",
-            "BI-PS1": "icon-ps1",
-            "BI-OSY": "icon-osy",
             "BI-PJV": "icon-pjv",
-            "BI-AG1": "icon-ag1",
-            "BI-AAG": "icon-aag"
+            "BI-PS1": "icon-ps1",
+            "BI-PYT": "icon-pyt"
         })[title] || "icon-unknown"
     }
 
