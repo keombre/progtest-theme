@@ -1,5 +1,5 @@
 
-var theme = 'light';
+var theme = 'automatic';
 var dropdown = true
 var displayNotifications = true
 var highlighting = true
@@ -7,7 +7,7 @@ var sounds = true
 
 const updateConfig = () => {
     chrome.storage.sync.get({
-        selectedTheme: 'light',
+        selectedTheme: 'automatic',
         autoHide: true,
         notifications: true,
         highlighting: true,
@@ -42,7 +42,18 @@ chrome.webRequest.onBeforeRequest.addListener(
     () => {
         if (theme == 'orig')
             {return { cancel: false };}
-        return { redirectUrl: chrome.runtime.getURL('themes/' + theme + '.css') };
+        let themeName;
+        if (theme === 'automatic') {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeName = 'dark'
+            } else {
+                // light theme is the fallback if prefers-color-scheme doesn't work
+                themeName = 'light'
+            }
+        } else {
+            themeName = theme
+        }
+        return { redirectUrl: chrome.runtime.getURL('themes/' + themeName + '.css') };
     },
     { urls: ["*://progtest.fit.cvut.cz/css.css", "*://ptmock.localhost/css.css"] },
     ["blocking"]
