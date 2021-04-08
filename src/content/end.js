@@ -287,7 +287,10 @@ class Main extends Logged {
 
     constructor() {
         super()
+        this.orderC = 1000
+    }
 
+    async initialise() {
         const subjects = document.createElement('div')
         subjects.classList.add('subjectSelect')
 
@@ -295,8 +298,14 @@ class Main extends Logged {
         settings.classList.add('subjectSelect')
         settings.classList.add('mainInfo');
 
-        this.orderC = 1000
         let orders = {}
+        
+        // get subject URLs from courses
+        const subjectInfo = await fetch("https://courses.fit.cvut.cz/data/courses-all.json", {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'omit'
+        }).then(response => response.json())
 
         // collect all elements
         Main.getSubjects().forEach(e => {
@@ -309,17 +318,17 @@ class Main extends Logged {
                 push = settings
             ] = Main.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
             orders[order] = footer
-            let link = {
-                "BI-AAG": "https://courses.fit.cvut.cz/BI-AAG/",
-                "BI-AG1": "https://courses.fit.cvut.cz/BI-AG1/",
-                "BI-OSY": "https://courses.fit.cvut.cz/BI-OSY/",
-                "BI-PA1": "https://moodle-vyuka.cvut.cz/course/view.php?id=2203",
-                "BI-PA2": "https://courses.fit.cvut.cz/BI-PA2/",
-                "BI-PJV": "https://moodle-vyuka.cvut.cz/course/view.php?id=2265",
-                "BI-PS1": "https://courses.fit.cvut.cz/BI-PS1/",
-                "BI-PYT": "https://courses.fit.cvut.cz/BI-PYT/",
-                "unknown": "https://courses.fit.cvut.cz/",
-            }[e[2]]
+
+            let link = null
+            try {
+                link = subjectInfo["courses"][e[2]]["homepage"]
+            } catch (_) { }
+            
+            // construct fallback URL
+            if (link === null && !["Překladače", "Nastavení", "FAQ"].includes(e[2])) {
+                link = "https://courses.fit.cvut.cz/" + e[2]
+            }
+            
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}" pttorder="${order}">
     <div class="subject-title">${e[2]}</div>
@@ -384,13 +393,14 @@ class Main extends Logged {
 
     static getSubjectIcon(title) {
         return ({
+            "BI-AAG": "icon-aag",
+            "BI-AG1": "icon-ag1",
+            "BI-OSY": "icon-osy",
             "BI-PA1": "icon-pa1",
             "BI-PA2": "icon-pa2",
-            "BI-PS1": "icon-ps1",
-            "BI-OSY": "icon-osy",
             "BI-PJV": "icon-pjv",
-            "BI-AG1": "icon-ag1",
-            "BI-AAG": "icon-aag"
+            "BI-PS1": "icon-ps1",
+            "BI-PYT": "icon-pyt"
         })[title] || "icon-unknown"
     }
 
@@ -1140,6 +1150,7 @@ const preload = () => {
                 break
             case "Main":
                 parser = new Main()
+                parser.initialise()
                 break
             default: {
                 // determine if site is really main
@@ -1153,7 +1164,10 @@ const preload = () => {
 
         }
     }
-    else { parser = new Main() }
+    else {
+        parser = new Main()
+        parser.initialise()
+    }
 }
 
 if (!settingsLoaded) { window.addEventListener('ppt-loaded', preload) }

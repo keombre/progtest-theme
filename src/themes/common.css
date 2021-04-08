@@ -655,28 +655,36 @@ div.subjectSelect > span.subjectHeader.active:before {
     top: 14px;
 }
 
-.icon-pa2 {
-    background-image: url('./assets/icons/pa2.svg')
-}
-
-.icon-pa1 {
-    background-image: url('./assets/icons/pa1.svg')
-}
-
-.icon-ps1 {
-    background-image: url('./assets/icons/ps1.svg')
-}
-
-.icon-pjv {
-    background-image: url('./assets/icons/pjv.svg')
+.icon-aag {
+    background-image: url('./assets/icons/aag.svg')
 }
 
 .icon-ag1 {
     background-image: url('./assets/icons/ag1.svg')
 }
 
-.icon-aag {
-    background-image: url('./assets/icons/aag.svg')
+.icon-osy {
+    background-image: url('./assets/icons/osy.svg');
+}
+
+.icon-pa1 {
+    background-image: url('./assets/icons/pa1.svg')
+}
+
+.icon-pa2 {
+    background-image: url('./assets/icons/pa2.svg')
+}
+
+.icon-pjv {
+    background-image: url('./assets/icons/pjv.svg')
+}
+
+.icon-ps1 {
+    background-image: url('./assets/icons/ps1.svg')
+}
+
+.icon-pyt {
+    background-image: url('./assets/icons/pyt.svg')
 }
 
 .icon-setting {
@@ -689,10 +697,6 @@ div.subjectSelect > span.subjectHeader.active:before {
 
 .icon-compile {
     background-image: url('./assets/icons/compile.svg');
-}
-
-.icon-osy {
-    background-image: url('./assets/icons/osy.svg');
 }
 
 .icon-unknown {

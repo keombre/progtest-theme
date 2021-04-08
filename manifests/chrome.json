@@ -36,6 +36,7 @@
         "webRequest",
         "webRequestBlocking",
         "*://progtest.fit.cvut.cz/*",
+        "*://courses.fit.cvut.cz/*",
         "storage",
         "tabs"
     ],
