@@ -42,18 +42,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     () => {
         if (theme == 'orig')
             {return { cancel: false };}
-        let themeName;
-        if (theme === 'automatic') {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                themeName = 'dark'
-            } else {
-                // light theme is the fallback if prefers-color-scheme doesn't work
-                themeName = 'light'
-            }
-        } else {
-            themeName = theme
-        }
-        return { redirectUrl: chrome.runtime.getURL('themes/' + themeName + '.css') };
+        return { redirectUrl: chrome.runtime.getURL('themes/' + theme + '.css') };
     },
     { urls: ["*://progtest.fit.cvut.cz/css.css", "*://ptmock.localhost/css.css"] },
     ["blocking"]
