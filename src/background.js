@@ -1,5 +1,5 @@
 
-var theme = 'light';
+var theme = 'automatic';
 var dropdown = true
 var displayNotifications = true
 var highlighting = true
@@ -7,7 +7,7 @@ var sounds = true
 
 const updateConfig = () => {
     chrome.storage.sync.get({
-        selectedTheme: 'light',
+        selectedTheme: 'automatic',
         autoHide: true,
         notifications: true,
         highlighting: true,

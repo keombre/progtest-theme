@@ -35,7 +35,7 @@ function save_options() {
 
 function restore_options() {
   chrome.storage.sync.get({
-    selectedTheme: 'light',
+    selectedTheme: 'automatic',
     autoHide: true,
     notifications: true,
     highlighting: true,
