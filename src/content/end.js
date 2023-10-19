@@ -1,38 +1,48 @@
-'use strict';
+"use strict";
 
 /* global theme, uniChange, moveInputLabel, loginFocus, loginFocusOut, displayNotifications, highlighting,
 hljs, dropdown, toggleDropDown, sounds, settingsLoaded
 */
 
-const args = window.location.search.substr(1).split("&").reduce((f, e) => {
-    let k = e.split("=")
-    f[k[0]] = k[1]
-    return f
-}, {})
+const args = window.location.search
+    .substr(1)
+    .split("&")
+    .reduce((f, e) => {
+        let k = e.split("=");
+        f[k[0]] = k[1];
+        return f;
+    }, {});
 
-const buildLink = (arg) => new URL('index.php?' + arg, window.location.protocol + '//' + window.location.hostname)
+const buildLink = (arg) =>
+    new URL(
+        "index.php?" + arg,
+        window.location.protocol + "//" + window.location.hostname
+    );
 
 /* exported parser */
 
 class Err404 {
-    site_body = `
+    siteBody = `
 <div class="e404">
     <h1>HTTP/1.1 404 Not Found</h1>
     <h2>Stránka nenalezena</h2>
     <span>Zkuste se vrátit <a href="#" onclick="window.history.back()">zpátky</a></span>
-</div>`
+</div>`;
 
     constructor() {
         document.title = "404 | ProgTest";
 
-        let link = document.createElement('link');
-        link.setAttribute('rel', 'stylesheet');
-        link.setAttribute('type', 'text/css');
+        let link = document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("type", "text/css");
 
-        link.setAttribute('href', chrome.extension.getURL('./themes/404/' + theme + '.css'))
-        document.getElementsByTagName('head')[0].appendChild(link)
+        link.setAttribute(
+            "href",
+            chrome.extension.getURL("./themes/404/" + theme + ".css")
+        );
+        document.getElementsByTagName("head")[0].appendChild(link);
 
-        document.body.innerHTML = this.site_body
+        document.body.innerHTML = this.siteBody;
     }
 }
 
@@ -41,48 +51,56 @@ class Login {
 <svg id="langGlobe" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <path d="M0 0h24v24H0z" fill="none"/>
     <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/>
-</svg>`
+</svg>`;
 
     constructor() {
-        let l_form = document.getElementsByTagName("form")[0]
-        if (typeof l_form != "undefined") {
-            let title = document.createElement('DIV')
-            title.className = "app_name"
-            title.innerHTML = "FIT: <b>ProgTest</b>"
-            l_form.parentElement.insertBefore(title, l_form)
-            l_form.className += " loginForm"
+        let loginForm = document.getElementsByTagName("form")[0];
+        if (typeof loginForm != "undefined") {
+            let title = document.createElement("DIV");
+            title.className = "app_name";
+            title.innerHTML = "FIT: <b>ProgTest</b>";
+            loginForm.parentElement.insertBefore(title, loginForm);
+            loginForm.className += " loginForm";
 
-            let uniselect = document.createElement('DIV')
-            uniselect.id = "uniSel"
+            let uniselect = document.createElement("DIV");
+            uniselect.id = "uniSel";
 
-            document.querySelector("#main > tbody > tr:nth-child(2) > td.rtbCell > select").childNodes.forEach(e => {
-                let uni = document.createElement('DIV')
-                uni.innerText = e.innerText
-                uni.setAttribute('uni', e.value)
-                uni.className = "uniVal"
-                uni.addEventListener('click', uniChange)
-                uniselect.appendChild(uni)
-            })
+            document
+                .querySelector(
+                    "#main > tbody > tr:nth-child(2) > td.rtbCell > select"
+                )
+                .childNodes.forEach((e) => {
+                    let uni = document.createElement("DIV");
+                    uni.innerText = e.innerText;
+                    uni.setAttribute("uni", e.value);
+                    uni.className = "uniVal";
+                    uni.addEventListener("click", uniChange);
+                    uniselect.appendChild(uni);
+                });
 
-            uniselect.children[0].setAttribute('active', 'true')
+            uniselect.children[0].setAttribute("active", "true");
 
-            l_form.appendChild(uniselect)
+            loginForm.appendChild(uniselect);
 
             // add title mover
-            document.querySelector("#ldap1 > td.ltCell.al > b").addEventListener('click', moveInputLabel)
-            document.querySelector("#ldap2 > td.al.lbCell > b").addEventListener('click', moveInputLabel)
+            document
+                .querySelector("#ldap1 > td.ltCell.al > b")
+                .addEventListener("click", moveInputLabel);
+            document
+                .querySelector("#ldap2 > td.al.lbCell > b")
+                .addEventListener("click", moveInputLabel);
 
-            const inputs = document.getElementsByTagName('input')
-            inputs[0].addEventListener('focus', loginFocus)
-            inputs[1].addEventListener('focus', loginFocus)
+            const inputs = document.getElementsByTagName("input");
+            inputs[0].addEventListener("focus", loginFocus);
+            inputs[1].addEventListener("focus", loginFocus);
 
-            inputs[0].addEventListener('focusout', loginFocusOut)
-            inputs[1].addEventListener('focusout', loginFocusOut)
+            inputs[0].addEventListener("focusout", loginFocusOut);
+            inputs[1].addEventListener("focusout", loginFocusOut);
 
-            document.getElementsByName('lang')[0].outerHTML += this.langGlobe
+            document.getElementsByName("lang")[0].outerHTML += this.langGlobe;
 
             // in firefox, when opening the page, load the selected login type
-            if (typeof browser !== 'undefined') {
+            if (typeof browser !== "undefined") {
                 document.querySelector("#uniSel > .uniVal").click();
             }
         }
@@ -94,566 +112,766 @@ class Logged {
 <svg id="upTop" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -0.5 26 26">
     <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path>
 </svg>
-`
+`;
     constructor() {
-        document.querySelector("body > table").className += " navbar"
+        document.querySelector("body > table").className += " navbar";
         // add scroll to top button
-        document.body.innerHTML += this.topButton
-        this.tButton = document.getElementById('upTop')
+        document.body.innerHTML += this.topButton;
+        this.tButton = document.getElementById("upTop");
         if (this.tButton) {
-            this.tButton.addEventListener('click', () => {
-                this.tButton.removeAttribute('style')
-                document.body.scrollIntoView({ block: "start", behavior: "smooth" })
-            })
+            this.tButton.addEventListener("click", () => {
+                this.tButton.removeAttribute("style");
+                document.body.scrollIntoView({
+                    block: "start",
+                    behavior: "smooth",
+                });
+            });
         }
 
-        this.header = document.querySelector("body > table")
+        this.header = document.querySelector("body > table");
 
         if (typeof this.header != "undefined" && this.header != null) {
-            window.onscroll = this.scrollCheck.bind(this)
-            window.addEventListener('load', this.scrollCheck.bind(this))
+            window.onscroll = this.scrollCheck.bind(this);
+            window.addEventListener("load", this.scrollCheck.bind(this));
         }
 
-        window.addEventListener('beforeunload', this.scrollHigh.bind(this))
+        window.addEventListener("beforeunload", this.scrollHigh.bind(this));
 
-        this.displayBell()
-        Logged.highlightCode()
-        this.notifications()
+        this.displayBell();
+        Logged.highlightCode();
+        this.notifications();
     }
 
     displayBell() {
-        if (!window.localStorage || !displayNotifications) { return }
-        let bell = document.createElement('div')
-        bell.classList.add('notify', 'off')
-        bell.addEventListener('click', Logged.notifyToggle.bind(this))
-        let logout = document.querySelector('.navLink[href*="Logout"]')
-        logout.parentNode.insertBefore(bell, logout)
+        if (!window.localStorage || !displayNotifications) {
+            return;
+        }
+        let bell = document.createElement("div");
+        bell.classList.add("notify", "off");
+        bell.addEventListener("click", Logged.notifyToggle.bind(this));
+        let logout = document.querySelector('.navLink[href*="Logout"]');
+        logout.parentNode.insertBefore(bell, logout);
 
-        document.addEventListener('click', e => {
-            if (e.target != bell) { document.getElementsByClassName('notifications')[0].classList.add('notifications-hide') }
-        })
+        document.addEventListener("click", (e) => {
+            if (e.target != bell) {
+                document
+                    .getElementsByClassName("notifications")[0]
+                    .classList.add("notifications-hide");
+            }
+        });
 
-        let notify = document.createElement('div')
-        notify.classList.add('notifications', 'notifications-hide')
-        notify.innerHTML = '<b>Žádná upozornění</b>'
-        document.body.insertBefore(notify, document.body.firstElementChild)
+        let notify = document.createElement("div");
+        notify.classList.add("notifications", "notifications-hide");
+        notify.innerHTML = "<b>Žádná upozornění</b>";
+        document.body.insertBefore(notify, document.body.firstElementChild);
     }
 
     scrollCheck() {
-        if (document.body.scrollTop > 40 || document.documentElement.scrollTop > 40) { this.scrollLow() }
-        else { this.scrollHigh() }
+        if (
+            document.body.scrollTop > 40 ||
+            document.documentElement.scrollTop > 40
+        ) {
+            this.scrollLow();
+        } else {
+            this.scrollHigh();
+        }
 
         this.oldScroll = window.scrollY;
     }
 
     scrollHigh() {
-        if (this.header && this.header.getAttribute('style')) { this.header.removeAttribute("style") }
-        if (this.tButton && this.tButton.getAttribute('style')) { this.tButton.removeAttribute('style') }
+        if (this.header && this.header.getAttribute("style")) {
+            this.header.removeAttribute("style");
+        }
+        if (this.tButton && this.tButton.getAttribute("style")) {
+            this.tButton.removeAttribute("style");
+        }
     }
 
     scrollLow() {
-        if (this.header && !this.header.getAttribute('style')) { this.header.style.padding = "0px 16px"; }
-        if (this.tButton && !this.tButton.getAttribute('style') && (this.oldScroll <= window.scrollY || !this.oldScroll)) { this.tButton.style.transform = "scale(1)" }
+        if (this.header && !this.header.getAttribute("style")) {
+            this.header.style.padding = "0px 16px";
+        }
+        if (
+            this.tButton &&
+            !this.tButton.getAttribute("style") &&
+            (this.oldScroll <= window.scrollY || !this.oldScroll)
+        ) {
+            this.tButton.style.transform = "scale(1)";
+        }
     }
 
     static highlightCode() {
-        document.querySelectorAll('pre, code, tt').forEach((block) => {
-            if (highlighting) { hljs.highlightBlock(block) }
-            else { block.classList.add('hljs') }
-        })
+        document.querySelectorAll("pre, code, tt").forEach((block) => {
+            if (highlighting) {
+                hljs.highlightBlock(block);
+            } else {
+                block.classList.add("hljs");
+            }
+        });
     }
 
     async notifications() {
-        if (!window.localStorage || !displayNotifications) { return }
+        if (!window.localStorage || !displayNotifications) {
+            return;
+        }
 
-        let tasks = await Logged.taskSpider()
+        let tasks = await Logged.taskSpider();
 
         if (!localStorage.tasks) {
-            localStorage.tasks = JSON.stringify(tasks.map(e => { e['seen'] = true; return e }))
+            localStorage.tasks = JSON.stringify(
+                tasks.map((e) => {
+                    e["seen"] = true;
+                    return e;
+                })
+            );
         } else {
-            let localTasks = JSON.parse(localStorage.tasks)
-            let notify = tasks.filter(t => { return !localTasks.some(e => e.link === t.link) })
-            this.displayNotifications(notify.concat(localTasks.filter(e => e.seen == false)))
-            localStorage.tasks = JSON.stringify(localTasks.concat(notify))
+            let localTasks = JSON.parse(localStorage.tasks);
+            let notify = tasks.filter((t) => {
+                return !localTasks.some((e) => e.link === t.link);
+            });
+            this.displayNotifications(
+                notify.concat(localTasks.filter((e) => e.seen == false))
+            );
+            localStorage.tasks = JSON.stringify(localTasks.concat(notify));
         }
     }
 
     displayNotifications(elems) {
-        if (!elems.length) { return }
-        document.getElementsByClassName('notify')[0].classList.replace('off', 'on')
-        let frame = document.getElementsByClassName('notifications')[0]
-        frame.innerHTML = ""
-        elems.forEach(e => {
-            let node = document.createElement('a')
-            node.href = e.link
-            node.innerHTML = `<i>${e.subject}</i> Nová úloha:<br /><b>${e.name}</b>`
-            node.addEventListener('click', Logged.notifySeen.bind(this))
-            frame.appendChild(node)
-        })
+        if (!elems.length) {
+            return;
+        }
+        document
+            .getElementsByClassName("notify")[0]
+            .classList.replace("off", "on");
+        let frame = document.getElementsByClassName("notifications")[0];
+        frame.innerHTML = "";
+        elems.forEach((e) => {
+            let node = document.createElement("a");
+            node.href = e.link;
+            node.innerHTML = `<i>${e.subject}</i> Nová úloha:<br /><b>${e.name}</b>`;
+            node.addEventListener("click", Logged.notifySeen.bind(this));
+            frame.appendChild(node);
+        });
     }
 
     static getLinksFromHTML(text, href) {
-        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
-        let doc = new DOMParser().parseFromString(text, 'text/html')
-        const allLinks = doc.querySelectorAll(`.butLink[href*="${href}"]`)
-        const links = []
+        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gim, "");
+        let doc = new DOMParser().parseFromString(text, "text/html");
+        const allLinks = doc.querySelectorAll(`.butLink[href*="${href}"]`);
+        const links = [];
         allLinks.forEach((link) => {
-            if (link.href && !link.href.includes('javascript:')) links.push(link)
-        })
-        return links
+            if (link.href && !link.href.includes("javascript:")) {
+                links.push(link);
+            }
+        });
+        return links;
     }
 
     static async taskSpider() {
-        let main = await fetch(new URL('index.php?X=Main', window.location.protocol + '//' + window.location.hostname))
-        if (!main.ok || main.redirected) { return [] }
+        let main = await fetch(
+            new URL(
+                "index.php?X=Main",
+                window.location.protocol + "//" + window.location.hostname
+            )
+        );
+        if (!main.ok || main.redirected) {
+            return [];
+        }
 
-        let mainText = await main.text()
-        let subjects = Logged.getLinksFromHTML(mainText, 'Course')
-        if (!subjects) { return [] }
-        let tasks = []
+        let mainText = await main.text();
+        let subjects = Logged.getLinksFromHTML(mainText, "Course");
+        if (!subjects) {
+            return [];
+        }
+        let tasks = [];
 
         for (let e of subjects) {
-            let course = await fetch(e.href)
-            if (!course.ok || course.redirected) { return }
-            let text = await course.text()
-            let taskLinks = Logged.getLinksFromHTML(text, 'TaskGrp')
-            if (!taskLinks) { return }
+            let course = await fetch(e.href);
+            if (!course.ok || course.redirected) {
+                return;
+            }
+            let text = await course.text();
+            let taskLinks = Logged.getLinksFromHTML(text, "TaskGrp");
+            if (!taskLinks) {
+                return;
+            }
 
-            taskLinks.forEach(f => {
-                let url = new URL(f.href)
+            taskLinks.forEach((f) => {
+                let url = new URL(f.href);
                 tasks.push({
-                    'subject': e.innerText,
-                    'link': '/' + url.search,
-                    'name': f.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText,
-                    'seen': false
-                })
-            })
+                    subject: e.innerText,
+                    link: "/" + url.search,
+                    name: f.parentNode.parentNode.parentNode.parentNode
+                        .firstElementChild.innerText,
+                    seen: false,
+                });
+            });
         }
-        return tasks
+        return tasks;
     }
 
     static notifyToggle() {
-        document.getElementsByClassName('notifications')[0].classList.toggle('notifications-hide')
+        document
+            .getElementsByClassName("notifications")[0]
+            .classList.toggle("notifications-hide");
     }
 
     static notifySeen(event) {
-        let localTasks = JSON.parse(localStorage.tasks)
-        let linkNode = event.target.nodeName == "A" ? event.target : event.target.parentElement
-        let link = new URL(linkNode.href)
-        localTasks.map(e => {
-            if (e.link == '/' + link.search) { e.seen = true }
-            return e
-        })
-        localStorage.tasks = JSON.stringify(localTasks)
-        let frame = document.getElementsByClassName('notifications')[0]
-        frame.removeChild(linkNode)
+        let localTasks = JSON.parse(localStorage.tasks);
+        let linkNode =
+            event.target.nodeName == "A"
+                ? event.target
+                : event.target.parentElement;
+        let link = new URL(linkNode.href);
+        localTasks.map((e) => {
+            if (e.link == "/" + link.search) {
+                e.seen = true;
+            }
+            return e;
+        });
+        localStorage.tasks = JSON.stringify(localTasks);
+        let frame = document.getElementsByClassName("notifications")[0];
+        frame.removeChild(linkNode);
         if (!frame.childElementCount) {
-            frame.innerHTML = '<b>Žádná upozornění</b>'
-            document.getElementsByClassName('notify')[0].classList.replace('on', 'off')
+            frame.innerHTML = "<b>Žádná upozornění</b>";
+            document
+                .getElementsByClassName("notify")[0]
+                .classList.replace("on", "off");
         }
     }
 }
 
 class Exam extends Logged {
     constructor() {
-        super()
+        super();
 
         // normalize html
-        document.querySelectorAll(`
+        document
+            .querySelectorAll(
+                `
             form[name="form1"] table tr:nth-child(n+4) td.rCell,
             form[name="form1"] table tr:nth-child(n+4) td.rbCell`
-        ).forEach(e => {
-            let radio = e.querySelector('input[type="radio"]')
-            if (!radio) { return }
-            let dot = e.previousElementSibling.querySelector('.redBox')
-            if (dot) {
-                dot.parentElement.removeChild(dot)
-                radio.classList.add('radio-red')
-            }
-            e.classList.add('radio')
-            let label = document.createElement('span')
-            label.classList.add('radio-label')
-            let remove = [];
-            e.childNodes.forEach(f => {
-                if (f.nodeName == "#text") {
-                    label.innerHTML += f.textContent
-                    e.replaceChild(label, f)
-                } else {
-                    label.innerHTML += f.outerHTML
-                    remove.push(f)
+            )
+            .forEach((e) => {
+                let radio = e.querySelector('input[type="radio"]');
+                if (!radio) {
+                    return;
                 }
-            })
-            remove.forEach(g => g.remove())
-        })
+                let dot = e.previousElementSibling.querySelector(".redBox");
+                if (dot) {
+                    dot.parentElement.removeChild(dot);
+                    radio.classList.add("radio-red");
+                }
+                e.classList.add("radio");
+                let label = document.createElement("span");
+                label.classList.add("radio-label");
+                let remove = [];
+                e.childNodes.forEach((f) => {
+                    if (f.nodeName == "#text") {
+                        label.innerHTML += f.textContent;
+                        e.replaceChild(label, f);
+                    } else {
+                        label.innerHTML += f.outerHTML;
+                        remove.push(f);
+                    }
+                });
+                remove.forEach((g) => g.remove());
+            });
     }
 }
 
 class Main extends Logged {
-
     constructor() {
-        super()
-        this.orderC = 1000
+        super();
+        this.orderC = 1000;
     }
 
     async initialise() {
-        const subjects = document.createElement('div')
-        subjects.classList.add('subjectSelect')
+        const subjects = document.createElement("div");
+        subjects.classList.add("subjectSelect");
 
-        const settings = document.createElement('div')
-        settings.classList.add('subjectSelect')
-        settings.classList.add('mainInfo');
+        const settings = document.createElement("div");
+        settings.classList.add("subjectSelect");
+        settings.classList.add("mainInfo");
 
-        let orders = {}
-        
+        let orders = {};
+
         // get subject URLs from courses
-        const subjectInfo = await fetch("https://courses.fit.cvut.cz/data/courses-all.json", {
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'omit'
-        }).then(response => response.json())
+        const subjectInfo = await fetch(
+            "https://courses.fit.cvut.cz/data/courses-all.json",
+            {
+                method: "GET",
+                mode: "cors",
+                credentials: "omit",
+            }
+        ).then((response) => response.json());
 
         // collect all elements
-        Main.getSubjects().forEach(e => {
+        Main.getSubjects().forEach((e) => {
+            const [order, icon, text = e[0], footer = "", push = settings] =
+                Main.parseSettings(e[2]) ||
+                this.parseSubject(e[2], e[0]).concat(subjects);
+            orders[order] = footer;
 
-            const [
-                order,
-                icon,
-                text = e[0],
-                footer = "",
-                push = settings
-            ] = Main.parseSettings(e[2]) || this.parseSubject(e[2], e[0]).concat(subjects)
-            orders[order] = footer
-
-            let link = null
+            let link = null;
             try {
-                link = subjectInfo["courses"][e[2]]["homepage"]
-            } catch (_) { }
-            
+                link = subjectInfo["courses"][e[2]]["homepage"];
+            } catch (_) {}
+
             // construct fallback URL
-            if (link === null && !["Překladače", "Nastavení", "FAQ"].includes(e[2])) {
-                link = "https://courses.fit.cvut.cz/" + e[2]
+            if (
+                link === null &&
+                !["Překladače", "Nastavení", "FAQ"].includes(e[2])
+            ) {
+                link = "https://courses.fit.cvut.cz/" + e[2];
             }
-            
+
             push.innerHTML += `
 <a href="${e[1]}" class="subject" style="order: ${order}" pttorder="${order}">
     <div class="subject-title">${e[2]}</div>
     <div class="icon ${icon}"></div>
     <div class="subject-body">${text}</div>
-    ${link ? `<button class="updButton" onclick="window.open('${link}');return false;">Stránky předmětu</button>` : ''}
-    ${footer ? `<div class="subject-footer">${footer}</div>` : ''}
-</a>`
-        })
+    ${
+        link
+            ? `<button class="updButton" onclick="window.open('${link}');return false;">Stránky předmětu</button>`
+            : ""
+    }
+    ${footer ? `<div class="subject-footer">${footer}</div>` : ""}
+</a>`;
+        });
 
         for (let order in orders) {
-            if (order >= 1000) { continue }
-            let header = document.createElement('span')
-            header.classList.add('subjectHeader')
-            header.style.order = order - 1
-            header.setAttribute('pttcolorder', order)
-            header.innerHTML = (order % 20 ? 'Letní' : 'Zimní') + ' semestr <b>' + orders[order].substr(0, 7) + '</b>'
-            header.addEventListener('click', Main.collapseSem.bind(this))
-            subjects.appendChild(header)
+            if (order >= 1000) {
+                continue;
+            }
+            let header = document.createElement("span");
+            header.classList.add("subjectHeader");
+            header.style.order = order - 1;
+            header.setAttribute("pttcolorder", order);
+            header.innerHTML =
+                (order % 20 ? "Letní" : "Zimní") +
+                " semestr <b>" +
+                orders[order].substr(0, 7) +
+                "</b>";
+            header.addEventListener("click", Main.collapseSem.bind(this));
+            subjects.appendChild(header);
         }
-        let cent = document.querySelector('center')
-        cent.parentNode.replaceChild(settings, cent)
-        settings.parentNode.insertBefore(subjects, settings)
+        let cent = document.querySelector("center");
+        cent.parentNode.replaceChild(settings, cent);
+        settings.parentNode.insertBefore(subjects, settings);
 
-        let min = Math.min(...Object.keys(orders))
+        let min = Math.min(...Object.keys(orders));
         for (let order in orders) {
-            let elm = document.querySelector('[pttcolorder="' + order + '"]')
-            if (elm && order != min) { elm.click() }
+            let elm = document.querySelector('[pttcolorder="' + order + '"]');
+            if (elm && order != min) {
+                elm.click();
+            }
         }
     }
 
     static collapseSem(event) {
-        let elm = event.target
-        if (elm.nodeName == 'B') { elm = elm.parentNode }
-        elm.classList.toggle('active')
-        document.querySelectorAll('[pttorder="' + elm.getAttribute('pttcolorder') + '"]').forEach(e => {
-            e.classList.toggle('subject-hidden')
-        })
+        let elm = event.target;
+        if (elm.nodeName == "B") {
+            elm = elm.parentNode;
+        }
+        elm.classList.toggle("active");
+        document
+            .querySelectorAll(
+                '[pttorder="' + elm.getAttribute("pttcolorder") + '"]'
+            )
+            .forEach((e) => {
+                e.classList.toggle("subject-hidden");
+            });
     }
 
     static parseSettings(title) {
-        return ({
-            "Nastavení": [10001, 'icon-setting', ""],
-            "Překladače": [10000, 'icon-compile'],
-            "FAQ": [10002, 'icon-faq', "Často kladené dotazy"]
-        })[title]
+        return {
+            Nastavení: [10001, "icon-setting", ""],
+            Překladače: [10000, "icon-compile"],
+            FAQ: [10002, "icon-faq", "Často kladené dotazy"],
+        }[title];
     }
 
     parseSubject(title, text) {
-
-        const bracketPos = text.lastIndexOf('(')
-        if (bracketPos == -1) { return [this.orderC++, 'icon-unknown', text, ""] }
-        else {
+        const bracketPos = text.lastIndexOf("(");
+        if (bracketPos == -1) {
+            return [this.orderC++, "icon-unknown", text, ""];
+        } else {
             return [
-                (100 - (text.substr(bracketPos + 1, 2) * 2) - text.includes('LS)')) * 10,
+                (100 -
+                    text.substr(bracketPos + 1, 2) * 2 -
+                    text.includes("LS)")) *
+                    10,
                 Main.getSubjectIcon(title),
                 text.substr(0, bracketPos - 1),
-                "20" + text.slice(bracketPos + 1, -1)
-            ]
+                "20" + text.slice(bracketPos + 1, -1),
+            ];
         }
     }
 
     static getSubjectIcon(title) {
-        return ({
-            "BI-AAG": "icon-aag",
-            "BI-AG1": "icon-ag1",
-            "BI-OSY": "icon-osy",
-            "BI-PA1": "icon-pa1",
-            "BI-PA2": "icon-pa2",
-            "BI-PJV": "icon-pjv",
-            "BI-PS1": "icon-ps1",
-            "BI-PYT": "icon-pyt"
-        })[title] || "icon-unknown"
+        return (
+            {
+                "BI-AAG": "icon-aag",
+                "BI-AG1": "icon-ag1",
+                "BI-OSY": "icon-osy",
+                "BI-PA1": "icon-pa1",
+                "BI-PA2": "icon-pa2",
+                "BI-PJV": "icon-pjv",
+                "BI-PS1": "icon-ps1",
+                "BI-PYT": "icon-pyt",
+            }[title] || "icon-unknown"
+        );
     }
 
     static getSubjects() {
-        return [...document.querySelectorAll("body > center > table > tbody > tr")].map(Main.getSubjectNames)
+        return [
+            ...document.querySelectorAll("body > center > table > tbody > tr"),
+        ].map(Main.getSubjectNames);
     }
 
     static getSubjectNames(e) {
-        const ch = e.children[1].children[0].children[0].children[0]
-        return [e.children[0].innerText, ch.href, ch.innerText]
+        const ch = e.children[1].children[0].children[0].children[0];
+        return [e.children[0].innerText, ch.href, ch.innerText];
     }
 }
 
 class Task extends Logged {
     constructor() {
-        super()
+        super();
 
-        Task.fixLinks()
+        Task.fixLinks();
 
         // autohide result tables
-        if (dropdown) { Task.autoHideResults() }
+        if (dropdown) {
+            Task.autoHideResults();
+        }
 
         // mark help checkboxes for grid
-        document.querySelectorAll('input[type="checkbox"][name]').forEach(e => {
-            e.parentNode.className += " gridHelp"
-        })
+        document
+            .querySelectorAll('input[type="checkbox"][name]')
+            .forEach((e) => {
+                e.parentNode.className += " gridHelp";
+            });
 
-        Task.markResultsTable()
+        Task.markResultsTable();
 
         // nicer progress bar
-        let progress = document.getElementById('refVal')
-        if (progress) { setTimeout(() => progress.scrollIntoView({ block: "center" }), 10) }
+        let progress = document.getElementById("refVal");
+        if (progress) {
+            setTimeout(() => progress.scrollIntoView({ block: "center" }), 10);
+        }
 
-        this.replaceCountdown()
+        this.replaceCountdown();
 
-        Task.easterEgg()
+        Task.easterEgg();
     }
 
     static fixLinks() {
-        document.querySelectorAll('[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"], [href*="?X=DryRunD&"], [href*="?X=DryRunO&"], [href*="?X=DryRunI&"], [href*="?X=CompileD&"]').forEach(e => {
-            e.setAttribute('target', '_blank')
-        })
+        document
+            .querySelectorAll(
+                '[href*="?X=Advice&"], [href*="?X=TaskD&"], [href*="?X=TaskS&"], [href*="?X=DryRunD&"], [href*="?X=DryRunO&"], [href*="?X=DryRunI&"], [href*="?X=CompileD&"]'
+            )
+            .forEach((e) => {
+                e.setAttribute("target", "_blank");
+            });
     }
 
     replaceCountdown() {
-        if (!document.getElementById('countdown')) { return }
+        if (!document.getElementById("countdown")) {
+            return;
+        }
         // block setTimeout calls
-        let elt = document.createElement("script")
-        elt.innerHTML = "window.setCountdown();window.setCountdown = function () {};"
-        document.head.appendChild(elt)
+        let elt = document.createElement("script");
+        elt.innerHTML =
+            "window.setCountdown();window.setCountdown = function () {};";
+        document.head.appendChild(elt);
 
         // rename element
-        document.getElementById('countdown').setAttribute('id', 'ptt-countdown')
+        document
+            .getElementById("countdown")
+            .setAttribute("id", "ptt-countdown");
 
         // create hidden mocked element
-        let hide = document.createElement("div")
-        hide.setAttribute("id", "countdown")
-        hide.style.display = "none"
-        document.head.appendChild(hide)
+        let hide = document.createElement("div");
+        hide.setAttribute("id", "countdown");
+        hide.style.display = "none";
+        document.head.appendChild(hide);
 
-        let elm = document.getElementById('ptt-countdown')
-        if (elm.innerHTML == '&nbsp;') { return; }
-        elm.style.minWidth = "200px"
-        let deadline = parseInt(elm.innerHTML.slice(0, -4)) * 1000 + new Date().getTime()
+        let elm = document.getElementById("ptt-countdown");
+        if (elm.innerHTML == "&nbsp;") {
+            return;
+        }
+        elm.style.minWidth = "200px";
+        let deadline =
+            parseInt(elm.innerHTML.slice(0, -4)) * 1000 + new Date().getTime();
 
         let loop = () => {
-            let remaining = (deadline - new Date().getTime()) / 1000
-            let t = "Zbýv"
+            let remaining = (deadline - new Date().getTime()) / 1000;
+            let t = "Zbýv";
             if (remaining > 86400) {
-                let days = parseInt(remaining / 86400)
-                t += ([
-                    "",
-                    "á <b>{} den",
-                    "ají <b>{} dny",
-                    "ají <b>{} dny",
-                    "ají <b>{} dny"
-                ][remaining / 86400] || "á <b>{} dní").replace('{}', days)
-                t += ", "
-            } else { t += "á <b>" }
-            let hours = remaining % 86400
-            let minutes = hours % 3600
-            t += parseInt(hours / 3600) + "h, " + parseInt(minutes / 60) + "m a " + parseInt(minutes % 60) + "s</b>"
-            elm.innerHTML = t
-        }
+                let days = parseInt(remaining / 86400);
+                t += (
+                    [
+                        "",
+                        "á <b>{} den",
+                        "ají <b>{} dny",
+                        "ají <b>{} dny",
+                        "ají <b>{} dny",
+                    ][remaining / 86400] || "á <b>{} dní"
+                ).replace("{}", days);
+                t += ", ";
+            } else {
+                t += "á <b>";
+            }
+            let hours = remaining % 86400;
+            let minutes = hours % 3600;
+            t +=
+                parseInt(hours / 3600) +
+                "h, " +
+                parseInt(minutes / 60) +
+                "m a " +
+                parseInt(minutes % 60) +
+                "s</b>";
+            elm.innerHTML = t;
+        };
 
-        loop()
-        this.timerLoop = setInterval(loop, 900)
+        loop();
+        this.timerLoop = setInterval(loop, 900);
     }
 
     static markResultsTable() {
-        document.querySelectorAll('form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child').forEach(e => {
-            let node = e.previousSibling
-            let text = node.textContent
-            let state
-            if (text.includes('Úspěch')) {
-                if (e.firstElementChild.innerHTML.includes('Dosaženo: 100.00 %')) {
-                    node.parentElement.className += " testRes testOK"
-                    state = "ok"
-                }
-                else {
-                    node.parentElement.className += " testRes testAOK"
-                    state = "warn"
-                }
-            } else if (
-                text.includes('Neúspěch') ||
-                text.includes('Program provedl neplatnou operaci a byl ukončen') ||
-                text.includes('Program překročil přidělenou maximální')
-            ) {
-                node.parentElement.className += " testRes testFailed"
-                state = "danger"
-            } else {
-                node.parentElement.className += " testRes testUnknown"
-                state = "light"
-            }
-
-            const testName = text.match(/Test '(.*)': (Úspěch|Neúspěch|Nebylo testováno)/)
-            if (testName != null) { node.textContent = testName[1] }
-
-            const score = [...e.childNodes[0].innerText.matchAll(/Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g)]
-            let scoreElem
-            if (score.length == 1 && score[0].length == 3) {
-                e.removeChild(e.childNodes[0])
-                scoreElem = document.createElement("badge")
-                scoreElem.style.marginRight = "10px"
-                scoreElem.style.minWidth = "120px"
-                scoreElem.classList.add(state)
-                scoreElem.innerHTML = '<label title="Dosaženo / požadováno"><b>' + parseFloat(score[0][1]).toFixed(0) + "</b>/" + parseFloat(score[0][2]).toFixed(0) + "</label>"
-                e.parentElement.insertBefore(scoreElem, e.parentElement.firstChild)
-            } else {
-                scoreElem = document.createElement("badge")
-                scoreElem.style.marginRight = "10px"
-                scoreElem.style.minWidth = "120px"
-                scoreElem.classList.add(state)
-                scoreElem.innerHTML = '<label title="Dosaženo / požadováno"><b>0</b></label>'
-                e.parentElement.insertBefore(scoreElem, e.parentElement.firstChild)
-            }
-
-            const badges = document.createElement("div")
-            badges.classList.add("badges")
-            e.parentElement.insertBefore(badges, e)
-
-            let markForRemove = []
-
-            e.childNodes.forEach(f => {
-                if (f.innerText.includes(', hodnocení')) {
-                    if (!scoreElem) { return }
-
-                    let scoreMult
-                    if (f.innerText.includes('Bonus nebude udělen')) { scoreMult = 0 }
-                    else {
-                        let multText = f.innerText.match(/(\d{1,3}.\d{2}) %/)
-                        if (multText == null) { return }
-                        scoreMult = parseFloat(multText[1]) / 100
+        document
+            .querySelectorAll(
+                "form > center > div:not(:nth-child(1)) .lrtbCell li > ul:only-child"
+            )
+            .forEach((e) => {
+                let node = e.previousSibling;
+                let text = node.textContent;
+                let state;
+                if (text.includes("Úspěch")) {
+                    if (
+                        e.firstElementChild.innerHTML.includes(
+                            "Dosaženo: 100.00 %"
+                        )
+                    ) {
+                        node.parentElement.className += " testRes testOK";
+                        state = "ok";
+                    } else {
+                        node.parentElement.className += " testRes testAOK";
+                        state = "warn";
                     }
-                    let testType = ""
-                    if (f.innerText.includes("nepovinném testu")) {
-                        testType = "💝 Nepovinný test"
-                    } else if (f.innerText.includes("bonusovém testu")) {
-                        testType = "🎁 Bonusový test"
-                    } else if (f.innerText.includes("závazném testu")) {
-                        testType = "📜 Závazný test"
-                    }
-
-                    if (testType != "") {
-                        let testTypeElem = document.createElement("span")
-                        testTypeElem.classList.add("testType")
-                        testTypeElem.innerText = testType + ": "
-                        node.parentElement.insertBefore(testTypeElem, node)
-                        markForRemove.push(f)
-                    }
-
-                    let multElem = document.createElement("span")
-                    multElem.setAttribute("title", "Skóre")
-                    multElem.innerText = scoreMult.toFixed(2)
-                    scoreElem.appendChild(multElem)
-                }
-                else if (
-                    f.innerText.includes('Celková doba běhu:') ||
-                    f.innerText.includes("Vyčerpání limitu na celý test, program násilně ukončen") ||
-                    f.innerText.includes("Program násilně ukončen po")
+                } else if (
+                    text.includes("Neúspěch") ||
+                    text.includes(
+                        "Program provedl neplatnou operaci a byl ukončen"
+                    ) ||
+                    text.includes("Program překročil přidělenou maximální")
                 ) {
-                    const time = [...f.innerText.matchAll(/(\d+.\d+)/g)]
-                    if (time.length != 0) {
-                        markForRemove.push(f)
-                        let timeElem = document.createElement("badge")
-                        timeElem.classList.add("info")
-                        if (time.length == 2) {
-                            const timeMe = parseFloat(time[0][1])
-                            const timeLimit = parseFloat(time[1][1])
-                            if (timeMe >= timeLimit) { timeElem.classList.replace("info", "danger") }
-                            timeElem.setAttribute("title", "Celkový čas / limit")
-                            timeElem.innerHTML = "<label>⏱️ <b>" + timeMe.toFixed(3) + "s</b> / " + timeLimit.toFixed(3) + "s</label>"
-                        } else {
-                            timeElem.setAttribute("title", "Celkový čas")
-                            timeElem.innerHTML = "<label>⏱️ <b>" + parseFloat(time[0][1]).toFixed(3) + "s</b></label>"
-                        }
-                        badges.appendChild(timeElem)
-                    }
-                } else if (f.innerText.includes("Využití paměti:")) {
-                    const memory = [...f.innerText.matchAll(/(\d+)/g)]
-                    if (memory.length != 0) {
-                        markForRemove.push(f)
-                        let memElem = document.createElement("badge")
-                        memElem.classList.add("info")
-                        if (memory.length == 2) {
-                            const memMe = parseFloat(memory[0][1]) * 1024
-                            const memLimit = parseFloat(memory[1][1]) * 1024
-                            if (memMe >= memLimit) { memElem.classList.replace("info", "danger") }
-                            memElem.setAttribute("title", "Celková paměť / limit")
-                            memElem.innerHTML = "<label>💾 <b>" + Task.convertMemory(memMe) + "</b> / " + Task.convertMemory(memLimit) + "</label>"
-                        } else {
-                            memElem.setAttribute("title", "Celková paměť")
-                            memElem.innerHTML = "<label>💾 <b>" + Task.convertMemory(parseFloat(memory[0][1]) * 1024) + "</b></label>"
-                        }
-                        badges.appendChild(memElem)
-                    }
+                    node.parentElement.className += " testRes testFailed";
+                    state = "danger";
+                } else {
+                    node.parentElement.className += " testRes testUnknown";
+                    state = "light";
                 }
-            })
 
-            markForRemove.forEach(f => e.removeChild(f))
-        })
+                const testName = text.match(
+                    /Test '(.*)': (Úspěch|Neúspěch|Nebylo testováno)/
+                );
+                if (testName != null) {
+                    node.textContent = testName[1];
+                }
 
-        document.querySelectorAll('li.testRes a').forEach(e => {
-            e.innerHTML = e.innerHTML.slice(1, -1)
-        })
+                const score = [
+                    ...e.childNodes[0].innerText.matchAll(
+                        /Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g
+                    ),
+                ];
+                let scoreElem;
+                if (score.length == 1 && score[0].length == 3) {
+                    e.removeChild(e.childNodes[0]);
+                    scoreElem = document.createElement("badge");
+                    scoreElem.style.marginRight = "10px";
+                    scoreElem.style.minWidth = "120px";
+                    scoreElem.classList.add(state);
+                    scoreElem.innerHTML =
+                        '<label title="Dosaženo / požadováno"><b>' +
+                        parseFloat(score[0][1]).toFixed(0) +
+                        "</b>/" +
+                        parseFloat(score[0][2]).toFixed(0) +
+                        "</label>";
+                    e.parentElement.insertBefore(
+                        scoreElem,
+                        e.parentElement.firstChild
+                    );
+                } else {
+                    scoreElem = document.createElement("badge");
+                    scoreElem.style.marginRight = "10px";
+                    scoreElem.style.minWidth = "120px";
+                    scoreElem.classList.add(state);
+                    scoreElem.innerHTML =
+                        '<label title="Dosaženo / požadováno"><b>0</b></label>';
+                    e.parentElement.insertBefore(
+                        scoreElem,
+                        e.parentElement.firstChild
+                    );
+                }
+
+                const badges = document.createElement("div");
+                badges.classList.add("badges");
+                e.parentElement.insertBefore(badges, e);
+
+                let markForRemove = [];
+
+                e.childNodes.forEach((f) => {
+                    if (f.innerText.includes(", hodnocení")) {
+                        if (!scoreElem) {
+                            return;
+                        }
+
+                        let scoreMult;
+                        if (f.innerText.includes("Bonus nebude udělen")) {
+                            scoreMult = 0;
+                        } else {
+                            let multText =
+                                f.innerText.match(/(\d{1,3}.\d{2}) %/);
+                            if (multText == null) {
+                                return;
+                            }
+                            scoreMult = parseFloat(multText[1]) / 100;
+                        }
+                        let testType = "";
+                        if (f.innerText.includes("nepovinném testu")) {
+                            testType = "💝 Nepovinný test";
+                        } else if (f.innerText.includes("bonusovém testu")) {
+                            testType = "🎁 Bonusový test";
+                        } else if (f.innerText.includes("závazném testu")) {
+                            testType = "📜 Závazný test";
+                        }
+
+                        if (testType != "") {
+                            let testTypeElem = document.createElement("span");
+                            testTypeElem.classList.add("testType");
+                            testTypeElem.innerText = testType + ": ";
+                            node.parentElement.insertBefore(testTypeElem, node);
+                            markForRemove.push(f);
+                        }
+
+                        let multElem = document.createElement("span");
+                        multElem.setAttribute("title", "Skóre");
+                        multElem.innerText = scoreMult.toFixed(2);
+                        scoreElem.appendChild(multElem);
+                    } else if (
+                        f.innerText.includes("Celková doba běhu:") ||
+                        f.innerText.includes(
+                            "Vyčerpání limitu na celý test, program násilně ukončen"
+                        ) ||
+                        f.innerText.includes("Program násilně ukončen po")
+                    ) {
+                        const time = [...f.innerText.matchAll(/(\d+.\d+)/g)];
+                        if (time.length != 0) {
+                            markForRemove.push(f);
+                            let timeElem = document.createElement("badge");
+                            timeElem.classList.add("info");
+                            if (time.length == 2) {
+                                const timeMe = parseFloat(time[0][1]);
+                                const timeLimit = parseFloat(time[1][1]);
+                                if (timeMe >= timeLimit) {
+                                    timeElem.classList.replace(
+                                        "info",
+                                        "danger"
+                                    );
+                                }
+                                timeElem.setAttribute(
+                                    "title",
+                                    "Celkový čas / limit"
+                                );
+                                timeElem.innerHTML =
+                                    "<label>⏱️ <b>" +
+                                    timeMe.toFixed(3) +
+                                    "s</b> / " +
+                                    timeLimit.toFixed(3) +
+                                    "s</label>";
+                            } else {
+                                timeElem.setAttribute("title", "Celkový čas");
+                                timeElem.innerHTML =
+                                    "<label>⏱️ <b>" +
+                                    parseFloat(time[0][1]).toFixed(3) +
+                                    "s</b></label>";
+                            }
+                            badges.appendChild(timeElem);
+                        }
+                    } else if (f.innerText.includes("Využití paměti:")) {
+                        const memory = [...f.innerText.matchAll(/(\d+)/g)];
+                        if (memory.length != 0) {
+                            markForRemove.push(f);
+                            let memElem = document.createElement("badge");
+                            memElem.classList.add("info");
+                            if (memory.length == 2) {
+                                const memMe = parseFloat(memory[0][1]) * 1024;
+                                const memLimit =
+                                    parseFloat(memory[1][1]) * 1024;
+                                if (memMe >= memLimit) {
+                                    memElem.classList.replace("info", "danger");
+                                }
+                                memElem.setAttribute(
+                                    "title",
+                                    "Celková paměť / limit"
+                                );
+                                memElem.innerHTML =
+                                    "<label>💾 <b>" +
+                                    Task.convertMemory(memMe) +
+                                    "</b> / " +
+                                    Task.convertMemory(memLimit) +
+                                    "</label>";
+                            } else {
+                                memElem.setAttribute("title", "Celková paměť");
+                                memElem.innerHTML =
+                                    "<label>💾 <b>" +
+                                    Task.convertMemory(
+                                        parseFloat(memory[0][1]) * 1024
+                                    ) +
+                                    "</b></label>";
+                            }
+                            badges.appendChild(memElem);
+                        }
+                    }
+                });
+
+                markForRemove.forEach((f) => e.removeChild(f));
+            });
+
+        document.querySelectorAll("li.testRes a").forEach((e) => {
+            e.innerHTML = e.innerHTML.slice(1, -1);
+        });
     }
 
     static convertMemory(size) {
-        var i = Math.floor(Math.log(size) / Math.log(1024))
-        return (size / Math.pow(1024, i)).toFixed(0) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+        var i = Math.floor(Math.log(size) / Math.log(1024));
+        return (
+            (size / Math.pow(1024, i)).toFixed(0) * 1 +
+            " " +
+            ["B", "kB", "MB", "GB", "TB"][i]
+        );
     }
 
     static autoHideResults() {
         // make ref solution clickable
-        let checkbox = document.querySelector('input[name="SHOW_REF"]')
+        let checkbox = document.querySelector('input[name="SHOW_REF"]');
         if (checkbox) {
-            let refHead = checkbox.parentNode.parentNode
-            let refSib = refHead.nextElementSibling
+            let refHead = checkbox.parentNode.parentNode;
+            let refSib = refHead.nextElementSibling;
 
             while (refSib) {
-                refSib.removeAttribute('style')
-                refSib = refSib.nextElementSibling
+                refSib.removeAttribute("style");
+                refSib = refSib.nextElementSibling;
             }
 
-            refHead.className += " dropDownHeader"
-            refHead.addEventListener('click', toggleDropDown)
-            refHead.click()
-            checkbox.parentNode.removeChild(checkbox)
+            refHead.className += " dropDownHeader";
+            refHead.addEventListener("click", toggleDropDown);
+            refHead.click();
+            checkbox.parentNode.removeChild(checkbox);
         }
 
         // hide the rest
@@ -663,328 +881,405 @@ class Task extends Logged {
             "rtbHalfSepCell",
             "rtbXSepCell",
             "rtbFailSepCell",
-            "rtbEditSepCell"
-        ].forEach(n => {
-            document.querySelectorAll("td." + n + " > div.but1.w120").forEach(e => {
-                let resHead = e.parentNode.parentNode
-                resHead.className += " dropDownHeader"
-                resHead.addEventListener('click', toggleDropDown)
-                resHead.click()
-            })
-        })
+            "rtbEditSepCell",
+        ].forEach((n) => {
+            document
+                .querySelectorAll("td." + n + " > div.but1.w120")
+                .forEach((e) => {
+                    let resHead = e.parentNode.parentNode;
+                    resHead.className += " dropDownHeader";
+                    resHead.addEventListener("click", toggleDropDown);
+                    resHead.click();
+                });
+        });
     }
 
     static easterEgg() {
         // play Portal 2 turrent sound on successful task submission (you are welcome ;) )
-        let storage = window.localStorage
-        if (!storage) { return }
+        let storage = window.localStorage;
+        if (!storage) {
+            return;
+        }
 
-        let params = window.location.search.split('&')
-        let task = btoa((params[1] || '') + (params[2] || '') + (params[3] || ''))
+        let params = window.location.search.split("&");
+        let task = btoa(
+            (params[1] || "") + (params[2] || "") + (params[3] || "")
+        );
 
-        if (document.getElementById('refProgress')) {
-            storage.setItem('upload', true)
-            storage.setItem('task', task)
-            return
-        } else if (storage.getItem('upload') == "true" && storage.getItem('task') == task) {
+        if (document.getElementById("refProgress")) {
+            storage.setItem("upload", true);
+            storage.setItem("task", task);
+            return;
+        } else if (
+            storage.getItem("upload") == "true" &&
+            storage.getItem("task") == task
+        ) {
             // upload ended and ptt has never seen this page before (yay!)
-            if (sounds && document.querySelector("form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell")) {
+            if (
+                sounds &&
+                document.querySelector(
+                    "form > center > div.topLayout:nth-child(5) > div.outBox > table > tbody > tr.dropDownHeader > td.ltbOkSepCell"
+                )
+            ) {
                 try {
-                    new Audio(chrome.runtime.getURL("./themes/assets/turret.ogg")).play()
-                } catch { }
+                    new Audio(
+                        chrome.runtime.getURL("./themes/assets/turret.ogg")
+                    ).play();
+                } catch {}
             }
         }
-        storage.setItem('upload', false)
-        storage.setItem('task', task)
+        storage.setItem("upload", false);
+        storage.setItem("task", task);
     }
 }
 
 class Results extends Logged {
     constructor() {
-        super()
+        super();
 
-        let styles = ''
+        let styles = "";
 
         // add selector to duplicate parrent elements
-        document.querySelectorAll("span.dupC").forEach(e => { e.parentNode.className += " dupCpar" })
+        document.querySelectorAll("span.dupC").forEach((e) => {
+            e.parentNode.className += " dupCpar";
+        });
 
         // mark number of columns
-        let c = [], i = 0
-        let qsel = document.querySelector("tr.resHdr:nth-child(1)")
+        let c = [],
+            i = 0;
+        let qsel = document.querySelector("tr.resHdr:nth-child(1)");
         if (typeof qsel != undefined && qsel != null) {
-            qsel.childNodes.forEach(e => { c.push(i += parseInt(e.getAttribute("colspan") || 1)) })
-            c.pop()
-            c.shift()
-            c.forEach(e => {
-                styles += 'tr.resRow > td:nth-child(' + (e + 1) + ') {border-left: thin solid rgba(0, 0, 0, 0.125);font-weight: 500;}'
-            })
+            qsel.childNodes.forEach((e) => {
+                c.push((i += parseInt(e.getAttribute("colspan") || 1)));
+            });
+            c.pop();
+            c.shift();
+            c.forEach((e) => {
+                styles +=
+                    "tr.resRow > td:nth-child(" +
+                    (e + 1) +
+                    ") {border-left: thin solid rgba(0, 0, 0, 0.125);font-weight: 500;}";
+            });
 
-            styles += 'tr.resRow > td:last-child {font-weight: 500;}'
+            styles += "tr.resRow > td:last-child {font-weight: 500;}";
         }
 
-        let styleSheet = document.createElement("style")
-        styleSheet.type = "text/css"
-        styleSheet.innerText = styles
-        document.head.appendChild(styleSheet)
+        let styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = styles;
+        document.head.appendChild(styleSheet);
     }
 }
 
 class Course extends Logged {
     constructor() {
-        super()
+        super();
 
-        Course.GetTasks().then(tasks => {
-            const cts = this.createContainers(tasks)
-            
-            let container = document.createElement('div')
-            container.classList.add('course_container')
+        Course.GetTasks().then((tasks) => {
+            const cts = this.createContainers(tasks);
 
-            cts.forEach(e => container.appendChild(e))
-            document.body.replaceChild(container, document.querySelector('center'))
+            let container = document.createElement("div");
+            container.classList.add("course_container");
 
-            document.addEventListener('keydown', e => {
-                if (e.key == "Escape") { Course.hideModal() }
-            })
+            cts.forEach((e) => container.appendChild(e));
+            document.body.replaceChild(
+                container,
+                document.querySelector("center")
+            );
 
-            document.addEventListener('click', () => Course.hideModal())
-        })
+            document.addEventListener("keydown", (e) => {
+                if (e.key == "Escape") {
+                    Course.hideModal();
+                }
+            });
+
+            document.addEventListener("click", () => Course.hideModal());
+        });
     }
 
     static async GetTasks() {
-        const page = await fetch(buildLink('X=CourseOverview&Cou=' + args.Cou))
-        const tree = (new DOMParser()).parseFromString(await page.text(), 'text/xml')
-        const ret = []
-        const scores = []
-        document.querySelectorAll('table.topLayout > tbody > tr > .lBox > span').forEach(e => {
-            const row = e.parentElement.parentElement
-            const taskName = row.children[1].querySelector('.menuListDis')
-            const points = row.childElementCount === 4 ? row.children[2].querySelector('.menuListDis') : null;
-            const link = row.children[row.childElementCount - 1].querySelector('a.butLink')
-            scores.push({
-                "name": taskName?.innerText,
-                "score": points?.innerText ?? '--',
-                "disabled": e.classList.contains("menuListDis"),
-                "link": link?.href
-            })
-        })
+        const page = await fetch(buildLink("X=CourseOverview&Cou=" + args.Cou));
+        const tree = new DOMParser().parseFromString(
+            await page.text(),
+            "text/xml"
+        );
+        const ret = [];
+        const scores = [];
+        document
+            .querySelectorAll("table.topLayout > tbody > tr > .lBox > span")
+            .forEach((e) => {
+                const row = e.parentElement.parentElement;
+                const taskName = row.children[1].querySelector(".menuListDis");
+                const points =
+                    row.childElementCount === 4
+                        ? row.children[2].querySelector(".menuListDis")
+                        : null;
+                const link =
+                    row.children[row.childElementCount - 1].querySelector(
+                        "a.butLink"
+                    );
+                scores.push({
+                    name: taskName?.innerText,
+                    score: points?.innerText ?? "--",
+                    disabled: e.classList.contains("menuListDis"),
+                    link: link?.href,
+                });
+            });
 
-        tree.querySelectorAll('AssessmentGrp').forEach(e => {
-            const groups = []
-            e.querySelectorAll('TaskGrp, KNTest, ExtraPoints').forEach(f => {
-                
+        tree.querySelectorAll("AssessmentGrp").forEach((e) => {
+            const groups = [];
+            e.querySelectorAll("TaskGrp, KNTest, ExtraPoints").forEach((f) => {
                 // const origLinkBase = {'TaskGrp': 'TaskGrp', 'KNTest': 'KNT', 'ExtraPoints': 'Extra'}[f.tagName]
                 // const origLinkPart = {'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'ExtraPoints': 'Ex'}[f.tagName]
-                // 
+                //
                 // if (document.querySelector(`a[href="?X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}"]`))
                 // link = buildLink(`X=${origLinkBase}&Cou=${args.Cou}&${origLinkPart}=${f.getAttribute('id')}`)
 
-                let type = {'TaskGrp': 'task', 'KNTest': 'test', 'ExtraPoints': 'extra'}[f.tagName];
-                if (type == 'test' && ['Training', 'eLearning'].includes(f.getAttribute('assignType'))) {
-                    type = 'test-demo'
+                let type = {
+                    TaskGrp: "task",
+                    KNTest: "test",
+                    ExtraPoints: "extra",
+                }[f.tagName];
+                if (
+                    type == "test" &&
+                    ["Training", "eLearning"].includes(
+                        f.getAttribute("assignType")
+                    )
+                ) {
+                    type = "test-demo";
                 }
 
-                const name = f.getAttribute('name')
-                let link = null
-                let score = 0
-                let disabled = false
-                scores.forEach(g => {
-                    if (g.name == name || g.name == "Znalostní test - " + name) {
-                        score = g.score
-                        disabled = g.disabled
-                        link = g.link ?? null
+                const name = f.getAttribute("name");
+                let link = null;
+                let score = 0;
+                let disabled = false;
+                scores.forEach((g) => {
+                    if (
+                        g.name == name ||
+                        g.name == "Znalostní test - " + name
+                    ) {
+                        score = g.score;
+                        disabled = g.disabled;
+                        link = g.link ?? null;
                     }
-                })
+                });
 
                 groups.push({
-                    'id': f.getAttribute('id'),
-                    'name': name,
-                    'type': type,
-                    'link': link,
-                    'opens': new Date(f.getAttribute('openDate') + "+0000"),
-                    'closes': new Date(f.getAttribute('deadlineDate') + "+0000"),
-                    'score': score,
-                    'disabled': disabled
-                })
-            })
+                    id: f.getAttribute("id"),
+                    name: name,
+                    type: type,
+                    link: link,
+                    opens: new Date(f.getAttribute("openDate") + "+0000"),
+                    closes: new Date(f.getAttribute("deadlineDate") + "+0000"),
+                    score: score,
+                    disabled: disabled,
+                });
+            });
             ret.push({
-                'name': e.getAttribute('name'),
-                'taskGrp': groups
-            })
-        })
-        return ret
+                name: e.getAttribute("name"),
+                taskGrp: groups,
+            });
+        });
+        return ret;
     }
 
     createContainers(tasks) {
-        const ret = []
+        const ret = [];
 
-        ret.push(Course.buildResultsLink())
+        ret.push(Course.buildResultsLink());
 
-        tasks.forEach(t => {
+        tasks.forEach((t) => {
             if (t.taskGrp.length == 0) {
-                return
+                return;
             }
-            const elem = document.createElement('div')
-            elem.classList.add(`course_grp`)
-            elem.appendChild(Course.createTitle(t.name))
-            let lastType = t.taskGrp[0].type
-            const prev = []
-            t.taskGrp.forEach(e => {
+            const elem = document.createElement("div");
+            elem.classList.add(`course_grp`);
+            elem.appendChild(Course.createTitle(t.name));
+            let lastType = t.taskGrp[0].type;
+            const prev = [];
+            t.taskGrp.forEach((e) => {
                 if (e.type == lastType) {
-                    prev.push(e)
+                    prev.push(e);
                 } else {
-                    elem.appendChild(Course.writeContainerSum(prev))
-                    prev.length = 0
-                    prev.push(e)
-                    lastType = e.type
+                    elem.appendChild(Course.writeContainerSum(prev));
+                    prev.length = 0;
+                    prev.push(e);
+                    lastType = e.type;
                 }
-                elem.appendChild(this.createLink(e))
-            })
+                elem.appendChild(this.createLink(e));
+            });
             if (prev.length) {
-                elem.appendChild(Course.writeContainerSum(prev))
+                elem.appendChild(Course.writeContainerSum(prev));
             }
-            ret.push(elem)
-        })
+            ret.push(elem);
+        });
 
-        return ret
+        return ret;
     }
 
     static createTitle(name) {
-        const elem = document.createElement('span')
-        elem.classList.add('course_title')
-        elem.innerText = name
-        return elem
+        const elem = document.createElement("span");
+        elem.classList.add("course_title");
+        elem.innerText = name;
+        return elem;
     }
 
     static buildResultsLink() {
-        const res = document.createElement('div')
-        res.classList.add('course_results_grp', 'course_grp')
+        const res = document.createElement("div");
+        res.classList.add("course_results_grp", "course_grp");
 
-        const lin = document.createElement('a')
-        lin.href = buildLink("X=Results&Cou=" + args.Cou)
-        lin.classList.add('course_link')
+        const lin = document.createElement("a");
+        lin.href = buildLink("X=Results&Cou=" + args.Cou);
+        lin.classList.add("course_link");
 
-        const span = document.createElement('span')
-        span.classList.add('course_link_name')
-        span.innerText = "Výsledky"
+        const span = document.createElement("span");
+        span.classList.add("course_link_name");
+        span.innerText = "Výsledky";
 
-        lin.appendChild(span)
-        res.appendChild(lin)
-        return res
+        lin.appendChild(span);
+        res.appendChild(lin);
+        return res;
     }
 
     createLink(entry) {
-        let ret
+        let ret;
         if (entry.link) {
-            ret = document.createElement('a')
-            ret.href = entry.link
+            ret = document.createElement("a");
+            ret.href = entry.link;
             if (entry.type == "task") {
-                ret.addEventListener('click', this.taskLink.bind(this))
+                ret.addEventListener("click", this.taskLink.bind(this));
             }
         } else {
-            ret = document.createElement('span')
+            ret = document.createElement("span");
         }
 
-        ret.classList.add(
-            'course_link',
-            'course_link_type_' + entry.type
-        )
+        ret.classList.add("course_link", "course_link_type_" + entry.type);
 
         if (entry.disabled) {
-            ret.classList.add('course_disabled')
+            ret.classList.add("course_disabled");
         }
 
         if (entry.closes && entry.score) {
-            ret.classList.add(Course.isToday(entry.closes) && (entry.score == '0.00' || entry.score == '--') ? 'course_deadline_today' : 'course_link')
+            ret.classList.add(
+                Course.isToday(entry.closes) &&
+                    (entry.score == "0.00" || entry.score == "--")
+                    ? "course_deadline_today"
+                    : "course_link"
+            );
         }
 
-        ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`
-        ret.innerHTML += entry.score ? `<span class="course_link_score">${entry.score}</span>` : ''
-        ret.innerHTML += entry.opens ? `<span class="course_link_deadline">${entry.opens.toLocaleDateString("cs-CZ")}</span><br />` : ''
-        ret.innerHTML += entry.closes ? `<span class="course_link_deadline" style="font-weight: 600">🏁 ${entry.closes.toLocaleDateString("cs-CZ")} ${entry.closes.toLocaleTimeString("cs-CZ")}</span>` : ''
-        return ret
+        ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`;
+        ret.innerHTML += entry.score
+            ? `<span class="course_link_score">${entry.score}</span>`
+            : "";
+        ret.innerHTML += entry.opens
+            ? `<span class="course_link_deadline">${entry.opens.toLocaleDateString(
+                  "cs-CZ"
+              )}</span><br />`
+            : "";
+        ret.innerHTML += entry.closes
+            ? `<span class="course_link_deadline" style="font-weight: 600">🏁 ${entry.closes.toLocaleDateString(
+                  "cs-CZ"
+              )} ${entry.closes.toLocaleTimeString("cs-CZ")}</span>`
+            : "";
+        return ret;
     }
 
     static isToday(d) {
-        const today = new Date()
-        return d.getDate() == today.getDate() &&
+        const today = new Date();
+        return (
+            d.getDate() == today.getDate() &&
             d.getMonth() == today.getMonth() &&
             d.getFullYear() == today.getFullYear()
+        );
     }
 
     static writeContainerSum(tasks) {
         let sum = 0;
-        tasks.forEach(e => {
-            if (e.score && e.score != '--') {
-                sum += parseFloat(e.score)
+        tasks.forEach((e) => {
+            if (e.score && e.score != "--") {
+                sum += parseFloat(e.score);
             }
-        })
+        });
 
-        let sumElem = document.createElement("span")
-        sumElem.innerText = sum.toFixed(2)
-        sumElem.classList.add("course_link")
-        sumElem.classList.add("course_link_score_sum")
-        sumElem.classList.add('course_link_type_' + tasks[0].type)
-        return sumElem
+        let sumElem = document.createElement("span");
+        sumElem.innerText = sum.toFixed(2);
+        sumElem.classList.add("course_link");
+        sumElem.classList.add("course_link_score_sum");
+        sumElem.classList.add("course_link_type_" + tasks[0].type);
+        return sumElem;
     }
 
     static hideModal() {
-        let modal = document.querySelector('.modal')
+        let modal = document.querySelector(".modal");
         if (modal) {
-            modal.classList.remove('modal-show')
-            modal.classList.add('modal-hide')
+            modal.classList.remove("modal-show");
+            modal.classList.add("modal-hide");
         }
     }
 
     taskLink(event) {
         // skip middle button & control+click
-        if (event.which != 1 || event.ctrlKey) { return true }
+        if (event.which != 1 || event.ctrlKey) {
+            return true;
+        }
 
-        let target = event.target
-        while (target.getAttribute('href') == null) {
-            target = target.parentElement
+        let target = event.target;
+        while (target.getAttribute("href") == null) {
+            target = target.parentElement;
         }
         // only prevent default action if anything
         // is going to be done with the link
-        if (this.getTaskGroups(target.getAttribute('href'))) {
-            event.preventDefault()
-            event.stopPropagation()
-            return false
+        if (this.getTaskGroups(target.getAttribute("href"))) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
         }
     }
 
     getTaskGroups(link) {
-        if (link.includes('javascript:')) {
-            return false
+        if (link.includes("javascript:")) {
+            return false;
         }
-        Course.displaySpinner()
-        fetch(link).then(e => {
-            if (!e.ok || e.redirected) { return Promise.reject() }
-            return e.text()
-        })
+        Course.displaySpinner();
+        fetch(link)
+            .then((e) => {
+                if (!e.ok || e.redirected) {
+                    return Promise.reject();
+                }
+                return e.text();
+            })
             .then(Course.parseTaskGrp.bind(this))
             //.then(this.checkSingleLink.bind(this))
             .then(this.createModal.bind(this))
             .catch(() => {
-                window.location.assign(link)
-                Course.hideSpinner()
-            })
-        return true
+                window.location.assign(link);
+                Course.hideSpinner();
+            });
+        return true;
     }
 
     static hideSpinner() {
-        let spinner = document.getElementsByClassName("modal-spinner")[0]
-        if (spinner) { spinner.parentNode.removeChild(spinner) }
+        let spinner = document.getElementsByClassName("modal-spinner")[0];
+        if (spinner) {
+            spinner.parentNode.removeChild(spinner);
+        }
     }
 
     static trimDeadline(text) {
-        if (text.includes(' 23:59:59')) { return text.substr(0, text.lastIndexOf(' ')) }
-        return text
+        if (text.includes(" 23:59:59")) {
+            return text.substr(0, text.lastIndexOf(" "));
+        }
+        return text;
     }
 
     static displaySpinner() {
-        let spinner = document.createElement("div")
-        spinner.classList.add("modal-spinner")
-        document.body.insertBefore(spinner, document.querySelector('.course_container'))
+        let spinner = document.createElement("div");
+        spinner.classList.add("modal-spinner");
+        document.body.insertBefore(
+            spinner,
+            document.querySelector(".course_container")
+        );
     }
     /*
         // not stable enough
@@ -996,23 +1291,26 @@ class Course extends Logged {
     */
     createModal(data) {
         // create/get modal
-        let modal = document.querySelector('.modal')
+        let modal = document.querySelector(".modal");
         if (modal == null) {
-            modal = document.createElement('div')
-            modal.classList.add('modal')
-            document.body.insertBefore(modal, document.querySelector('.course_container'))
+            modal = document.createElement("div");
+            modal.classList.add("modal");
+            document.body.insertBefore(
+                modal,
+                document.querySelector(".course_container")
+            );
         }
-        modal.innerHTML = ""
-        modal.classList.remove('modal-hide')
-        modal.classList.add('modal-show')
-        let modalClose = document.createElement('div')
-        modalClose.classList.add('modal-close')
-        modalClose.innerText = '✖️'
-        modalClose.addEventListener('click', Course.hideModal.bind(this))
-        modal.appendChild(modalClose)
+        modal.innerHTML = "";
+        modal.classList.remove("modal-hide");
+        modal.classList.add("modal-show");
+        let modalClose = document.createElement("div");
+        modalClose.classList.add("modal-close");
+        modalClose.innerText = "✖️";
+        modalClose.addEventListener("click", Course.hideModal.bind(this));
+        modal.appendChild(modalClose);
 
-        let modalHeader = document.createElement('div')
-        modalHeader.classList.add('modal-header')
+        let modalHeader = document.createElement("div");
+        modalHeader.classList.add("modal-header");
         modalHeader.innerHTML = `
 <div class="modal-title">${data.info.title}</div>
 <div class="modal-score">
@@ -1021,14 +1319,14 @@ class Course extends Logged {
 <div class="modal-deadline">
     <span class="modal-deadline-norm">${data.info.deadline}</span><span class="modal-deadline-late">${data.info.lateDeadline}</span>
 </div>
-`
-        modal.appendChild(modalHeader)
-        let modalBody = document.createElement('div')
-        modalBody.classList.add("modal-body")
-        data.tasks.forEach(task => {
-            let modalLine = document.createElement('a')
-            modalLine.classList.add('modal-line')
-            modalLine.href = task.link
+`;
+        modal.appendChild(modalHeader);
+        let modalBody = document.createElement("div");
+        modalBody.classList.add("modal-body");
+        data.tasks.forEach((task) => {
+            let modalLine = document.createElement("a");
+            modalLine.classList.add("modal-line");
+            modalLine.href = task.link;
             modalLine.innerHTML = `
 <div class="mtask-title">${task.title}</div>
 <div class="mtask-sub">
@@ -1038,17 +1336,17 @@ class Course extends Logged {
     <span class="mtask-score-my">${task.score}</span><span class="mtask-score-max">${task.scoreMax}</span>
 </div>
 <div class="mtask-text">${task.text}</div>
-`
-            modalBody.appendChild(modalLine)
-        })
-        Course.hideSpinner()
-        modal.appendChild(modalBody)
+`;
+            modalBody.appendChild(modalLine);
+        });
+        Course.hideSpinner();
+        modal.appendChild(modalBody);
     }
 
     static parseTaskGrp(text) {
         // sanitize page
-        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
-        let doc = new DOMParser().parseFromString(text, 'text/html')
+        text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gim, "");
+        let doc = new DOMParser().parseFromString(text, "text/html");
 
         /* data schema
         {
@@ -1076,107 +1374,148 @@ class Course extends Logged {
         }
         */
 
-        let data = { 'info': {}, 'tasks': [] }
+        let data = { info: {}, tasks: [] };
 
         // gather global task info
-        data.info['title'] = doc.querySelector("body > center").innerText.trim()
-        data.info['deadline'] = Course.trimDeadline(doc.querySelector("#maintable > tbody > tr:nth-child(1) > td.tCell").innerText)
-        let deadline = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rCell > b"), score
+        data.info["title"] = doc
+            .querySelector("body > center")
+            .innerText.trim();
+        data.info["deadline"] = Course.trimDeadline(
+            doc.querySelector("#maintable > tbody > tr:nth-child(1) > td.tCell")
+                .innerText
+        );
+        let deadline = doc.querySelector(
+                "#maintable > tbody > tr:nth-child(2) > td.rCell > b"
+            ),
+            score;
         if (deadline) {
-            data.info['lateDeadline'] = '(' + Course.trimDeadline(deadline.innerText) + ')'
-            data.info['lateDeadlineInfo'] = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rCell").innerText.slice(data.info['lateDeadline'].length + 2, -1)
-            score = doc.querySelector("#maintable > tbody > tr:nth-child(3) > td.rbCell > b").innerText
+            data.info["lateDeadline"] =
+                "(" + Course.trimDeadline(deadline.innerText) + ")";
+            data.info["lateDeadlineInfo"] = doc
+                .querySelector(
+                    "#maintable > tbody > tr:nth-child(2) > td.rCell"
+                )
+                .innerText.slice(data.info["lateDeadline"].length + 2, -1);
+            score = doc.querySelector(
+                "#maintable > tbody > tr:nth-child(3) > td.rbCell > b"
+            ).innerText;
         } else {
-            data.info['lateDeadline'] = ""
-            data.info['lateDeadlineInfo'] = ""
-            score = doc.querySelector("#maintable > tbody > tr:nth-child(2) > td.rbCell > b").innerText
+            data.info["lateDeadline"] = "";
+            data.info["lateDeadlineInfo"] = "";
+            score = doc.querySelector(
+                "#maintable > tbody > tr:nth-child(2) > td.rbCell > b"
+            ).innerText;
         }
-        let scoreDivPos = score.indexOf('/')
-        data.info['score'] = score.substr(0, scoreDivPos - 3)
-        data.info['scoreMax'] = score.slice(scoreDivPos + 2, -2)
-        data.info['scoreInfo'] = doc.querySelector("#maintable > tbody > tr:nth-child(3) > td.rbCell").innerText.slice(score.length + 2, -1)
+        let scoreDivPos = score.indexOf("/");
+        data.info["score"] = score.substr(0, scoreDivPos - 3);
+        data.info["scoreMax"] = score.slice(scoreDivPos + 2, -2);
+        data.info["scoreInfo"] = doc
+            .querySelector("#maintable > tbody > tr:nth-child(3) > td.rbCell")
+            .innerText.slice(score.length + 2, -1);
 
         // gather info about individual assignments
-        doc.querySelectorAll('#maintable').forEach((e, i) => {  // Why are there multiple elements with same id?! :-(
-            if (!i) { return }
-            let task = {}
-            task['title'] = e.querySelector("tbody > tr:nth-child(1) > td.tbSepCell").innerText
-            task['link'] = e.querySelector("tbody > tr:nth-child(5) > td > div > div > a").href
-            task['text'] = e.querySelector("tbody > tr:nth-child(4) > td").innerText
-            let subms = e.querySelector("tbody > tr:nth-child(2) > td.rtCell").innerText
-            let submsSl = subms.indexOf('/'), submsPl = subms.indexOf('+')
-            task['sub'] = subms.substr(0, submsSl - 1)
-            task['subMax'] = subms.substr(submsSl + 2, submsPl - submsSl - 3)
-            task['subPen'] = subms.substr(submsPl + 2)
-            let taskScore = e.querySelector("tbody > tr:nth-child(3) > td.rbCell").innerText
-            let taskScoreDiv = taskScore.indexOf('/')
-            task['score'] = taskScore.substr(0, taskScoreDiv - 3)
-            task['scoreMax'] = taskScore.slice(taskScoreDiv + 2, -2)
+        doc.querySelectorAll("#maintable").forEach((e, i) => {
+            // Why are there multiple elements with same id?! :-(
+            if (!i) {
+                return;
+            }
+            let task = {};
+            task["title"] = e.querySelector(
+                "tbody > tr:nth-child(1) > td.tbSepCell"
+            ).innerText;
+            task["link"] = e.querySelector(
+                "tbody > tr:nth-child(5) > td > div > div > a"
+            ).href;
+            task["text"] = e.querySelector(
+                "tbody > tr:nth-child(4) > td"
+            ).innerText;
+            let subms = e.querySelector(
+                "tbody > tr:nth-child(2) > td.rtCell"
+            ).innerText;
+            let submsSl = subms.indexOf("/"),
+                submsPl = subms.indexOf("+");
+            task["sub"] = subms.substr(0, submsSl - 1);
+            task["subMax"] = subms.substr(submsSl + 2, submsPl - submsSl - 3);
+            task["subPen"] = subms.substr(submsPl + 2);
+            let taskScore = e.querySelector(
+                "tbody > tr:nth-child(3) > td.rbCell"
+            ).innerText;
+            let taskScoreDiv = taskScore.indexOf("/");
+            task["score"] = taskScore.substr(0, taskScoreDiv - 3);
+            task["scoreMax"] = taskScore.slice(taskScoreDiv + 2, -2);
 
-            data.tasks.push(task)
-        })
+            data.tasks.push(task);
+        });
 
-        return Promise.resolve(data)
+        return Promise.resolve(data);
     }
 }
 
-let parser
+let parser;
 
 const preload = () => {
-
-    document.body.removeAttribute('bgcolor')
-    document.body.removeAttribute('text')
+    document.body.removeAttribute("bgcolor");
+    document.body.removeAttribute("text");
 
     // 404
-    if (document.body.innerHTML == "") { parser = new Err404() }
+    if (document.body.innerHTML == "") {
+        parser = new Err404();
+    }
     // login
-    else if (document.querySelector('select[name=UID_UNIVERSITY]') != null) { parser = new Login() }
-    else if ('X' in args) {
-        switch (args['X']) {
+    else if (document.querySelector("select[name=UID_UNIVERSITY]") != null) {
+        parser = new Login();
+    } else if ("X" in args) {
+        switch (args["X"]) {
             case "FAQ":
             case "Preset":
             case "CompilersDryRuns":
             case "Extra":
             case "KNT":
             case "TaskGrp":
-                parser = new Logged()
-                break
+                parser = new Logged();
+                break;
             case "KNTQ":
-                parser = new Exam()
-                break
+                parser = new Exam();
+                break;
             case "Course":
-                parser = new Course()
-                break
+                parser = new Course();
+                break;
             case "Results":
-                parser = new Results()
-                break
+                parser = new Results();
+                break;
             case "Compiler":
             case "DryRun":
             case "Task":
             case "TaskU":
-                parser = new Task()
-                break
+                parser = new Task();
+                break;
             case "Main":
-                parser = new Main()
-                parser.initialise()
-                break
+                parser = new Main();
+                parser.initialise();
+                break;
             default: {
                 // determine if site is really main
-                let navlink = document.querySelector("span.navlink") // first time login
+                let navlink = document.querySelector("span.navlink"); // first time login
                 if (
-                    document.querySelector('span.navLink > a.navLink[href="?X=Main"]') || (
-                        navlink && navlink.innerText.includes("Než")
-                    )) { parser = new Logged() }
-                else { parser = new Main() }
+                    document.querySelector(
+                        'span.navLink > a.navLink[href="?X=Main"]'
+                    ) ||
+                    (navlink && navlink.innerText.includes("Než"))
+                ) {
+                    parser = new Logged();
+                } else {
+                    parser = new Main();
+                }
             }
-
         }
+    } else {
+        parser = new Main();
+        parser.initialise();
     }
-    else {
-        parser = new Main()
-        parser.initialise()
-    }
-}
+};
 
-if (!settingsLoaded) { window.addEventListener('ppt-loaded', preload) }
-else { preload() }
+if (!settingsLoaded) {
+    window.addEventListener("ppt-loaded", preload);
+} else {
+    preload();
+}

@@ -1,22 +1,26 @@
 body {
-    background-color:#1c1c1c;
-    color:#fff;
-    font-family:Tahoma;
-    font-size:10px;
-    margin:0;
+    background-color: #1c1c1c;
+    color: #fff;
+    font-family: Tahoma;
+    font-size: 10px;
+    margin: 0;
 }
-body > table td{
+body > table td {
     background-color: #008500;
 }
 form {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 }
-input,button,select,tr {
-    font-family:Tahoma;
-    font-size:12px;
+input,
+button,
+select,
+tr {
+    font-family: Tahoma;
+    font-size: 12px;
 }
-input,select {
+input,
+select {
     background-color: #000;
     color: #fff;
 }
@@ -35,613 +39,735 @@ input[type="radio"][disabled][checked]::before {
     content: "\26AB";
 }
 .menu {
-    background-color:#0CF;
-    cursor:default;
+    background-color: #0cf;
+    cursor: default;
 }
 .menuPane {
-    background-color:#0CF;
-    border:solid 1px #000;
-    display:none;
-    position:absolute;
+    background-color: #0cf;
+    border: solid 1px #000;
+    display: none;
+    position: absolute;
 }
 .menuSep {
-    background-color:#000;
-    font-size:0;
-    height:1px;
-    width:90%;
+    background-color: #000;
+    font-size: 0;
+    height: 1px;
+    width: 90%;
 }
-.item,.itemLo,.itemHi {
-    cursor:default;
-    font-family:Tahoma, Verdana, sans-serif;
-    font-size:12px;
-    padding:.2em .4em;
+.item,
+.itemLo,
+.itemHi {
+    cursor: default;
+    font-family: Tahoma, Verdana, sans-serif;
+    font-size: 12px;
+    padding: 0.2em 0.4em;
 }
 .itemLo {
-    font-weight:700;
+    font-weight: 700;
 }
 .itemHi {
-    background-color:#08C;
-    font-weight:700;
+    background-color: #08c;
+    font-weight: 700;
 }
 .navLink {
-    font-size:16px;
+    font-size: 16px;
 }
 .ac {
-    text-align:center;
+    text-align: center;
 }
 .al {
-    text-align:left;
+    text-align: left;
 }
 .ar {
-    text-align:right;
+    text-align: right;
 }
 .w20 {
-    width:20px;
+    width: 20px;
 }
 .w50 {
-    width:50px;
+    width: 50px;
 }
 .w65 {
-    width:65px;
+    width: 65px;
 }
 .w70 {
-    width:70px;
+    width: 70px;
 }
 .w80 {
-    width:80px;
+    width: 80px;
 }
 .w100 {
-    width:100px;
+    width: 100px;
 }
 .w120 {
-    width:120px;
+    width: 120px;
 }
 .w200 {
-    width:200px;
+    width: 200px;
 }
 .w270 {
-    width:270px;
+    width: 270px;
 }
 .w450 {
-    width:450px;
+    width: 450px;
 }
 .fw {
-    width:100%;
+    width: 100%;
 }
 .w80p {
-    width:80%;
+    width: 80%;
 }
 .w50p {
-    width:50%;
+    width: 50%;
 }
 .float {
-    float:left;
+    float: left;
 }
 .fntSmall {
-    font-size:8px;
+    font-size: 8px;
 }
 .menuList {
-    font-size:16px;
-    font-weight:700;
+    font-size: 16px;
+    font-weight: 700;
 }
 .menuListDis {
-    color:#898989;
-    font-size:16px;
-    font-weight:700;
+    color: #898989;
+    font-size: 16px;
+    font-weight: 700;
 }
 .outBox {
-    background-color:#000;
+    background-color: #000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:2px;
+    border-style: solid;
+    border-width: 2px;
 }
 .outBox1 {
-    background-color:#000;
+    background-color: #000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:0 2px 2px;
+    border-style: solid;
+    border-width: 0 2px 2px;
 }
 .titleBox {
-    background-color:#000080;
-    border-color:#079 #0BE #0BE #079;
-    border-style:solid;
-    border-width:1px;
-    font-weight:700;
+    background-color: #000080;
+    border-color: #079 #0be #0be #079;
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 700;
 }
 .bigTitleBox {
-    background-color:#000080;
-    border-color:#079 #0BE #0BE #079;
-    border-style:solid;
-    border-width:1px;
-    font-size:20px;
-    font-weight:700;
-    text-align:center;
+    background-color: #000080;
+    border-color: #079 #0be #0be #079;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
 }
 .topLayout {
-    width:94%;
+    width: 94%;
 }
 .insBox {
-    width:400px;
+    width: 400px;
 }
 .insLab {
-    background-color:#000;
+    background-color: #000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
+    border-style: solid;
+    border-width: 1px;
 }
-.lBox,.mBox,.mtBox,.mbBox,.rBox {
-    background-color:#000;
+.lBox,
+.mBox,
+.mtBox,
+.mbBox,
+.rBox {
+    background-color: #000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:2px;
-    padding:2px;
+    border-style: solid;
+    border-width: 2px;
+    padding: 2px;
 }
 .mtBox {
-    border-bottom-width:0;
-    border-left-width:0;
-    border-right-width:0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
 }
 .mbBox {
-    border-left-width:0;
-    border-right-width:0;
-    border-top-width:0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
 }
-.Cell,.lCell,.rCell,.tCell,.bCell,.ltCell,.rtCell,.lbCell,.rbCell,.ltbCell,.rtbCell,.lrbCell,.lrtCell,.tbCell,.lrCell,.lrtbCell {
-    background-color:#000;
+.Cell,
+.lCell,
+.rCell,
+.tCell,
+.bCell,
+.ltCell,
+.rtCell,
+.lbCell,
+.rbCell,
+.ltbCell,
+.rtbCell,
+.lrbCell,
+.lrtCell,
+.tbCell,
+.lrCell,
+.lrtbCell {
+    background-color: #000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:0;
-    padding:2px;
+    border-style: solid;
+    border-width: 0;
+    padding: 2px;
 }
-.tCell,.ltCell,.rtCell,.ltbCell,.rtbCell,.lrtCell,.tbCell,.lrtbCell {
-    border-top-width:1px;
+.tCell,
+.ltCell,
+.rtCell,
+.ltbCell,
+.rtbCell,
+.lrtCell,
+.tbCell,
+.lrtbCell {
+    border-top-width: 1px;
 }
-.bCell,.lbCell,.rbCell,.ltbCell,.rtbCell,.lrbCell,.tbCell,.lrtbCell {
-    border-bottom-width:1px;
+.bCell,
+.lbCell,
+.rbCell,
+.ltbCell,
+.rtbCell,
+.lrbCell,
+.tbCell,
+.lrtbCell {
+    border-bottom-width: 1px;
 }
 tr.resRow {
-    background-color:#000;
+    background-color: #000;
 }
 tr.resRow:hover {
-    background-color:#444;
+    background-color: #444;
 }
 tr.resRow td {
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px 0;
-    padding:2px;
-    text-align:right;
+    border-style: solid;
+    border-width: 1px 0;
+    padding: 2px;
+    text-align: right;
 }
 tr.resStat td {
-    background-color:#989889;
+    background-color: #989889;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    font-weight:400;
-    padding-left:3px;
-    padding-right:3px;
-    padding-top:3px;
-    text-align:right;
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 400;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    text-align: right;
 }
-.lrtbSepCell,.ltbSepCell,.rtbSepCell,.tbSepCell {
-    background-color:#333;
+.lrtbSepCell,
+.ltbSepCell,
+.rtbSepCell,
+.tbSepCell {
+    background-color: #333;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    padding:2px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
 }
-.lrtbOkSepCell,.ltbOkSepCell,.rtbOkSepCell,.tbOkSepCell {
-    background-color:#00C000;
+.lrtbOkSepCell,
+.ltbOkSepCell,
+.rtbOkSepCell,
+.tbOkSepCell {
+    background-color: #00c000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    padding:2px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
 }
-.lrtbHalfSepCell,.ltbHalfSepCell,.rtbHalfSepCell,.tbHalfSepCell {
-    background-color:#80C000;
+.lrtbHalfSepCell,
+.ltbHalfSepCell,
+.rtbHalfSepCell,
+.tbHalfSepCell {
+    background-color: #80c000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    padding:2px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
 }
-.lrtbWaitSepCell,.ltbWaitSepCell,.rtbWaitSepCell,.tbWaitSepCell {
-    background-color:#C0C000;
+.lrtbWaitSepCell,
+.ltbWaitSepCell,
+.rtbWaitSepCell,
+.tbWaitSepCell {
+    background-color: #c0c000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    padding:2px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
 }
-.lrtbXSepCell,.ltbXSepCell,.rtbXSepCell,.tbXSepCell {
-    background-color:#C00080;
+.lrtbXSepCell,
+.ltbXSepCell,
+.rtbXSepCell,
+.tbXSepCell {
+    background-color: #c00080;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    padding:2px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
 }
-.lrtbFailSepCell,.ltbFailSepCell,.rtbFailSepCell,.tbFailSepCell {
-    background-color:#C04000;
+.lrtbFailSepCell,
+.ltbFailSepCell,
+.rtbFailSepCell,
+.tbFailSepCell {
+    background-color: #c04000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:0;
-    padding:2px;
+    border-style: solid;
+    border-width: 0;
+    padding: 2px;
 }
-.lrtbEditSepCell,.ltbEditSepCell,.rtbEditSepCell,.tbEditSepCell {
-    background-color:#09c;
+.lrtbEditSepCell,
+.ltbEditSepCell,
+.rtbEditSepCell,
+.tbEditSepCell {
+    background-color: #09c;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    padding:2px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
 }
-input.std,input.stdDis,input.test,input.testDis,input.flt,input.fltDis,input.seek,input.seekDis,input.err {
-    border-color:#6C6C61 #B2B2A7 #B2B2A7 #6C6C61;
-    border-style:solid;
-    border-width:1px;
-    color:#FFF;
-    font-size:12px;
-    font-weight:700;
+input.std,
+input.stdDis,
+input.test,
+input.testDis,
+input.flt,
+input.fltDis,
+input.seek,
+input.seekDis,
+input.err {
+    border-color: #6c6c61 #b2b2a7 #b2b2a7 #6c6c61;
+    border-style: solid;
+    border-width: 1px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
 }
-input.std,input.test {
-    background-color:#09C;
+input.std,
+input.test {
+    background-color: #09c;
 }
 input.err {
-    background-color:#c00000;
+    background-color: #c00000;
 }
-input.stdDis,input.testDis {
-    background-color:#989889;
+input.stdDis,
+input.testDis {
+    background-color: #989889;
 }
-select.std,select.stdDis,select.test,select.flt {
-    font-family:Courier;
-    font-size:12px;
+select.std,
+select.stdDis,
+select.test,
+select.flt {
+    font-family: Courier;
+    font-size: 12px;
 }
 input.fltDis {
-    background-color:#989889;
-    color:#fFF;
+    background-color: #989889;
+    color: #fff;
 }
 input.flt {
-    background-color:#989889;
-    color:#000;
+    background-color: #989889;
+    color: #000;
 }
 input.seekDis {
-    background-color:#989889;
-    color:#fFF;
-    font-size:10px;
+    background-color: #989889;
+    color: #fff;
+    font-size: 10px;
 }
 input.seek {
-    background-color:#989889;
-    color:#000;
-    font-size:10px;
+    background-color: #989889;
+    color: #000;
+    font-size: 10px;
 }
 select.seek {
-    font-family:Courier;
-    font-size:10px;
+    font-family: Courier;
+    font-size: 10px;
 }
 .textStd {
-    color:#000;
+    color: #000;
 }
 .textDis {
-    color:gray;
+    color: gray;
 }
 .dupG {
-    color:#ff0;
+    color: #ff0;
 }
 .dupC {
-    color:#c00000;
+    color: #c00000;
 }
-.grayBox,.greenBox,.redBox,.yellowBox,.legendBox {
-    border-color:#666 #FFF #FFF #666;
-    border-style:solid;
-    border-width:1px;
-    display:block;
-    height:8px;
-    width:8px;
+.grayBox,
+.greenBox,
+.redBox,
+.yellowBox,
+.legendBox {
+    border-color: #666 #fff #fff #666;
+    border-style: solid;
+    border-width: 1px;
+    display: block;
+    height: 8px;
+    width: 8px;
 }
 .grayBox {
-    background-color:silver;
+    background-color: silver;
 }
 .greenBox {
-    background-color:#0f0;
+    background-color: #0f0;
 }
 .redBox {
-    background-color:red;
+    background-color: red;
 }
 .yellowBox {
-    background-color:#ff0;
+    background-color: #ff0;
 }
 .legendBox {
-    margin:3px;
+    margin: 3px;
 }
 .nOk:before {
-    color:red;
-    content:"\2718";
-    float:left;
+    color: red;
+    content: "\2718";
+    float: left;
 }
 .wOk:before {
-    color:#f0f;
-    content:"\2718";
-    float:left;
+    color: #f0f;
+    content: "\2718";
+    float: left;
 }
 .yOk:before {
-    color:green;
-    content:"\2714";
-    float:left;
+    color: green;
+    content: "\2714";
+    float: left;
 }
 .oOk:before {
-    color:#FF0;
-    content:"\2714";
-    float:left;
+    color: #ff0;
+    content: "\2714";
+    float: left;
 }
 .but2 {
-    background-color:#333;
-    border-color:#666 #222 #222 #666;
-    border-style:solid;
-    border-width:1px;
-    display:block;
-    padding-left:5px;
-    padding-right:5px;
-    text-align:center;
+    background-color: #333;
+    border-color: #666 #222 #222 #666;
+    border-style: solid;
+    border-width: 1px;
+    display: block;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
 }
 .butJSDis {
-    color:#404040;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    color: #404040;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butJSDel {
-    color:#909;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    color: #909;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butJSDel:hover {
-    background-color:#909;
-    color:#fc0;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    background-color: #909;
+    color: #fc0;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butLink:hover {
-    color:#FFF;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    color: #fff;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butDel {
-    color:red;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    color: red;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butDel:hover {
-    background-color:red;
-    color:#fc0;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    background-color: red;
+    color: #fc0;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butWarn {
-    color:#ff0;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    color: #ff0;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butWarn:hover {
-    background-color:#FF0;
-    color:#000;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+    background-color: #ff0;
+    color: #000;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
 a.butSortHi {
-    color:#00F;
-    font-weight:700;
-    text-decoration:none;
+    color: #00f;
+    font-weight: 700;
+    text-decoration: none;
 }
 .disButton {
-    background-color:#444;
-    border-color:#FFF #666 #666 #FFF;
-    border-style:solid;
-    border-width:1px;
-    color:gray;
-    font-weight:400;
-    height:16px;
-    width:120px;
+    background-color: #444;
+    border-color: #fff #666 #666 #fff;
+    border-style: solid;
+    border-width: 1px;
+    color: gray;
+    font-weight: 400;
+    height: 16px;
+    width: 120px;
 }
 .delButton {
-    background-color:#444;
-    border-color:#FFF #666 #666 #FFF;
-    border-style:solid;
-    border-width:1px;
-    color:red;
-    font-weight:700;
-    height:16px;
-    width:120px;
+    background-color: #444;
+    border-color: #fff #666 #666 #fff;
+    border-style: solid;
+    border-width: 1px;
+    color: red;
+    font-weight: 700;
+    height: 16px;
+    width: 120px;
 }
 .fltButton {
-    background-color:#989889;
-    border-color:#B2B2A7 #6C6C61 #6C6C61 #B2B2A7;
-    border-style:solid;
-    border-width:1px;
-    color:#000;
-    font-weight:700;
-    height:16px;
-    width:120px;
+    background-color: #989889;
+    border-color: #b2b2a7 #6c6c61 #6c6c61 #b2b2a7;
+    border-style: solid;
+    border-width: 1px;
+    color: #000;
+    font-weight: 700;
+    height: 16px;
+    width: 120px;
 }
 .seekButton {
-    background-color:#989889;
-    border-color:#B2B2A7 #6C6C61 #6C6C61 #B2B2A7;
-    border-style:solid;
-    border-width:1px;
-    color:#000;
-    font-weight:700;
-    height:16px;
-    width:80px;
+    background-color: #989889;
+    border-color: #b2b2a7 #6c6c61 #6c6c61 #b2b2a7;
+    border-style: solid;
+    border-width: 1px;
+    color: #000;
+    font-weight: 700;
+    height: 16px;
+    width: 80px;
 }
 .flatButton {
-    background-color:#000;
+    background-color: #000;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    text-align:center;
+    border-style: solid;
+    border-width: 1px;
+    text-align: center;
 }
 .hdrUp {
-    background-color:#2e2e2e;
+    background-color: #2e2e2e;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    height:15px;
-    padding-left:3px;
-    padding-right:3px;
-    padding-top:3px;
+    border-style: solid;
+    border-width: 1px;
+    height: 15px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
 }
 .hdrDown {
-    background-color:#2e2e2e;
-    border-color:#666 #ccc #ccc #666;
-    border-style:solid;
-    border-width:1px;
-    height:15px;
-    padding-left:3px;
-    padding-right:3px;
-    padding-top:3px;
+    background-color: #2e2e2e;
+    border-color: #666 #ccc #ccc #666;
+    border-style: solid;
+    border-width: 1px;
+    height: 15px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
 }
 .hdrDis {
-    background-color:#2e2e2e;
+    background-color: #2e2e2e;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    font-weight:400;
-    height:15px;
-    padding-left:3px;
-    padding-right:3px;
-    padding-top:3px;
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 400;
+    height: 15px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
 }
 .hdrLink {
-    display:block;
-    width:100%;
+    display: block;
+    width: 100%;
 }
 img.border {
-    border-color:#6C6C61 #B2B2A7 #B2B2A7 #6C6C61;
-    border-style:solid;
-    border-width:1px;
+    border-color: #6c6c61 #b2b2a7 #b2b2a7 #6c6c61;
+    border-style: solid;
+    border-width: 1px;
 }
 img {
     filter: invert(100%);
-    transition: filter .2s ease;
+    transition: filter 0.2s ease;
 }
 img:hover {
     filter: invert(0%);
     background: #fff;
 }
 .visY {
-    visibility:visible;
+    visibility: visible;
 }
 .visN {
-    visibility:hidden;
+    visibility: hidden;
 }
 table.header {
-    background-color:#000080;
-    font-size:16px;
-    font-weight:700;
+    background-color: #000080;
+    font-size: 16px;
+    font-weight: 700;
 }
 td.header {
-    font-size:16px;
-    font-weight:700;
-    padding:2px;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 2px;
 }
 .textOk {
-    color:#009940;
-    font-weight:700;
+    color: #009940;
+    font-weight: 700;
 }
 .textWarn {
-    color:#DD0;
-    font-weight:700;
+    color: #dd0;
+    font-weight: 700;
 }
 .textCrit {
-    color:#994040;
-    font-weight:700;
+    color: #994040;
+    font-weight: 700;
 }
 .textOther {
-    color:gray;
-    font-weight:700;
+    color: gray;
+    font-weight: 700;
 }
-a,a.butSortLo {
-    color:#fff;
-    font-weight:700;
-    text-decoration:none;
+a,
+a.butSortLo {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
 }
-a:hover,a.butSortLo:hover,a.butSortHi:hover {
-    color:#FFF;
-    font-weight:700;
-    text-decoration:none;
+a:hover,
+a.butSortLo:hover,
+a.butSortHi:hover {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
 }
-.w35,.w40 {
-    width:40px;
+.w35,
+.w40 {
+    width: 40px;
 }
-.lBox,.ltbSepCell,.ltbOkSepCell,.ltbHalfSepCell,.ltbWaitSepCell,.ltbXSepCell,.ltbFailSepCell,.ltbEditSepCell {
-    border-right-width:0;
+.lBox,
+.ltbSepCell,
+.ltbOkSepCell,
+.ltbHalfSepCell,
+.ltbWaitSepCell,
+.ltbXSepCell,
+.ltbFailSepCell,
+.ltbEditSepCell {
+    border-right-width: 0;
 }
-.mBox,.tbSepCell,.tbOkSepCell,.tbHalfSepCell,.tbWaitSepCell,.tbXSepCell,.tbFailSepCell,.tbEditSepCell {
-    border-left-width:0;
-    border-right-width:0;
+.mBox,
+.tbSepCell,
+.tbOkSepCell,
+.tbHalfSepCell,
+.tbWaitSepCell,
+.tbXSepCell,
+.tbFailSepCell,
+.tbEditSepCell {
+    border-left-width: 0;
+    border-right-width: 0;
 }
-.rBox,.rtbSepCell,.rtbOkSepCell,.rtbHalfSepCell,.rtbWaitSepCell,.rtbXSepCell,.rtbFailSepCell,.rtbEditSepCell {
-    border-left-width:0;
+.rBox,
+.rtbSepCell,
+.rtbOkSepCell,
+.rtbHalfSepCell,
+.rtbWaitSepCell,
+.rtbXSepCell,
+.rtbFailSepCell,
+.rtbEditSepCell {
+    border-left-width: 0;
 }
-.lCell,.ltCell,.lbCell,.ltbCell,.lrbCell,.lrtCell,.lrCell,.lrtbCell,tr.resRow td:first-child {
-    border-left-width:1px;
+.lCell,
+.ltCell,
+.lbCell,
+.ltbCell,
+.lrbCell,
+.lrtCell,
+.lrCell,
+.lrtbCell,
+tr.resRow td:first-child {
+    border-left-width: 1px;
 }
-.rCell,.rtCell,.rbCell,.rtbCell,.lrbCell,.lrtCell,.lrCell,.lrtbCell,tr.resRow td:last-child {
-    border-right-width:1px;
+.rCell,
+.rtCell,
+.rbCell,
+.rtbCell,
+.lrbCell,
+.lrtCell,
+.lrCell,
+.lrtbCell,
+tr.resRow td:last-child {
+    border-right-width: 1px;
 }
-tr.resHdr td,.hdrCell {
-    background-color:#2e2e2e;
+tr.resHdr td,
+.hdrCell {
+    background-color: #2e2e2e;
     border-color: #777 #333 #333 #555;
-    border-style:solid;
-    border-width:1px;
-    font-weight:400;
-    padding-left:3px;
-    padding-right:3px;
-    padding-top:3px;
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 400;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
 }
-.textHi,.pageCount {
-    color:maroon;
+.textHi,
+.pageCount {
+    color: maroon;
 }
-.dupS,.dupA {
-    color:#c000c0;
+.dupS,
+.dupA {
+    color: #c000c0;
 }
-.but1,.outButton {
-    background-color:#000;
-    padding:1px;
+.but1,
+.outButton {
+    background-color: #000;
+    padding: 1px;
 }
-a.butJS,a.butTest {
-    color:#00f;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+a.butJS,
+a.butTest {
+    color: #00f;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
-a.butJS:hover,a.butTest:hover,a.butLink {
-    color:#ccc;
-    display:block;
-    font-weight:700;
-    text-decoration:none;
-    width:100%;
+a.butJS:hover,
+a.butTest:hover,
+a.butLink {
+    color: #ccc;
+    display: block;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
 }
-.updButton,.insButton {
-    background-color:#444;
-    border-color:#FFF #666 #666 #FFF;
-    border-style:solid;
-    border-width:1px;
-    color:#fff;
-    font-weight:700;
-    height:16px;
-    width:120px;
+.updButton,
+.insButton {
+    background-color: #444;
+    border-color: #fff #666 #666 #fff;
+    border-style: solid;
+    border-width: 1px;
+    color: #fff;
+    font-weight: 700;
+    height: 16px;
+    width: 120px;
     cursor: pointer;
 }
