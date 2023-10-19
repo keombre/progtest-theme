@@ -2,7 +2,7 @@ chrome.tabs.query(
     { active: true, currentWindow: true },
     function callback(tabs) {
         if (
-            tabs[0].url.indexOf("://progtest.fit.cvut.cz") == -1 &&
+            tabs[0]?.url?.indexOf("://progtest.fit.cvut.cz") == -1 &&
             tabs[0].url.indexOf("://ptmock.localhost") == -1
         ) {
             if (tabs[0].url.indexOf("://newtab") != -1) {
@@ -14,15 +14,15 @@ chrome.tabs.query(
                 chrome.tabs.create({ url: "https://progtest.fit.cvut.cz/" });
             }
         }
-    }
+    },
 );
 
 function saveOptions() {
-    var theme = document.getElementById("theme").value;
-    var hide = document.getElementById("dropdown").checked;
-    var notify = document.getElementById("notifications").checked;
-    var highlight = document.getElementById("highlighting").checked;
-    var sound = document.getElementById("sounds").checked;
+    let theme = document?.getElementById("theme")?.value;
+    let hide = document.getElementById("dropdown").checked;
+    let notify = document.getElementById("notifications").checked;
+    let highlight = document.getElementById("highlighting").checked;
+    let sound = document.getElementById("sounds").checked;
     chrome.storage.sync.set(
         {
             selectedTheme: theme,
@@ -32,13 +32,13 @@ function saveOptions() {
             sounds: sound,
         },
         function () {
-            var status = document.getElementById("status");
+            let status = document.getElementById("status");
             status.textContent = "Option saved";
             chrome.tabs.reload({ bypassCache: true });
             setTimeout(function () {
                 status.textContent = "";
             }, 1500);
-        }
+        },
     );
 }
 
@@ -60,12 +60,12 @@ function restoreOptions() {
                 items.highlighting;
             document.getElementById("sounds").checked = items.sounds;
             hideDropdown();
-        }
+        },
     );
 }
 
 function hideDropdown() {
-    var dd = document.getElementById("config");
+    let dd = document.getElementById("config");
     if (document.getElementById("theme").value.includes("orig")) {
         dd.style.display = "none";
     } else {

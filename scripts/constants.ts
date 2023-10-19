@@ -1,0 +1,13 @@
+export const SRC_DIR = "./src" as const;
+export const ENTRYPOINTS = [
+    "./src/background.js",
+    "./src/content/end.js",
+    "./src/content/start.js",
+    "./src/options/options.js",
+] as const;
+
+export const BUILD_DIR = "./build" as const;
+export const OUT_DIR = "./out" as const;
+
+export const CHROME_MANIFEST = "./manifests/chrome.json" as const;
+export const FIREFOX_MANIFEST = "./manifests/firefox.json" as const;

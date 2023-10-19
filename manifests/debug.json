@@ -18,7 +18,7 @@
         }
     ],
     "background": {
-        "scripts": ["background.js", "reloader.js"],
+        "scripts": ["background.js", "crx-hot-reload.js"],
         "persistent": true
     },
     "permissions": [
@@ -38,7 +38,5 @@
     "icons": {
         "128": "icon.png"
     },
-    "web_accessible_resources": [
-        "themes/*"
-    ]
+    "web_accessible_resources": ["themes/*"]
 }

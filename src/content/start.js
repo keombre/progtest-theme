@@ -1,15 +1,12 @@
 "use strict";
 
-/* exported theme, dropdown, displayNotifications, highlighting, sounds, settingsLoaded, toggleDropDown, 
-uniChange, moveInputLabel, loginFocusOut, loginFocus */
-
-var theme;
-var dropdown;
-var displayNotifications;
-var highlighting;
-var sounds;
-var settingsLoaded = false;
-var pttLoaded = new Event("ptt-loaded");
+export let theme;
+export let dropdown;
+export let displayNotifications;
+export let highlighting;
+export let sounds;
+export let settingsLoaded = false;
+let pttLoaded = new Event("ptt-loaded");
 
 const loader = `
 <div id="loadWrapper">
@@ -63,7 +60,7 @@ const addLoader = () => {
     });
 };
 
-const toggleDropDown = (e) => {
+export const toggleDropDown = (e) => {
     if (e.button == 2) {
         return;
     }
@@ -83,7 +80,7 @@ const toggleDropDown = (e) => {
     }
 };
 
-const uniChange = (event) => {
+export const uniChange = (event) => {
     let c = 0,
         i;
     document.getElementById("uniSel").childNodes.forEach((e) => {
@@ -102,12 +99,12 @@ const uniChange = (event) => {
     select.dispatchEvent(trigger);
 };
 
-const moveInputLabel = (event) => {
+export const moveInputLabel = (event) => {
     event.target.setAttribute("moved", true);
     event.target.parentNode.parentNode.children[1].children[0].focus();
 };
 
-const loginFocusOut = (event) => {
+export const loginFocusOut = (event) => {
     if (event.target.value == "") {
         event.target.parentNode.parentNode.children[0].children[0].removeAttribute(
             "moved"
@@ -115,7 +112,7 @@ const loginFocusOut = (event) => {
     }
 };
 
-const loginFocus = (event) => {
+export const loginFocus = (event) => {
     event.target.parentNode.parentNode.children[0].children[0].click();
 };
 
@@ -137,7 +134,7 @@ chrome.runtime.sendMessage({ type: "config" }, function (response) {
     window.dispatchEvent(pttLoaded);
 
     // add favicon
-    var favicon =
+    let favicon =
         document.querySelector("link[rel*='icon']") ||
         document.createElement("link");
     favicon.type = "image/x-icon";

@@ -2,9 +2,16 @@
     "name": "progtest-theme",
     "version": "1.1.6",
     "description": "Theme manager for ProgTest",
-    "main": "background.js",
+    "main": "src/background.js",
     "scripts": {
-        "lint": "npx csslint --quiet src/themes/*.css & npx eslint src"
+        "build": "bun run scripts/run_build.ts",
+        "build:firefox": "bun build && bun run scripts/package.ts --firefox",
+        "build:chrome": "bun build && bun run scripts/package.ts --chrome",
+        "dev": "bun run scripts/dev.ts",
+        "lint": "stylelint **/*.css; eslint .",
+        "lint:fix": "prettier --write .; stylelint **/*.css --fix; eslint . --fix",
+        "sign:firefox": "bun build && bun run scripts/package.ts --firefox --sign",
+        "version": "bun run scripts/version.ts"
     },
     "repository": {
         "type": "git",
@@ -17,15 +24,22 @@
     },
     "homepage": "https://github.com/keombre/progtest-theme",
     "devDependencies": {
-        "@babel/cli": "^7.11.6",
-        "@babel/core": "^7.11.6",
-        "@babel/plugin-proposal-class-properties": "^7.10.4",
-        "babel-eslint": "^10.1.0",
-        "csslint": "^1.0.5",
-        "eslint": "^6.8.0",
-        "eslint-config-pedant": "^1.0.1",
-        "github-api": "^3.3.0",
-        "minimist": ">=1.2.3",
-        "web-ext": "^4.3.0"
+        "@babel/cli": "^7.23.0",
+        "@babel/core": "^7.23.2",
+        "@types/archiver": "^5.3.4",
+        "@types/chrome": "^0.0.248",
+        "@types/minimist": "^1.2.4",
+        "@types/web": "^0.0.117",
+        "@typescript-eslint/eslint-plugin": "^6.8.0",
+        "@typescript-eslint/parser": "^6.8.0",
+        "archiver": "^6.0.1",
+        "bun-types": "^1.0.6",
+        "eslint": "^8.51.0",
+        "minimist": ">=1.2.8",
+        "prettier": "^3.0.3",
+        "stylelint": "^15.11.0",
+        "stylelint-config-standard": "^34.0.0",
+        "typescript": "^5.2.2",
+        "web-ext": "^7.8.0"
     }
 }

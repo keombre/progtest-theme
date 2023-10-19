@@ -417,7 +417,12 @@ class Main extends Logged {
             let link = null;
             try {
                 link = subjectInfo["courses"][e[2]]["homepage"];
-            } catch (_) {}
+            } catch (e) {
+                console.info(
+                    "Could not get link from Courses for subject: ",
+                    e
+                );
+            }
 
             // construct fallback URL
             if (
@@ -848,7 +853,7 @@ class Task extends Logged {
     }
 
     static convertMemory(size) {
-        var i = Math.floor(Math.log(size) / Math.log(1024));
+        let i = Math.floor(Math.log(size) / Math.log(1024));
         return (
             (size / Math.pow(1024, i)).toFixed(0) * 1 +
             " " +
@@ -925,7 +930,9 @@ class Task extends Logged {
                     new Audio(
                         chrome.runtime.getURL("./themes/assets/turret.ogg")
                     ).play();
-                } catch {}
+                } catch {
+                    console.error("Failed to play sound");
+                }
             }
         }
         storage.setItem("upload", false);
@@ -948,7 +955,7 @@ class Results extends Logged {
         let c = [],
             i = 0;
         let qsel = document.querySelector("tr.resHdr:nth-child(1)");
-        if (typeof qsel != undefined && qsel != null) {
+        if (qsel != null) {
             qsel.childNodes.forEach((e) => {
                 c.push((i += parseInt(e.getAttribute("colspan") || 1)));
             });

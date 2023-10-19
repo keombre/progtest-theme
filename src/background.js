@@ -1,8 +1,8 @@
-var theme = "automatic";
-var dropdown = true;
-var displayNotifications = true;
-var highlighting = true;
-var sounds = true;
+let theme = "automatic";
+let dropdown = true;
+let displayNotifications = true;
+let highlighting = true;
+let sounds = true;
 
 const updateConfig = () => {
     chrome.storage.sync.get(
@@ -19,7 +19,7 @@ const updateConfig = () => {
             displayNotifications = items.notifications;
             highlighting = items.highlighting;
             sounds = items.sounds;
-        }
+        },
     );
 };
 
@@ -54,5 +54,5 @@ chrome.webRequest.onBeforeRequest.addListener(
             "*://ptmock.localhost/css.css",
         ],
     },
-    ["blocking"]
+    ["blocking"],
 );
