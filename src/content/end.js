@@ -195,7 +195,12 @@ class Logged {
     static getLinksFromHTML(text, href) {
         text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '')
         let doc = new DOMParser().parseFromString(text, 'text/html')
-        return doc.querySelectorAll(`.butLink[href*="${href}"]`)
+        const allLinks = doc.querySelectorAll(`.butLink[href*="${href}"]`)
+        const links = []
+        allLinks.forEach((link) => {
+            if (link.href && !link.href.includes('javascript:')) links.push(link)
+        })
+        return links
     }
 
     static async taskSpider() {
@@ -752,11 +757,14 @@ class Course extends Logged {
         const scores = []
         document.querySelectorAll('table.topLayout > tbody > tr > .lBox > span').forEach(e => {
             const row = e.parentElement.parentElement
+            const taskName = row.children[1].querySelector('.menuListDis')
+            const points = row.childElementCount === 4 ? row.children[2].querySelector('.menuListDis') : null;
+            const link = row.children[row.childElementCount - 1].querySelector('a.butLink')
             scores.push({
-                "name": e.innerText,
-                "score": row.childElementCount == 4 ? row.children[1].innerText : '--',
+                "name": taskName?.innerText,
+                "score": points?.innerText ?? '--',
                 "disabled": e.classList.contains("menuListDis"),
-                "link": row.querySelector('.butLink')?.href
+                "link": link?.href
             })
         })
 
