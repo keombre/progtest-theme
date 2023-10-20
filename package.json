@@ -5,12 +5,12 @@
     "main": "src/background.js",
     "scripts": {
         "build": "bun run scripts/run_build.ts",
-        "build:firefox": "bun build && bun run scripts/package.ts --firefox",
-        "build:chrome": "bun build && bun run scripts/package.ts --chrome",
+        "build:firefox": "bun run build && bun run scripts/package.ts --firefox",
+        "build:chrome": "bun run build && bun run scripts/package.ts --chrome",
         "dev": "bun run scripts/dev.ts",
         "lint": "stylelint **/*.css; eslint .",
         "lint:fix": "prettier --write .; stylelint **/*.css --fix; eslint . --fix",
-        "sign:firefox": "bun build && bun run scripts/package.ts --firefox --sign",
+        "sign:firefox": "bun run build && bun run scripts/package.ts --firefox --sign",
         "version": "bun run scripts/version.ts"
     },
     "repository": {
