@@ -41,11 +41,23 @@ async function incrementVersionInFile(
 async function addUpdateToList(updateFile: string) {
     const packageJson = await Bun.file("./package.json").json();
     const version = packageJson.version as string;
-    const updateJson = await Bun.file(updateFile).json();
-    updateJson.updates.push({
+
+    const firefoxManifest = await Bun.file(FIREFOX_MANIFEST).json();
+    const appId = firefoxManifest.applications.gecko.id;
+
+    const updateEntry = {
         version,
         update_link: `https://github.com/keombre/progtest-theme/releases/download/${version}/progtest_themes-${version}-an+fx.xpi`,
-    });
+    };
+
+    const updateJson = await Bun.file(updateFile).json();
+    const addon = updateJson.addons[appId];
+    if (!addon) {
+        updateJson.addons[appId] = { updates: [updateEntry] };
+    } else {
+        updateJson.addons[appId].updates.push(updateEntry);
+    }
+
     console.log(`Adding ${version} to ${updateFile}`);
     writeFormattedJson(updateFile, updateJson);
 }
