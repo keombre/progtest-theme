@@ -1,6 +1,6 @@
 {
     "name": "ProgTest Themes",
-    "version": "1.1.6",
+    "version": "1.2.0",
     "description": "Theme manager for ProgTest",
     "manifest_version": 2,
     "content_scripts": [
@@ -35,7 +35,7 @@
     "web_accessible_resources": ["themes/*"],
     "applications": {
         "gecko": {
-            "id": "progtest-themes@keombre",
+            "id": "progtest-themes@stieranka.dev",
             "update_url": "https://raw.githubusercontent.com/keombre/progtest-theme/stable/update.json"
         }
     }

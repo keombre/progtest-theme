@@ -1,6 +1,6 @@
 {
     "name": "ProgTest Themes",
-    "version": "100.0.33",
+    "version": "100.1.0",
     "description": "Theme manager for ProgTest",
     "manifest_version": 2,
     "content_scripts": [
@@ -35,9 +35,7 @@
         "default_icon": "icon.png",
         "default_popup": "options/options.html"
     },
-    "icons": {
-        "128": "icon.png"
-    },
+    "icons": { "128": "icon.png" },
     "web_accessible_resources": ["themes/*"],
     "applications": {
         "gecko": {
