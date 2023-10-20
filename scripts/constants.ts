@@ -1,8 +1,8 @@
 export const SRC_DIR = "./src" as const;
 export const ENTRYPOINTS = [
-    "./src/background.js",
-    "./src/content/end.js",
-    "./src/content/start.js",
+    "./src/background.ts",
+    "./src/content/end.ts",
+    "./src/content/start.ts",
     "./src/options/options.js",
 ] as const;
 

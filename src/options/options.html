@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <style>
@@ -46,6 +46,13 @@
             .dropdown_c {
                 margin: 5px 10px 0;
                 text-align: left;
+            }
+
+            .version {
+                display: block;
+                margin: 5px 10px 0 10px;
+                padding-top: 5px;
+                border-top: thin solid #bfbfbf;
             }
         </style>
     </head>
@@ -95,7 +102,15 @@
         </table>
 
         <div id="status"></div>
-        <button id="save">Save</button>
+        <div>
+            <button id="save">Save</button>
+        </div>
+
+        <br />
+
+        <a class="version" href="https://github.com/keombre/progtest-theme"
+            >Version <span id="version"></span
+        ></a>
 
         <script src="options.js"></script>
     </body>

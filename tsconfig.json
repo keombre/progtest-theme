@@ -1,12 +1,22 @@
 {
+    "include": ["./src/**/*", "./package.json"],
     "compilerOptions": {
         // add Bun type definitions
-        "types": ["archiver", "bun-types", "chrome", "minimist", "web"],
+        "types": [
+            "archiver",
+            "bun-types",
+            "chrome",
+            "minimist",
+            "web",
+            "./src/types.d.ts"
+        ],
 
         // enable latest features
         "lib": ["DOM", "ESNext"],
         "module": "esnext",
         "target": "ES6",
+
+        "resolveJsonModule": true,
 
         // if TS 5.x+
         "moduleResolution": "bundler",
@@ -25,6 +35,21 @@
         "skipLibCheck": true,
         "composite": true,
         "downlevelIteration": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+
+        // temporary until all code is migrated
+        "noImplicitAny": false,
+        "noImplicitReturns": false,
+        "noImplicitThis": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
+        "strictBindCallApply": false,
+        "noFallthroughCasesInSwitch": false,
+        "noImplicitOverride": false,
+        "noImplicitUseStrict": false,
+        "noPropertyAccessFromIndexSignature": false,
+        "noUncheckedIndexedAccess": false
     }
 }

@@ -1,6 +1,6 @@
 import { watch } from "fs";
 import { cp } from "fs/promises";
-import { build } from "./build.ts";
+import { build } from "./build";
 
 const watchedExtensions = [".ts", ".js", ".json", ".html", ".css"];
 
@@ -36,8 +36,8 @@ build({ verbose: false, clean: true })
         const watchers = [
             watch("./src/", { recursive: true }, onChange),
             watch("./manifests/", { recursive: true }, onChange),
+            watch("./scripts/crx-hot-reload.js", {}, onChange),
         ];
-
         process.on("SIGINT", exit);
         console.log("Watching for changes...");
     });

@@ -8,6 +8,11 @@
     background: #fff;
 }
 
+#shib1 > td > img {
+    background: none;
+    padding-left: 0;
+}
+
 body {
     color: #000000;
     background-color: #fff;

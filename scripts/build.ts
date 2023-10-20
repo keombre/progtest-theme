@@ -1,6 +1,6 @@
-import { BUILD_DIR, ENTRYPOINTS, SRC_DIR } from "./constants.ts";
+import { BUILD_DIR, ENTRYPOINTS, SRC_DIR } from "./constants";
 import { mkdir, rm } from "fs/promises";
-import { copyDirectory } from "./utils.ts";
+import { copyDirectory } from "./utils";
 
 export async function build(options: { verbose: boolean; clean: boolean }) {
     if (options.clean) {
@@ -16,15 +16,27 @@ export async function build(options: { verbose: boolean; clean: boolean }) {
     }
 
     console.log("Building .js files");
-    await Bun.build({
+    const buildOutput = await Bun.build({
         entrypoints: Array(...ENTRYPOINTS),
         outdir: BUILD_DIR,
     });
+    if (!buildOutput.success) {
+        console.error("Build failed:", buildOutput);
+        return;
+    }
+    console.log("Build finished", buildOutput);
 
     console.log("Copying other files");
     await copyDirectory(SRC_DIR, BUILD_DIR, {
-        filter: (path) =>
-            !path.endsWith(".js") || path.endsWith("highlight.pack.js"),
+        filter: (path) => {
+            if (path.endsWith("highlight.min.js")) {
+                return true;
+            }
+            if (path.endsWith(".js") || path.endsWith(".ts")) {
+                return false;
+            }
+            return true;
+        },
         verbose: options.verbose,
     });
 }

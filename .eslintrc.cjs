@@ -8,4 +8,7 @@ module.exports = {
         browser: true,
         webextensions: true,
     },
+    rules: {
+        "@typescript-eslint/ban-ts-comment": "warn",
+    },
 };
