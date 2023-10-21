@@ -42,9 +42,17 @@ build({ verbose: false, clean: true })
         console.log("Watching for changes...");
     })
     .then(() => {
-        Bun.serve({
+        const server = Bun.serve({
             async fetch(req: Request) {
-                return new Response(Bun.file(`./build/${req.url}`).text());
+                const url = new URL(req.url);
+                console.log(`Serving ${url}`);
+
+                if (url.pathname === "/") {
+                    return Response.redirect("/options/options.html");
+                }
+
+                return new Response(Bun.file(`./build/${url.pathname}`));
             },
         });
+        console.log(`Dev server running on http://localhost:${server.port}/`);
     });
