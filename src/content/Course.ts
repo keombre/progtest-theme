@@ -209,6 +209,9 @@ export class Course extends Logged {
             );
         }
 
+        // TODO: Fix github security warnings:
+        // "DOM text is reinterpreted as HTML without escaping meta-characters."
+        // https://github.com/keombre/progtest-theme/security/code-scanning/4
         ret.innerHTML += `<span class="course_link_name">${entry.name}</span>`;
         ret.innerHTML += entry.score
             ? `<span class="course_link_score">${entry.score}</span>`
@@ -384,6 +387,9 @@ export class Course extends Logged {
         modal.appendChild(modalBody);
     }
 
+    // TODO: Fix github security warnings:
+    // "Incomplete multi-character sanitization"
+    // https://github.com/keombre/progtest-theme/security/code-scanning/6
     static parseTaskGrp(text) {
         // sanitize page
         text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gim, "");
