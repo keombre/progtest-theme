@@ -45,12 +45,12 @@ export class Main extends Logged {
                 push = settings,
             } = Main.parseSettings(e[2]) || {
                 ...this.parseSubject(e[2], e[0]),
-                push: subjects,
+                push: e[1].includes("X=Course") ? subjects : settings,
             };
             orders[order] = footer;
 
             let link = null;
-            if (!["Překladače", "Nastavení", "FAQ"].includes(e[2])) {
+            if (push !== settings) {
                 try {
                     link = subjectInfo["courses"][e[2]]["homepage"];
                 } catch (_) {
