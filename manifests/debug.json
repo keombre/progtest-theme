@@ -33,7 +33,7 @@
   "browser_action": {
     "default_title": "",
     "default_icon": "icon.png",
-    "default_popup": "options/options.html"
+    "default_popup": "settings/index.html"
   },
   "icons": { "128": "icon.png" },
   "web_accessible_resources": ["themes/*"],

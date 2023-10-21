@@ -3,7 +3,7 @@ export const ENTRYPOINTS = [
     "./src/background.ts",
     "./src/content/end.ts",
     "./src/content/start.ts",
-    "./src/options/options.js",
+    "./src/settings/index.js",
 ] as const;
 
 export const BUILD_DIR = "./build" as const;

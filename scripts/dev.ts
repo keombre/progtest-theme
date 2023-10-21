@@ -48,7 +48,7 @@ build({ verbose: false, clean: true })
                 console.log(`Serving ${url}`);
 
                 if (url.pathname === "/") {
-                    return Response.redirect("/options/options.html");
+                    return Response.redirect("/settings/index.html");
                 }
 
                 return new Response(Bun.file(`./build/${url.pathname}`));

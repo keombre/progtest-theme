@@ -1,4 +1,4 @@
-import Options from "./options.svelte";
+import Settings from "./settings.svelte";
 
 // on click, Open Progtest in new tab
 if (typeof chrome === "object") {
@@ -25,4 +25,4 @@ if (typeof chrome === "object") {
 }
 
 // settings page
-new Options({ target: document.body });
+new Settings({ target: document.body });
