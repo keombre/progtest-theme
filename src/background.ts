@@ -48,7 +48,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     {
         urls: [
             "*://progtest.fit.cvut.cz/css.css",
-            "*://ptmock.localhost/css.css",
+            "*://ptmock.localhost/**/css.css",
         ],
     },
     ["blocking"],

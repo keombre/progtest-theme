@@ -42,6 +42,12 @@
             display: flex; 
             flex-direction: column; 
             gap: 12px;
+            
+            color: var(--foreground-color);
+            background-color: var(--background-color);
+            height: 386px;
+            width: 200px;
+            padding: 12px;
         "
 >
     <div
@@ -123,28 +129,28 @@
                         gap: 4px;
                     "
                 >
-                    <label>
+                    <label style="display: block">
                         <input
                             type="checkbox"
                             bind:checked={settings.autohideResults}
                         />
                         Autohide results
                     </label>
-                    <label>
+                    <label style="display: block">
                         <input
                             type="checkbox"
                             bind:checked={settings.showNotifications}
                         />
                         Show notifications
                     </label>
-                    <label>
+                    <label style="display: block">
                         <input
                             type="checkbox"
                             bind:checked={settings.syntaxHighlighting}
                         />
                         Syntax highlighting
                     </label>
-                    <label>
+                    <label style="display: block">
                         <input
                             type="checkbox"
                             bind:checked={settings.playSounds}
@@ -228,79 +234,3 @@
         </a>
     </div>
 </main>
-
-<style>
-    @layer light, dark;
-
-    @layer light {
-        :root {
-            --background-color: hsl(0 0% 100%);
-            --foreground-color: hsl(240 10% 3.9%);
-            --divider-color: #eee;
-        }
-    }
-
-    @layer dark {
-        @media screen and (prefers-color-scheme: dark) {
-            :root {
-                --background-color: hsl(240 10% 3.9%);
-                --foreground-color: hsl(0 0% 98%);
-                --divider-color: hsl(0 0% 15%);
-            }
-        }
-    }
-
-    :root {
-        font-family: "Inter", sans-serif;
-    }
-
-    @supports (font-variation-settings: normal) {
-        :root {
-            font-family: "Inter var", sans-serif;
-        }
-    }
-
-    * {
-        font-size: 14px;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    :global(button) {
-        border: none;
-        margin: 0;
-        padding: 0;
-        width: auto;
-        overflow: visible;
-
-        background: transparent;
-
-        /* inherit font & color from ancestor */
-        color: inherit;
-        font: inherit;
-
-        /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
-        line-height: normal;
-
-        /* Corrects font smoothing for webkit */
-        -webkit-font-smoothing: inherit;
-        -moz-osx-font-smoothing: inherit;
-
-        /* Corrects inability to style clickable `input` types in iOS */
-        appearance: none;
-        -webkit-appearance: none;
-    }
-
-    main {
-        color: var(--foreground-color);
-        background-color: var(--background-color);
-        height: 386px;
-        width: 200px;
-        padding: 12px;
-    }
-
-    label {
-        display: block;
-    }
-</style>
