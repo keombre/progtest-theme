@@ -17,6 +17,11 @@ const getMessage = (classes: string[], message: string) => {
 };
 
 const main = (settings: ExtensionSettings) => {
+    if (!["/", "/index.php"].includes(window.location.pathname)) {
+        console.log("unknown page", window.location.pathname);
+        return;
+    }
+
     const args = new URLSearchParams(window.location.search);
 
     // show message for new users
