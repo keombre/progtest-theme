@@ -32,7 +32,7 @@
         if (typeof chrome === "object") {
             chrome.storage.sync.set(settings, onSetSettings);
         } else {
-            onSetSettings;
+            onSetSettings();
         }
     }
 </script>
@@ -41,7 +41,7 @@
     style="
             display: flex; 
             flex-direction: column; 
-            gap: 10px;
+            gap: 12px;
         "
 >
     <div
@@ -50,7 +50,7 @@
             align-items: end;
             justify-content: center;
             gap: 8px;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--divider-color);
         "
     >
@@ -67,7 +67,7 @@
             style="
                 display: flex; 
                 flex-direction: column; 
-                gap: 4px;
+                gap: 8px;
             "
         >
             <div
@@ -97,10 +97,10 @@
                 style="
                     display: flex;
                     flex-direction: column;
-                    gap: 4px;
-                    margin-top: 10px;
+                    gap: 8px;
+                    margin-top: 12px;
                     border-top: 1px solid var(--divider-color);
-                    padding-top: 10px;
+                    padding-top: 12px;
                 "
             >
                 <div
@@ -120,7 +120,7 @@
                     style="
                         display: flex;
                         flex-direction: column;
-                        gap: 2px;
+                        gap: 4px;
                     "
                 >
                     <label>
@@ -157,8 +157,8 @@
 
         <div
             style="
-                padding-top: 10px;
-                margin-top: 10px;
+                padding-top: 12px;
+                margin-top: 12px;
                 border-top: 1px solid var(--divider-color);
             "
         >
@@ -166,7 +166,7 @@
                 type="submit"
                 style="
                     appearance: none;
-                    padding: 4px 12px;
+                    padding: 6px;
                     width: 100%;
                     background-color: var(--foreground-color);
                     color: var(--background-color);
@@ -205,7 +205,7 @@
 
     <div
         style="
-            padding-top: 10px;
+            padding-top: 12px;
             border-top: 1px solid var(--divider-color);
             text-align: center
         "
@@ -295,9 +295,9 @@
     main {
         color: var(--foreground-color);
         background-color: var(--background-color);
-        height: 350px;
+        height: 386px;
         width: 200px;
-        padding: 10px;
+        padding: 12px;
     }
 
     label {
