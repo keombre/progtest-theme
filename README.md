@@ -24,7 +24,9 @@ The current version of **ProgTest Themes** has been successfully compiled using 
 
 1. Install all dev dependencies using `bun install`
 2. Run `bun dev` to get a hot-reloading version of the extension in `build/`. Alternatively, run `bun build:chrome` or `bun build:firefox` to build it just once (and with the proper manifests; the dev version uses `manifests/debug.json`).
-3. Load the extension to your browser. `chrome://extensions` in Chrome or `about:addons` in Firefox.
+3. Load the extension to your browser
+    - `chrome://extensions` in Chrome
+    - `about:addons` (if building) / `about:debugging#/runtime/this-firefox` (if developing) in Firefox
 
 ## Privacy policy
 
