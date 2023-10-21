@@ -101,7 +101,7 @@ const main = async (settings: ExtensionSettings) => {
 };
 
 const replaceStyles = (theme: string) => {
-    document.head.querySelectorAll('link[href="/css.css"]').forEach((e) => {
+    document.head.querySelectorAll('link[href$="/css.css"]').forEach((e) => {
         e.remove();
     });
 
