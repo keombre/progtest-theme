@@ -67,16 +67,14 @@ const main = (settings: ExtensionSettings) => {
     }
 };
 
-chrome.runtime
-    .sendMessage({ type: MessageType.GET_SETTINGS })
-    .then((settings) => {
-        console.log("Initializing PTT with settings", settings);
-        // TODO: investigate whether this loaded check is necessary
-        if (window.progtestThemes?.loaded) {
+chrome.runtime.sendMessage({ type: MessageType.GET_SETTINGS }, (settings) => {
+    console.log("Initializing PTT with settings", settings);
+    // TODO: investigate whether this loaded check is necessary
+    if (window.progtestThemes?.loaded) {
+        main(settings);
+    } else {
+        window.addEventListener("pttLoaded", () => {
             main(settings);
-        } else {
-            window.addEventListener("pttLoaded", () => {
-                main(settings);
-            });
-        }
-    });
+        });
+    }
+});

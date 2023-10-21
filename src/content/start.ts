@@ -77,22 +77,23 @@ const setFavicon = () => {
     document.head.appendChild(favicon);
 };
 
-chrome.runtime.sendMessage({ type: MessageType.GET_SETTINGS }).then(function (
-    settings: ExtensionSettings,
-) {
-    if (settings === undefined) {
-        throw new Error("Did not receive settings from background script");
-    }
-    if (settings.theme == "orig" || settings.theme == "orig-dark") {
-        return;
-    }
+chrome.runtime.sendMessage(
+    { type: MessageType.GET_SETTINGS },
+    function (settings: ExtensionSettings) {
+        if (settings === undefined) {
+            throw new Error("Did not receive settings from background script");
+        }
+        if (settings.theme == "orig" || settings.theme == "orig-dark") {
+            return;
+        }
 
-    errorReporter();
+        errorReporter();
 
-    window.progtestThemes = { loaded: true };
-    window.dispatchEvent(pttLoaded);
+        window.progtestThemes = { loaded: true };
+        window.dispatchEvent(pttLoaded);
 
-    setTitle();
-    addLoader();
-    setTimeout(setFavicon, 0);
-});
+        setTitle();
+        addLoader();
+        setTimeout(setFavicon, 0);
+    },
+);
