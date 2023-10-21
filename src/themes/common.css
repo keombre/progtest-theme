@@ -7,6 +7,10 @@
     src: url("./fonts/NotoColorEmoji/NotoColorEmoji.ttf") format("truetype");
 }
 
+.install-message {
+    display: none;
+}
+
 .errorReporter {
     position: fixed;
     bottom: 25px;

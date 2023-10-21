@@ -9,8 +9,23 @@ import { Main } from "./Main";
 import { Results } from "./Results";
 import { Task } from "./Task";
 
+const getMessage = (classes: string[], message: string) => {
+    const div = document.createElement("div");
+    div.classList.add(...classes);
+    div.innerHTML = message.replace(/\n/g, "<br />");
+    return div;
+};
+
 const main = (settings: ExtensionSettings) => {
     const args = new URLSearchParams(window.location.search);
+
+    // show message for new users
+    const message = getMessage(
+        ["install-message"],
+        "PTT seems to be freshly installed.\nPlease force refresh the page to load the theme.\n(Ctrl+Shift+R / Cmd+Shift+R)",
+    );
+    message.style.fontSize = "40px";
+    document.body.prepend(message);
 
     document.body.removeAttribute("bgcolor");
     document.body.removeAttribute("text");
