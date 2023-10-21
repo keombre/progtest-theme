@@ -339,7 +339,7 @@ export class Task extends Logged {
                 refSib = refSib.nextElementSibling;
             }
 
-            refHead.className += " dropDownHeader";
+            refHead.classList.add("dropDownHeader");
             refHead.addEventListener("click", toggleDropDown);
             refHead.click();
             checkbox.parentNode.removeChild(checkbox);
@@ -359,7 +359,7 @@ export class Task extends Logged {
                 .forEach((e) => {
                     const resHead = e.parentNode.parentNode;
                     if (!(resHead instanceof HTMLElement)) return;
-                    resHead.className += " dropDownHeader";
+                    resHead.classList.add("dropDownHeader");
                     resHead.addEventListener("click", toggleDropDown);
                     resHead.click();
                 });
@@ -418,15 +418,14 @@ export const toggleDropDown = (e: MouseEvent) => {
     if (element?.nodeName == "A" || element?.nodeName == "BUTTON") {
         return;
     }
-    let id = 0;
-    for (const node of element.parentNode.children) {
-        if (id++ == 0) {
-            continue;
-        }
-        if (node.className.indexOf("dropDownHide") == -1) {
-            node.className += " dropDownHide";
+    const header = element.closest(".dropDownHeader");
+    header.parentNode.childNodes.forEach((node) => {
+        if (!(node instanceof HTMLElement)) return;
+        if (node === header) return;
+        if (!node.classList.contains("dropDownHide")) {
+            node.classList.add("dropDownHide");
         } else {
-            node.className = node.className.replace(" dropDownHide", "");
+            node.classList.remove("dropDownHide");
         }
-    }
+    });
 };
