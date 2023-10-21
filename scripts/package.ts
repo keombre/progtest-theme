@@ -16,15 +16,13 @@ const CHROME_DIST_DIR = `${OUT_DIR}/chrome` as const;
 async function pack(distDir: string) {
     await rm(distDir, { recursive: true });
     await mkdir(distDir);
-    await zipDirectory(BUILD_DIR, `${distDir}/progtest_themes.zip`, {
-        zipDestPath: "progtest-themes/",
-    });
+    await zipDirectory(BUILD_DIR, `${distDir}/progtest_themes.zip`);
 }
 
 async function signFirefox() {
     if (!process.env.WEB_EXT_API_KEY || !process.env.WEB_EXT_API_SECRET) {
         throw new Error(
-            "WEB_EXT_API_KEY and WEB_EXT_API_SECRET must be set in the environment"
+            "WEB_EXT_API_KEY and WEB_EXT_API_SECRET must be set in the environment",
         );
     }
 
@@ -42,7 +40,7 @@ async function signFirefox() {
             // useSubmissionApi: true,
             // amoBaseUrl: "https://addons.mozilla.org/api/v5",
         },
-        { shouldExitProgram: false }
+        { shouldExitProgram: false },
     );
 }
 
@@ -84,7 +82,7 @@ async function main() {
     }
 
     console.log(
-        "Use '--chrome' or '--firefox' to build a specific browser extension"
+        "Use '--chrome' or '--firefox' to build a specific browser extension",
     );
     console.log("Use '--firefox --sign' to create a signed Firefox extension");
 }

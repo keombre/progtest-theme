@@ -2,7 +2,7 @@ import { watch } from "fs";
 import { cp } from "fs/promises";
 import { build } from "./build";
 
-const watchedExtensions = [".ts", ".js", ".json", ".html", ".css"];
+const watchedExtensions = [".ts", ".js", ".json", ".html", ".css", ".svelte"];
 
 async function additionalDevSteps() {
     await cp("./manifests/debug.json", "./build/manifest.json");
@@ -40,4 +40,11 @@ build({ verbose: false, clean: true })
         ];
         process.on("SIGINT", exit);
         console.log("Watching for changes...");
+    })
+    .then(() => {
+        Bun.serve({
+            async fetch(req: Request) {
+                return new Response(Bun.file(`./build/${req.url}`).text());
+            },
+        });
     });

@@ -54,16 +54,22 @@ export function zipDirectory(
         zipDestPath?: string;
     },
 ) {
+    console.log(`Zipping ${sourceDir} to ${outPath}`);
     const archive = archiver("zip", { zlib: { level: 9 } });
+
     const stream = createWriteStream(outPath);
-
-    return new Promise<void>((resolve, reject) => {
-        archive
-            .directory(sourceDir, options?.zipDestPath ?? false)
-            .on("error", (err) => reject(err))
-            .pipe(stream);
-
-        stream.on("close", () => resolve()).on("error", (err) => reject(err));
-        archive.finalize();
+    stream.on("error", (err) => {
+        console.error(err);
+        throw err;
     });
+
+    archive
+        .on("error", (err) => {
+            console.error(err);
+            throw err;
+        })
+        .directory(sourceDir, options?.zipDestPath ?? false)
+        .pipe(stream);
+
+    return archive.finalize();
 }
