@@ -7,7 +7,6 @@ const watchedExtensions = [".ts", ".js", ".json", ".html", ".css", ".svelte"];
 
 async function additionalDevSteps() {
     await cp("./manifests/debug.json", "./build/manifest.json");
-    await cp("./scripts/crx-hot-reload.js", "./build/crx-hot-reload.js");
 }
 
 console.log("Building extension...");
@@ -37,7 +36,6 @@ build({ verbose: false, clean: true })
         const watchers = [
             watch("./src/", { recursive: true }, onChange),
             watch("./manifests/", { recursive: true }, onChange),
-            watch("./scripts/crx-hot-reload.js", {}, onChange),
         ];
         process.on("SIGINT", exit);
         console.log("Watching for changes...");

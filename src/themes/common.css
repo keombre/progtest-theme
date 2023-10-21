@@ -1,11 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap&subset=latin-ext");
 @import url("https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css");
-
-@font-face {
-    font-family: "Noto Color Emoji";
-    /*src: url("https://gitcdn.xyz/repo/googlefonts/noto-emoji/master/fonts/NotoColorEmoji.ttf") format('truetype');*/
-    src: url("./fonts/NotoColorEmoji/NotoColorEmoji.ttf") format("truetype");
-}
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/noto-color-emoji@5.0.15/index.min.css");
 
 .install-message {
     display: none;
@@ -27,75 +22,6 @@
 .errorReporter:before {
     content: "ProgTest Themes Error Reporter\A";
     font-size: 9pt;
-}
-
-/** page loader */
-
-#loadWrapper {
-    font-family: "Open Sans", "Noto Color Emoji";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    user-select: none;
-    transition: opacity 0.2s ease;
-    opacity: 1;
-    z-index: 1000;
-}
-
-.loadWrapperHide {
-    opacity: 0 !important;
-}
-
-.loadWrapperHide > .anim-load {
-    animation-play-state: paused !important;
-}
-
-.anim-load {
-    animation-play-state: running;
-    position: absolute;
-    height: 30px;
-    background: #565f7c;
-    width: 30px;
-    border-radius: 3px;
-    left: calc(50% - 34px);
-    transform-origin: right center;
-}
-
-@keyframes width {
-    0% {
-        transform: scale(1, 1);
-    }
-    50% {
-        transform: scale(2.5, 1);
-    }
-    100% {
-        transform: scale(1, 1);
-    }
-}
-
-.anim-1 {
-    top: calc(50% - 93px);
-    animation: 1s width infinite;
-}
-
-.anim-2 {
-    top: calc(50% - 55px);
-    animation: 1s width infinite;
-    animation-delay: 0.33s;
-}
-
-.anim-3 {
-    top: calc(50% - 18px);
-    animation: 1s width infinite;
-    animation-delay: 0.66s;
-}
-
-.anim-logo {
-    position: absolute;
-    top: calc(50% - 93px);
-    left: calc(50% + 5px);
 }
 
 /** global layout */

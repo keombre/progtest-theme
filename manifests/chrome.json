@@ -2,35 +2,41 @@
   "name": "ProgTest Themes",
   "version": "1.2.0",
   "description": "Theme manager for ProgTest",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "content_scripts": [
     {
       "run_at": "document_start",
       "js": ["content/start.js", "content/highlightjs/highlight.min.js"],
-      "matches": ["*://progtest.fit.cvut.cz/*"],
+      "matches": ["https://progtest.fit.cvut.cz/*"],
       "all_frames": true
     },
     {
       "run_at": "document_end",
       "js": ["content/end.js"],
-      "matches": ["*://progtest.fit.cvut.cz/*"],
+      "matches": ["https://progtest.fit.cvut.cz/*"],
       "all_frames": true
     }
   ],
-  "background": { "scripts": ["background.js"], "persistent": true },
-  "permissions": [
-    "webRequest",
-    "webRequestBlocking",
-    "*://progtest.fit.cvut.cz/*",
-    "*://courses.fit.cvut.cz/*",
-    "storage",
-    "tabs"
+  "web_accessible_resources": [
+    {
+      "resources": ["content/loader.js"],
+      "matches": ["https://progtest.fit.cvut.cz/*"]
+    },
+    {
+      "resources": ["themes/*"],
+      "matches": ["https://progtest.fit.cvut.cz/*"]
+    }
   ],
-  "browser_action": {
+  "background": { "service_worker": "background.js" },
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://progtest.fit.cvut.cz/*",
+    "https://courses.fit.cvut.cz/data/courses-all.json"
+  ],
+  "action": {
     "default_title": "",
     "default_icon": "icon.png",
     "default_popup": "settings/index.html"
   },
-  "icons": { "128": "icon.png" },
-  "web_accessible_resources": ["themes/*"]
+  "icons": { "128": "icon.png" }
 }

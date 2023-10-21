@@ -3,6 +3,7 @@
 @layer light {
     :root {
         --background-color: hsl(0 0% 100%);
+        --foreground-color--muted: hsl(240 7% 14%);
         --foreground-color: hsl(240 10% 3.9%);
         --divider-color: #eee;
     }
@@ -12,6 +13,7 @@
     @media screen and (prefers-color-scheme: dark) {
         :root {
             --background-color: hsl(240 10% 3.9%);
+            --foreground-color--muted: hsl(0 0% 80%);
             --foreground-color: hsl(0 0% 98%);
             --divider-color: hsl(0 0% 15%);
         }
@@ -33,31 +35,21 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    border: none;
+}
+
+ul {
+    margin: 0 8px;
 }
 
 :global(button) {
-    border: none;
-    margin: 0;
+    all: unset;
+    outline: revert;
+}
+
+:global(button::-moz-focus-inner) {
+    border: 0;
     padding: 0;
-    width: auto;
-    overflow: visible;
-
-    background: transparent;
-
-    /* inherit font & color from ancestor */
-    color: inherit;
-    font: inherit;
-
-    /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
-    line-height: normal;
-
-    /* Corrects font smoothing for webkit */
-    -webkit-font-smoothing: inherit;
-    -moz-osx-font-smoothing: inherit;
-
-    /* Corrects inability to style clickable `input` types in iOS */
-    appearance: none;
-    -webkit-appearance: none;
 }
 
 #loadWrapper {

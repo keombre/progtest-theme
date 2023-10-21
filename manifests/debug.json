@@ -1,43 +1,54 @@
 {
   "name": "ProgTest Themes",
-  "version": "100.1.0",
+  "version": "101.0.0",
   "description": "Theme manager for ProgTest",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "content_scripts": [
     {
       "run_at": "document_start",
       "js": ["content/start.js", "content/highlightjs/highlight.min.js"],
-      "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
+      "matches": [
+        "https://progtest.fit.cvut.cz/*",
+        "http://ptmock.localhost/*"
+      ],
       "all_frames": true
     },
     {
       "run_at": "document_end",
       "js": ["content/end.js"],
-      "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
+      "matches": [
+        "https://progtest.fit.cvut.cz/*",
+        "http://ptmock.localhost/*"
+      ],
       "all_frames": true
     }
   ],
-  "background": {
-    "scripts": ["background.js", "crx-hot-reload.js"],
-    "persistent": true
-  },
-  "permissions": [
-    "webRequest",
-    "webRequestBlocking",
-    "*://progtest.fit.cvut.cz/*",
-    "*://ptmock.localhost/*",
-    "*://courses.fit.cvut.cz/*",
-    "storage",
-    "tabs"
+  "web_accessible_resources": [
+    {
+      "resources": ["content/loader.js"],
+      "matches": ["https://progtest.fit.cvut.cz/*", "http://ptmock.localhost/*"]
+    },
+    {
+      "resources": ["themes/*"],
+      "matches": ["https://progtest.fit.cvut.cz/*", "http://ptmock.localhost/*"]
+    }
   ],
-  "browser_action": {
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://progtest.fit.cvut.cz/*",
+    "http://ptmock.localhost/",
+    "https://courses.fit.cvut.cz/data/courses-all.json"
+  ],
+  "action": {
     "default_title": "",
     "default_icon": "icon.png",
     "default_popup": "settings/index.html"
   },
   "icons": { "128": "icon.png" },
-  "web_accessible_resources": ["themes/*"],
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "progtest-themes@debug.dev",
       "update_url": "https://raw.githubusercontent.com/keombre/progtest-theme/stable/update.json"

@@ -2,6 +2,7 @@ export const SRC_DIR = "./src" as const;
 export const ENTRYPOINTS = [
     "./src/background.ts",
     "./src/content/end.ts",
+    "./src/content/loader.ts",
     "./src/content/start.ts",
     "./src/settings/index.ts",
     "./src/dev/index.ts",

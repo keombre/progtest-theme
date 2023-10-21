@@ -1,13 +1,15 @@
 import { MessageType } from "../messages";
 import { ExtensionSettings } from "../settings";
-import { Course } from "./Course";
-import { Err404 } from "./Err404";
-import { Exam } from "./Exam";
-import { Logged } from "./Logged";
-import { Login } from "./Login";
-import { Main } from "./Main";
-import { Results } from "./Results";
-import { Task } from "./Task";
+import { Course } from "./pages/Course";
+import { Err404 } from "./pages/Err404";
+import { Exam } from "./pages/Exam";
+import { Logged } from "./pages/Logged";
+import { Login } from "./pages/Login";
+import { Main } from "./pages/Main";
+import { Results } from "./pages/Results";
+import { Task } from "./pages/Task";
+import { pttLoadedEvent } from "../events";
+import { Page } from "./pages/Page";
 
 const getMessage = (classes: string[], message: string) => {
     const div = document.createElement("div");
@@ -16,7 +18,7 @@ const getMessage = (classes: string[], message: string) => {
     return div;
 };
 
-const main = (settings: ExtensionSettings) => {
+const main = async (settings: ExtensionSettings) => {
     if (!["/", "/index.php"].includes(window.location.pathname)) {
         console.log("unknown page", window.location.pathname);
         return;
@@ -35,10 +37,11 @@ const main = (settings: ExtensionSettings) => {
     document.body.removeAttribute("bgcolor");
     document.body.removeAttribute("text");
 
+    let page: Page;
     if (document.body.innerHTML == "") {
-        return new Err404(settings);
+        page = new Err404(settings);
     } else if (document.querySelector("select[name=UID_UNIVERSITY]") != null) {
-        return new Login();
+        page = new Login();
     } else if (args.has("X")) {
         switch (args.get("X")) {
             case "FAQ":
@@ -46,23 +49,32 @@ const main = (settings: ExtensionSettings) => {
             case "CompilersDryRuns":
             case "Extra":
             case "KNT":
-            case "TaskGrp":
-                return new Logged(settings);
-            case "KNTQ":
-                return new Exam(settings);
-            case "Course":
-                return new Course(settings);
-            case "Results":
-                return new Results(settings);
+            case "TaskGrp": {
+                page = new Logged(settings);
+                break;
+            }
+            case "KNTQ": {
+                page = new Exam(settings);
+                break;
+            }
+            case "Course": {
+                page = new Course(settings);
+                break;
+            }
+            case "Results": {
+                page = new Results(settings);
+                break;
+            }
             case "Compiler":
             case "DryRun":
             case "Task":
-            case "TaskU":
-                return new Task(settings);
+            case "TaskU": {
+                page = new Task(settings);
+                break;
+            }
             case "Main": {
-                const page = new Main(settings);
-                page.initialise();
-                return page;
+                page = new Main(settings);
+                break;
             }
             default: {
                 // determine if site is really main
@@ -74,27 +86,48 @@ const main = (settings: ExtensionSettings) => {
                     ) ||
                     (navlink && navlink.innerText.includes("Než"))
                 ) {
-                    return new Logged(settings);
+                    page = new Logged(settings);
                 } else {
-                    return new Main(settings);
+                    page = new Main(settings);
                 }
             }
         }
     } else {
-        const page = new Main(settings);
-        page.initialise();
-        return page;
+        page = new Main(settings);
     }
+
+    await page.initialise();
+    return page;
 };
 
-chrome.runtime.sendMessage({ type: MessageType.GET_SETTINGS }, (settings) => {
-    console.log("Initializing PTT with settings", settings);
-    // TODO: investigate whether this loaded check is necessary
-    if (window.progtestThemes?.loaded) {
-        main(settings);
-    } else {
-        window.addEventListener("pttLoaded", () => {
-            main(settings);
-        });
-    }
-});
+const replaceStyles = (theme: string) => {
+    document.head.querySelectorAll('link[href="/css.css"]').forEach((e) => {
+        e.remove();
+    });
+
+    const link = document.createElement("link");
+    link.setAttribute("rel", "stylesheet");
+    link.setAttribute("type", "text/css");
+
+    link.setAttribute(
+        "href",
+        chrome.runtime.getURL("themes/" + theme + ".css"),
+    );
+    document.getElementsByTagName("head")[0].appendChild(link);
+};
+
+chrome.runtime.sendMessage(
+    { type: MessageType.GET_SETTINGS },
+    async (settings: ExtensionSettings) => {
+        console.log("PTT end with settings:", settings);
+        if (settings.theme === "orig") {
+            return;
+        }
+        replaceStyles(settings.theme);
+        if (settings.theme === "orig-dark") {
+            setTimeout(() => document.dispatchEvent(pttLoadedEvent), 0);
+            return;
+        }
+        await main(settings).then(() => document.dispatchEvent(pttLoadedEvent));
+    },
+);

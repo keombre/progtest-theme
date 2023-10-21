@@ -20,6 +20,7 @@ export const sveltePlugin: BunPlugin = {
                 contents: compile(preprocessed.code, {
                     filename: path,
                     generate: "dom",
+                    dev: Bun.main.endsWith("dev.ts"),
                 }).js.code,
                 loader: "js",
             };
