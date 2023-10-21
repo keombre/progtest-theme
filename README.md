@@ -10,11 +10,9 @@
 
 ## Download
 
-[Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
+[Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf) (supports any Chromium browser, e.g. Opera, Brave, new Microsoft Edge, etc.)
 
 [Firefox Addon](https://github.com/keombre/progtest-theme/releases/latest)
-
-[Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/knkajihkihfoadhcgjibkhlhdfdmliem)
 
 ## Building from source
 
