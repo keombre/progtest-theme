@@ -48,7 +48,7 @@ export async function migrateSettingNames(): Promise<void> {
                     items.playSounds = items.sounds;
                     delete items.sounds;
                 }
-                chrome.storage.sync.set(items).then(resolve);
+                chrome.storage.sync.set(items, resolve);
             },
         );
     });
