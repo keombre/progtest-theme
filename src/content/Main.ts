@@ -174,6 +174,7 @@ export class Main extends Logged {
                 "BI-PJV": "icon-pjv",
                 "BI-PS1": "icon-ps1",
                 "BI-PYT": "icon-pyt",
+                "NI-PDP": "icon-pdp",
             }[title] || "icon-unknown"
         );
     }

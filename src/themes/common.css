@@ -655,6 +655,10 @@ div.subjectSelect > span.subjectHeader.active:before {
     background-image: url("./assets/icons/pa2.svg");
 }
 
+.icon-pdp {
+    background-image: url("./assets/icons/pdp.svg");
+}
+
 .icon-pjv {
     background-image: url("./assets/icons/pjv.svg");
 }
