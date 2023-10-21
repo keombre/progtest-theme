@@ -50,12 +50,12 @@ export class Course extends Logged {
             .forEach((e) => {
                 const row: HTMLElement = e.parentElement.parentElement;
                 const taskName: HTMLElement = row.children[1].querySelector(
-                    ".menuListDis, .menuList",
+                    ".menuListDis, .menuList, .menuListEarly",
                 );
                 const points: HTMLElement =
                     row.childElementCount === 4
                         ? row.children[2].querySelector(
-                              ".menuListDis, .menuList",
+                              ".menuListDis, .menuList, .menuListEarly",
                           )
                         : null;
                 const link: HTMLAnchorElement =
@@ -73,6 +73,9 @@ export class Course extends Logged {
         tree.querySelectorAll("AssessmentGrp").forEach((e) => {
             const groups = [];
             e.querySelectorAll("TaskGrp, KNTest, ExtraPoints").forEach((f) => {
+                if (f.getAttribute("id") === "2600") {
+                    // debugger;
+                }
                 // const origLinkBase = {'TaskGrp': 'TaskGrp', 'KNTest': 'KNT', 'ExtraPoints': 'Extra'}[f.tagName]
                 // const origLinkPart = {'TaskGrp': 'Tgr', 'KNTest': 'Knt', 'ExtraPoints': 'Ex'}[f.tagName]
                 //
