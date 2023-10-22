@@ -6,6 +6,7 @@
     let isVisible = true;
 
     function showLoader() {
+        document.querySelectorAll("dialog").forEach((el) => el.remove());
         console.log("showLoader", isVisible);
         isVisible = true;
     }

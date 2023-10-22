@@ -1,6 +1,6 @@
 import { MessageType } from "../messages";
 import { ExtensionSettings } from "../settings";
-import { Course } from "./pages/Course";
+import { Course } from "./pages/Course/Course";
 import { Err404 } from "./pages/Err404";
 import { Exam } from "./pages/Exam";
 import { Logged } from "./pages/Logged";

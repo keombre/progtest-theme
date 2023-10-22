@@ -6,25 +6,27 @@
     display: none;
 }
 
-.errorReporter {
-    position: fixed;
-    bottom: 25px;
-    left: 25px;
-    background: #d32f2f;
-    border: thin solid #b71c1c;
-    color: #fff;
-    padding: 1px 6px;
-    white-space: pre;
-    box-shadow: 0 0 2px 0 #707070;
-    font-size: 8pt;
-}
-
-.errorReporter:before {
-    content: "ProgTest Themes Error Reporter\A";
-    font-size: 9pt;
-}
-
 /** global layout */
+
+:root {
+    --font-sans: "Open Sans";
+    font-family:
+        var(--font-sans),
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        "Noto Sans",
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
 
 html {
     height: 100%;
@@ -33,7 +35,6 @@ html {
 body {
     overflow-y: scroll;
     font-size: 10px;
-    font-family: "Open Sans", "Noto Color Emoji";
     margin: 0;
     padding-bottom: 25px;
     background-attachment: fixed;
@@ -66,7 +67,6 @@ input,
 button,
 select,
 tr {
-    font-family: "Open Sans", "Noto Color Emoji";
     font-size: 12px;
 }
 
@@ -611,375 +611,6 @@ div.subjectSelect > span.subjectHeader.active:before {
 
 .icon-unknown {
     background-image: url("./assets/icons/unknown.svg");
-}
-
-/** task select */
-
-.course_container {
-    display: grid;
-    grid-gap: 20px 35px;
-    grid-template-columns: repeat(4, 330px);
-    justify-content: center;
-}
-
-@media only screen and (max-width: 1500px) {
-    .course_container {
-        grid-template-columns: repeat(3, 330px);
-    }
-}
-
-@media only screen and (max-width: 1150px) {
-    .course_container {
-        grid-template-columns: repeat(2, 330px);
-    }
-}
-
-@media only screen and (max-width: 750px) {
-    .course_container {
-        grid-template-columns: repeat(1, 330px);
-    }
-}
-
-.course_grp {
-    border-radius: 5px;
-    box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.25);
-    height: fit-content;
-    overflow: hidden;
-}
-
-span.course_title {
-    display: block;
-    font-size: 18pt;
-    font-weight: 100;
-    border-bottom: 1px solid #37474f;
-    padding: 7px 0 7px 11px;
-    color: #fff;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-    background: #45535a;
-}
-
-.course_link {
-    display: block;
-    font-size: 13pt;
-    position: relative;
-    padding: 6px 0 6px 6px;
-    border-left: 3px solid transparent;
-    font-weight: 500;
-}
-
-span.course_link_score_sum:before {
-    content: "Σ = ";
-}
-
-span.course_link_score_sum {
-    text-align: right;
-    padding: 2px 15px 2px 0;
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.course_link.course_disabled {
-    font-weight: 400;
-}
-
-span.course_link_name {
-    display: block;
-    max-width: calc(100% - 75px);
-}
-
-span.course_link_score {
-    position: absolute;
-    right: 15px;
-    top: calc(50% - 16px);
-    font-size: 17pt;
-    font-weight: 100;
-    color: #fff;
-    background: #78909c;
-    border-radius: 9px;
-    padding: 0 7px;
-    line-height: 30px;
-    height: 32px;
-}
-
-.course_link.course_disabled span.course_link_deadline {
-    text-decoration: line-through;
-}
-
-span.course_link_deadline {
-    font-weight: 100;
-    font-size: 10pt;
-    color: #a0a0a0;
-}
-
-.course_results_grp {
-    order: 1;
-    grid-row: 1;
-    grid-column-end: -1;
-    grid-column-start: 1;
-    padding-bottom: 0;
-}
-
-.course_tasks_grp {
-    order: 2;
-}
-
-.course_tests_grp {
-    order: 3;
-}
-
-.course_sem_grp {
-    order: 4;
-}
-
-.course_extras_grp {
-    order: 5;
-}
-
-.course_tasks_extra_grp {
-    order: 6;
-}
-
-.course_exams_grp {
-    order: 7;
-}
-
-.course_unknown_grp {
-    order: 8;
-}
-
-.course_results_grp .course_link_name {
-    text-align: center;
-}
-
-.course_results_grp .course_link_name::before {
-    content: "🏆";
-    margin-right: 7px;
-}
-
-.course_link_type_task {
-    border-color: #4caf50;
-}
-
-.course_link_type_test-demo {
-    border-color: #2196f3;
-}
-
-.course_link_type_extra {
-    border-color: #fb8c00;
-}
-
-.course_link_type_test {
-    border-color: #9c27b0;
-}
-
-.course_link_type_task.course_link_score_sum {
-    background-color: rgba(76, 175, 80, 0.3) !important;
-}
-
-.course_link_type_test-demo.course_link_score_sum {
-    background-color: rgba(33, 150, 243, 0.3) !important;
-}
-
-.course_link_type_extra.course_link_score_sum {
-    background-color: rgba(251, 140, 0, 0.3) !important;
-}
-
-.course_link_type_test.course_link_score_sum {
-    background-color: rgba(156, 39, 176, 0.3) !important;
-}
-
-.course_deadline_today {
-    background-color: #ffc107 !important;
-}
-
-.course_deadline_today:hover {
-    background-color: #ffb300 !important;
-}
-
-.modal {
-    position: fixed;
-    top: 150px;
-    width: 50%;
-    left: 25%;
-    min-height: 50px;
-    z-index: 50;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.modal-show {
-    animation: 0.2s modal-slide;
-}
-
-.modal-hide {
-    animation: 0.2s modal-slide-reverse running;
-    visibility: hidden;
-}
-
-.modal-body {
-    max-height: calc(100vh - 280px);
-    overflow-y: auto;
-}
-
-.modal-spinner {
-    position: absolute;
-    top: calc(50% - 100px);
-    left: calc(50% - 100px);
-    width: 200px;
-    height: 200px;
-    z-index: 99;
-}
-
-/* need another keyframe to restart animation */
-@keyframes modal-slide-reverse {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0);
-        visibility: visible;
-    }
-    99% {
-        visibility: visible;
-    }
-    100% {
-        visibility: hidden;
-        opacity: 0;
-        transform: translate(0, -10px);
-    }
-}
-
-@keyframes modal-slide {
-    0% {
-        opacity: 0;
-        transform: translate(0, -10px);
-        visibility: hidden;
-    }
-    99% {
-        visibility: visible;
-    }
-    100% {
-        visibility: visible;
-        opacity: 1;
-        transform: translate(0, 0);
-    }
-}
-
-@media only screen and (max-width: 900px) {
-    .modal {
-        width: 75%;
-        left: 12.5%;
-    }
-}
-
-@media only screen and (max-width: 750px) {
-    .modal {
-        width: 90%;
-        left: 5%;
-    }
-}
-
-.modal-close {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50px;
-    text-align: center;
-    height: 20px;
-    border-bottom-left-radius: 5px;
-    line-height: 20px;
-    cursor: pointer;
-    z-index: 500;
-}
-
-.modal-header {
-    padding: 15px;
-}
-
-.modal-title {
-    font-size: 20pt;
-    font-weight: 500;
-}
-
-.modal-score {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-}
-
-.modal-score-my {
-    font-size: 30pt;
-}
-
-.modal-score-my::after {
-    content: "/";
-    font-weight: 100;
-}
-
-.modal-score-max {
-    font-size: 22pt;
-    font-weight: 100;
-}
-
-.modal-deadline {
-    margin-top: 7px;
-}
-
-.modal-deadline-norm {
-    font-size: 14pt;
-    font-weight: 100;
-}
-
-.modal-deadline-late {
-    font-size: 11pt;
-    margin-left: 5pt;
-    font-weight: 100;
-}
-
-.modal-line {
-    padding: 15px;
-    display: block;
-    position: relative;
-    padding-right: 140px;
-}
-
-.mtask-title {
-    font-size: 16pt;
-}
-
-.mtask-text {
-    margin-top: 5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.mtask-score {
-    position: absolute;
-    top: 7px;
-    right: 15px;
-}
-
-.mtask-score-my {
-    font-size: 22pt;
-}
-
-.mtask-score-my::after {
-    content: "/";
-    font-weight: 100;
-}
-
-.mtask-score-max {
-    font-size: 15pt;
-    font-weight: 100;
-}
-
-.mtask-sub {
-    font-size: 10pt;
-    position: absolute;
-    top: 37pt;
-    right: 15px;
-}
-
-.mtask-sub-pen {
-    font-weight: 100;
 }
 
 /** item header */
