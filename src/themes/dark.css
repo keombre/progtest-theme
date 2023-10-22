@@ -126,23 +126,37 @@ body > table td {
 
 /** subject select */
 
-div.subjectSelect > a {
+.subject {
     border: thin solid #505050;
     background-color: #2d2d2d;
 }
 
-div.subjectSelect > a > div.subject-title {
+.subject:hover {
+    background-color: #333333;
+}
+
+.subject-title {
     color: #fff;
 }
 
-div.subjectSelect > a > div.subject-body {
+.subject-body {
     color: #b8b8b8;
 }
 
-div.subjectSelect > a > div.subject-footer {
+.subject-footer {
     background-color: #3b3b3b;
     border-top: thin solid #505050;
     color: #fff;
+}
+
+.subject-homepage {
+    background-color: #546e7a;
+    border-color: #455a64;
+}
+
+.subject-homepage:hover {
+    background-color: #607d8b;
+    border-color: #455a64;
 }
 
 .icon {
@@ -278,7 +292,9 @@ table.header {
 
 .lrtbCell img {
     filter: invert(100%);
-    transition: filter 0.2s ease, background 0.2s ease;
+    transition:
+        filter 0.2s ease,
+        background 0.2s ease;
 }
 
 .lrtbCell img:hover {

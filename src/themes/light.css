@@ -102,23 +102,38 @@ body > table td {
 
 /** subject select */
 
-div.subjectSelect > a {
+.subject {
     border: thin solid #d1d1d1;
     background-color: #fff;
 }
 
-div.subjectSelect > a > div.subject-title {
+.subject:hover {
+    background-color: #fafafa;
+}
+
+.subject-title {
     color: #000;
 }
 
-div.subjectSelect > a > div.subject-body {
+.subject-body {
     color: #414141;
 }
 
-div.subjectSelect > a > div.subject-footer {
+.subject-footer {
     background-color: #f0f0f0;
     border-top: thin solid #d5d5d5;
     color: #000;
+}
+
+.subject-homepage {
+    color: white !important;
+    background-color: #607d8b;
+    border-color: #455a64;
+}
+
+.subject-homepage:hover {
+    background-color: #546e7a;
+    border-color: #455a64;
 }
 
 /** task select */

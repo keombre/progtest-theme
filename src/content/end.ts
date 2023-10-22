@@ -5,7 +5,7 @@ import { ErrorPage } from "./pages/Error/Error";
 import { Exam } from "./pages/Exam";
 import { Logged } from "./pages/Logged";
 import { Login } from "./pages/Login";
-import { Main } from "./pages/Main";
+import { Main } from "./pages/Main/Main";
 import { Results } from "./pages/Results";
 import { Task } from "./pages/Task";
 import { pttLoadedEvent } from "../events";

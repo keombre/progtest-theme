@@ -10,22 +10,11 @@
 
 :root {
     --font-sans: "Open Sans";
-    font-family:
-        var(--font-sans),
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        "Helvetica Neue",
-        Arial,
-        "Noto Sans",
-        sans-serif,
-        "Apple Color Emoji",
-        "Segoe UI Emoji",
-        "Segoe UI Symbol",
-        "Noto Color Emoji";
+    --font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+        "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: var(--font-family);
 }
 
 html {
@@ -318,6 +307,7 @@ body > table * {
     font-size: 16px;
     padding: 15px 0;
 }
+
 .menuSep {
     padding: 0;
 }
@@ -443,120 +433,6 @@ body > table td:nth-child(1) > span > *:nth-child(1) {
 }
 
 /** subject select */
-div.mainInfo {
-    margin-top: 30px !important;
-}
-
-div.subjectSelect {
-    display: grid;
-    grid-template-columns: 270px 270px 270px;
-    grid-gap: 20px 24px;
-    place-content: center;
-    margin: 0 50px;
-}
-
-div.subjectSelect .updButton {
-    position: absolute;
-    bottom: 45px;
-    right: 7px;
-    font-size: 12px;
-    font-weight: 500;
-    width: auto;
-    padding: 2px 5px;
-}
-
-div.subjectSelect > .subject {
-    border-radius: 7px;
-    padding: 16px 12pt;
-    min-height: 140px;
-    position: relative;
-    width: 240px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.25);
-}
-
-div.subjectSelect.mainInfo > a {
-    min-height: 90px;
-}
-
-@media only screen and (max-width: 1000px) {
-    div.subjectSelect {
-        grid-template-columns: 270px 270px;
-    }
-}
-
-@media only screen and (max-width: 650px) {
-    div.subjectSelect {
-        grid-template-columns: 270px;
-    }
-}
-
-div.subjectSelect > .subject:hover {
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
-}
-
-div.subjectSelect > .subject > div.subject-title {
-    font-size: 16pt;
-    width: calc(100% - 80px);
-}
-
-div.subjectSelect > .subject > div.subject-body {
-    font-size: 12pt;
-    width: calc(100% - 85px);
-    margin-top: 5px;
-}
-
-div.subjectSelect > .subject > div.subject-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 12pt;
-    padding: 7px 0;
-}
-
-div.subjectSelect > span.subjectHeader {
-    grid-column: 1/-1;
-    width: auto;
-    height: 35px;
-    background: linear-gradient(to right, #343a40 20%, rgba(0, 0, 0, 0) 99%);
-    line-height: 35px;
-    padding-left: 34px;
-    font-size: 22px;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    color: #fff;
-    margin-bottom: -12px;
-    font-weight: 100;
-    cursor: pointer;
-    user-select: none;
-}
-
-div.subjectSelect > span.subjectHeader:before {
-    content: "";
-    position: absolute;
-    margin-top: 13px;
-    margin-left: -21px;
-    border: solid #c7c7c7;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    transition: all 0.1s ease;
-}
-
-div.subjectSelect > span.subjectHeader.active:before {
-    -webkit-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-}
-
-.subject-hidden {
-    display: none;
-}
 
 .icon {
     width: 70px;
