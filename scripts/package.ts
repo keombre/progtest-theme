@@ -13,10 +13,12 @@ const MANIFEST_TARGET = `${BUILD_DIR}/manifest.json` as const;
 const FIREFOX_DIST_DIR = `${OUT_DIR}/firefox` as const;
 const CHROME_DIST_DIR = `${OUT_DIR}/chrome` as const;
 
-async function pack(distDir: string) {
+async function pack(distDir: string, useSystemUtilities: boolean) {
     await rm(distDir, { recursive: true });
     await mkdir(distDir);
-    await zipDirectory(BUILD_DIR, `${distDir}/progtest_themes.zip`);
+    await zipDirectory(BUILD_DIR, `${distDir}/progtest_themes.zip`, {
+        useSystemUtilities,
+    });
 }
 
 async function signFirefox() {
@@ -44,23 +46,24 @@ async function signFirefox() {
     );
 }
 
-async function packChrome() {
+async function packChrome(useSystemUtilities: boolean) {
     cp(CHROME_MANIFEST, MANIFEST_TARGET);
-    pack(CHROME_DIST_DIR);
+    pack(CHROME_DIST_DIR, useSystemUtilities);
 }
 
-async function packFirefox() {
+async function packFirefox(useSystemUtilities: boolean) {
     cp(FIREFOX_MANIFEST, MANIFEST_TARGET);
-    pack(FIREFOX_DIST_DIR);
+    pack(FIREFOX_DIST_DIR, useSystemUtilities);
 }
 
 async function main() {
     const args = minimist(process.argv.slice(2), {
-        boolean: ["chrome", "firefox", "sign"],
+        boolean: ["chrome", "firefox", "sign", "system"],
         default: {
             chrome: false,
             firefox: false,
             sign: false,
+            system: false,
         },
     });
 
@@ -68,15 +71,18 @@ async function main() {
         if (args.sign) {
             throw new Error("Cannot sign Chrome extension");
         }
-        await packChrome();
+        await packChrome(args.system);
         return;
     }
 
     if (args.firefox) {
         if (args.sign) {
+            if (args.system) {
+                throw new Error("System utilities cannot be used with signing");
+            }
             await signFirefox();
         } else {
-            await packFirefox();
+            await packFirefox(args.system);
         }
         return;
     }
@@ -85,6 +91,7 @@ async function main() {
         "Use '--chrome' or '--firefox' to build a specific browser extension",
     );
     console.log("Use '--firefox --sign' to create a signed Firefox extension");
+    console.log("Use '--system' to use system utilities for zipping");
 }
 
 main();
