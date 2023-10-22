@@ -460,7 +460,7 @@ a.butLink {
     padding: 0.5em;
     background: #333;
     color: white;
-    font-family: Hack, monospace;
+    font-family: var(--font-monospace);
 }
 
 code.hljs,

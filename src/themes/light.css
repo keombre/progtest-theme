@@ -386,7 +386,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
     overflow-x: auto;
     padding: 0.5em;
     background: #f0f0f0;
-    font-family: Hack, monospace;
+    font-family: var(--font-monospace);
 }
 
 code.hljs,

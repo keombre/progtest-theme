@@ -49,7 +49,7 @@
 
 <style>
     .loader {
-        font-family: "Open Sans", "Noto Color Emoji";
+        font-family: var(--font-sans);
         position: fixed;
         top: 0;
         left: 0;
