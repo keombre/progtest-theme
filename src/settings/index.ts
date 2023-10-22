@@ -10,9 +10,11 @@ if (typeof chrome === "object") {
                 tabs[0].url.indexOf("://ptmock.localhost") == -1
             ) {
                 if (tabs[0].url.indexOf("://newtab") != -1) {
-                    chrome.tabs.update(tabs[0].id, {
-                        url: "https://progtest.fit.cvut.cz/",
-                    });
+                    if (tabs[0].id !== undefined) {
+                        chrome.tabs.update(tabs[0].id, {
+                            url: "https://progtest.fit.cvut.cz/",
+                        });
+                    }
                     window.close();
                 } else {
                     chrome.tabs.create({

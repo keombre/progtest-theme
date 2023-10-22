@@ -18,7 +18,7 @@
         ),
     );
     const sum = (entries: CourseItem[]) =>
-        entries.reduce((acc, curr) => acc + curr.score ?? 0, 0);
+        entries.reduce((acc, curr) => acc + (curr.score ?? 0), 0);
 
     const onEntryClick = (event: MouseEvent, entry: CourseItem) => {
         if (!entry.link || entry.link.startsWith("javascript:")) {

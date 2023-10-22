@@ -12,13 +12,19 @@ export class Logged implements Page {
     header: HTMLElement;
     oldScroll: number | undefined;
 
-    constructor(protected settings: ExtensionSettings) {}
+    constructor(protected settings: ExtensionSettings) {
+        this.tButton = document.getElementById("upTop") as HTMLElement;
+        const header = document.querySelector<HTMLElement>("body > table");
+        if (!header) {
+            throw new Error("Header not found");
+        }
+        this.header = header;
+    }
 
     async initialise() {
-        document.querySelector("body > table").className += " navbar";
+        this.header.className += " navbar";
         // add scroll to top button
         document.body.innerHTML += this.topButton;
-        this.tButton = document.getElementById("upTop") as HTMLElement;
         if (this.tButton) {
             this.tButton.addEventListener("click", () => {
                 this.tButton.removeAttribute("style");
@@ -28,8 +34,6 @@ export class Logged implements Page {
                 });
             });
         }
-
-        this.header = document.querySelector("body > table");
 
         if (typeof this.header != "undefined" && this.header != null) {
             window.onscroll = this.scrollCheck.bind(this);
@@ -51,7 +55,7 @@ export class Logged implements Page {
         bell.classList.add("notify", "off");
         bell.addEventListener("click", Logged.notifyToggle.bind(this));
         const logout = document.querySelector('.navLink[href*="Logout"]');
-        logout.parentNode.insertBefore(bell, logout);
+        logout?.parentNode?.insertBefore(bell, logout);
 
         document.addEventListener("click", (e) => {
             if (e.target != bell) {
@@ -96,6 +100,7 @@ export class Logged implements Page {
         if (
             this.tButton &&
             !this.tButton.getAttribute("style") &&
+            this.oldScroll &&
             (this.oldScroll <= window.scrollY || !this.oldScroll)
         ) {
             this.tButton.style.transform = "scale(1)";
@@ -123,18 +128,18 @@ export class Logged implements Page {
 
         if (!localStorage.tasks) {
             localStorage.tasks = JSON.stringify(
-                tasks.map((e) => {
+                tasks?.map((e) => {
                     e["seen"] = true;
                     return e;
                 }),
             );
         } else {
             const localTasks = JSON.parse(localStorage.tasks);
-            const notify = tasks.filter((t) => {
+            const notify = tasks?.filter((t) => {
                 return !localTasks.some((e) => e.link === t.link);
             });
             this.displayNotifications(
-                notify.concat(localTasks.filter((e) => e.seen == false)),
+                notify?.concat(localTasks.filter((e) => e.seen == false)),
             );
             localStorage.tasks = JSON.stringify(localTasks.concat(notify));
         }
@@ -164,7 +169,7 @@ export class Logged implements Page {
         const allLinks = doc.querySelectorAll<HTMLAnchorElement>(
             `.butLink[href*="${href}"]`,
         );
-        const links = [];
+        const links: HTMLAnchorElement[] = [];
         allLinks.forEach((link) => {
             if (link.href && !link.href.includes("javascript:")) {
                 links.push(link);
@@ -189,7 +194,12 @@ export class Logged implements Page {
         if (!subjects) {
             return [];
         }
-        const tasks = [];
+        const tasks: {
+            subject: string;
+            link: string;
+            name: string;
+            seen: boolean;
+        }[] = [];
 
         for (const e of subjects) {
             const course = await fetch(e.href);
@@ -204,11 +214,17 @@ export class Logged implements Page {
 
             taskLinks.forEach((f) => {
                 const url = new URL(f.href);
+                const name = (f.parentNode?.parentNode?.parentNode?.parentNode
+                    ?.firstElementChild || undefined) as
+                    | HTMLElement
+                    | undefined;
+                if (!name) {
+                    return;
+                }
                 tasks.push({
                     subject: e.innerText,
                     link: "/" + url.search,
-                    name: f.parentNode.parentNode.parentNode.parentNode
-                        .firstElementChild.innerText,
+                    name: name?.innerText,
                     seen: false,
                 });
             });

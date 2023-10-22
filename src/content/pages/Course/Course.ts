@@ -7,11 +7,11 @@ export interface CourseItem {
     id: string;
     name: string;
     type: string;
-    link: string;
+    link: string | undefined;
     opens: Date;
-    bonusEnd: Date;
+    bonusEnd: Date | undefined;
     closes: Date;
-    score: number | null;
+    score: number | undefined;
     disabled: boolean;
 }
 
@@ -21,8 +21,6 @@ export interface CourseGroup {
 }
 
 export class Course extends Logged {
-    args: URLSearchParams;
-
     constructor(settings: ExtensionSettings) {
         super(settings);
     }
@@ -31,7 +29,9 @@ export class Course extends Logged {
         await super.initialise();
 
         const center = document.querySelector<HTMLElement>("body > center");
-        center.style.display = "none";
+        if (center) {
+            center.style.display = "none";
+        }
 
         const tasks = await GetTasks();
 
@@ -57,40 +57,44 @@ export async function GetTasks() {
     document
         .querySelectorAll("table.topLayout > tbody > tr > .lBox > span")
         .forEach((e) => {
-            const row: HTMLElement = e.parentElement.parentElement;
-            const taskName: HTMLElement = row.children[1].querySelector(
+            const row = e.parentElement?.parentElement;
+            const taskName = row?.children[1]?.querySelector<HTMLElement>(
                 ".menuListDis, .menuList, .menuListEarly",
             );
-            const bonusEnd: HTMLElement =
-                row.children[1].querySelector(".mBox span + div");
-            const points: HTMLElement =
-                row.childElementCount === 4
-                    ? row.children[2].querySelector(
+            const bonusEnd =
+                row?.children[1]?.querySelector<HTMLElement>(
+                    ".mBox span + div",
+                );
+            const points =
+                row?.childElementCount === 4
+                    ? row.children[2].querySelector<HTMLElement>(
                           ".menuListDis, .menuList, .menuListEarly",
                       )
                     : null;
-            const link: HTMLAnchorElement =
-                row.children[row.childElementCount - 1].querySelector(
-                    "a.butLink",
-                );
+            const link =
+                row?.children[
+                    row.childElementCount - 1
+                ].querySelector<HTMLAnchorElement>("a.butLink");
 
             const bonusEndLine = bonusEnd?.textContent
                 ?.trim()
                 .split("\n")
                 .find((line) => line.includes("Včasné odevzdání"))
                 ?.trim();
+
+            if (!taskName) return;
             scores.push({
                 name: taskName?.innerText,
-                score: parseFloat(points?.innerText) || null,
+                score: points ? parseFloat(points?.innerText) : undefined,
                 bonusEnd: bonusEndLine
                     ? textToDate(
                           bonusEndLine
                               .substring(bonusEndLine.indexOf(":") + 1)
                               .trim(),
                       )
-                    : null,
+                    : undefined,
                 disabled: e.classList.contains("menuListDis"),
-                link: link?.href,
+                link: link?.href ?? "",
             });
         });
 
@@ -110,33 +114,42 @@ export async function GetTasks() {
             }[f.tagName.toLowerCase()];
             if (
                 type == "test" &&
-                ["Training", "eLearning"].includes(f.getAttribute("assignType"))
+                ["Training", "eLearning"].includes(
+                    f.getAttribute("assignType") ?? "",
+                )
             ) {
                 type = "test-demo";
             }
 
-            let name = f.getAttribute("name");
-            if (name.startsWith("Code review")) {
+            let name = f.getAttribute("name") || undefined;
+            if (name?.startsWith("Code review")) {
                 name = scores.find((e) => e.name?.startsWith("Code review"))
                     ?.name;
             }
-            let link = null;
-            let bonusEnd = null;
+            let link: string | undefined = undefined;
+            let bonusEnd: Date | undefined = undefined;
             let score = 0;
             let disabled = false;
             scores.forEach((g) => {
                 if (g.name === name || g.name === "Znalostní test - " + name) {
-                    score = g.score;
-                    bonusEnd = g.bonusEnd;
-                    disabled = g.disabled;
-                    link = g.link ?? null;
+                    score = g.score || score;
+                    bonusEnd = g.bonusEnd || bonusEnd;
+                    disabled = g.disabled || disabled;
+                    link = g.link || link;
                 }
             });
 
+            const id = f.getAttribute("id");
+            if (!id || !name || !type) {
+                throw new Error(
+                    "Missing required properties: " +
+                        JSON.stringify([id, name, type]),
+                );
+            }
             groups.push({
-                id: f.getAttribute("id"),
-                name: name,
-                type: type,
+                id,
+                name,
+                type,
                 link: link,
                 opens: new Date(f.getAttribute("openDate") + "+0000"),
                 bonusEnd: bonusEnd,
@@ -145,8 +158,14 @@ export async function GetTasks() {
                 disabled: disabled,
             });
         });
+        const name = e.getAttribute("name");
+        if (!name) {
+            throw new Error(
+                "Missing required group name: " + JSON.stringify(name),
+            );
+        }
         ret.push({
-            name: e.getAttribute("name"),
+            name,
             taskGrp: groups,
         });
     });
@@ -174,11 +193,11 @@ export function isToday(d) {
 export interface TaskItemInfo {
     title: string;
     deadline: Date;
-    lateDeadline: Date | null;
-    lateDeadlineInfo: string | null;
+    lateDeadline: Date | undefined;
+    lateDeadlineInfo: string | undefined;
     score: number;
     scoreMax: number;
-    scoreInfo: string | null;
+    scoreInfo: string | undefined;
 }
 
 /**
@@ -213,9 +232,11 @@ function textToDate(text: string | null): Date {
         throw new Error("Failed to parse date");
     }
     // parse "DD.MM.YYYY HH:MM:SS"
-    const [date, time] = text.split(" ");
-    const [day, month, year] = date.split(".").map((s) => parseInt(s));
-    const [hour, minute, second] = time.split(":").map((s) => parseInt(s));
+    const [date, time] = text.split(" ") ?? [];
+    const [day, month, year] = (date.split(".") ?? []).map((s) => parseInt(s));
+    const [hour, minute, second] = (time?.split(":") ?? []).map((s) =>
+        parseInt(s),
+    );
     const parsedDate = new Date(year, month - 1, day, hour, minute, second);
     if (!isDateValid(parsedDate)) {
         throw new Error(`Failed to parse date: ${text}\n
@@ -225,40 +246,41 @@ function textToDate(text: string | null): Date {
 }
 
 function parseItemInfo(document: Document): TaskItemInfo {
-    const title = document.querySelector("td.header")?.textContent.trim();
+    const title = document.querySelector("td.header")?.textContent?.trim();
 
-    const deadline = textToDate(
-        document
-            .querySelector("#maintable")
-            ?.querySelector("tr > td + td.tCell")?.textContent,
-    );
+    const deadlineText = document
+        .querySelector("#maintable")
+        ?.querySelector("tr > td + td.tCell")?.textContent;
+    if (deadlineText === undefined) {
+        throw new Error("Failed to parse deadline");
+    }
+    const deadline = textToDate(deadlineText);
 
     const lateDeadlineEl = document
         .querySelector("#maintable")
         ?.querySelector("tr > td + td.rCell");
-    const lateDeadline =
-        lateDeadlineEl !== null
-            ? textToDate(lateDeadlineEl.querySelector("b")?.textContent)
-            : null;
-    const lateDeadlineInfo =
-        lateDeadlineEl !== null
-            ? lateDeadlineEl.textContent
-                  .replace(
-                      lateDeadlineEl.querySelector("b")?.textContent ?? "",
-                      "",
-                  )
-                  .trim()
-            : null;
+    const lateDeadlineText = lateDeadlineEl?.querySelector("b")?.textContent;
+    const lateDeadline = lateDeadlineText
+        ? textToDate(lateDeadlineText)
+        : undefined;
+    const lateDeadlineInfo = lateDeadlineEl
+        ? (lateDeadlineEl.textContent ?? "")
+              .replace(lateDeadlineEl.querySelector("b")?.textContent ?? "", "")
+              .trim()
+        : undefined;
 
     const scoreEl = document
         .querySelector("#maintable")
         ?.querySelector("tr > td + td.rbCell");
-    const scoreText = scoreEl.querySelector("b")?.textContent;
-    const [score, scoreMax] = scoreText.split("/").map(parseFloat);
-    const scoreInfo = scoreEl.textContent
-        .replace(scoreEl.querySelector("b")?.textContent ?? "", "")
+    const scoreText = scoreEl?.querySelector("b")?.textContent;
+    const [score, scoreMax] = (scoreText?.split("/") ?? []).map(parseFloat);
+    const scoreInfo = scoreEl?.textContent
+        ?.replace(scoreEl.querySelector("b")?.textContent ?? "", "")
         .trim();
 
+    if (!title) {
+        throw new Error("Failed to parse course item title");
+    }
     return {
         title,
         deadline,
@@ -277,11 +299,13 @@ function parseItemTasks(document: Document): TaskItemTask[] {
         // skip first as that one contains ItemInfo
         if (key === 0) return;
 
-        const title = val.querySelector("tr > td + td").textContent;
+        const title = val.querySelector("tr > td + td")?.textContent;
         const link = val.querySelector<HTMLAnchorElement>(
             "tr + tr + tr + tr + tr a:last-child",
-        ).href;
-        const text = val.querySelector("tr + tr + tr + tr").textContent.trim();
+        )?.href;
+        const text = val
+            .querySelector("tr + tr + tr + tr")
+            ?.textContent?.trim();
 
         const submissionsText =
             val.querySelector("tr + tr > td + td")?.textContent;
@@ -290,8 +314,7 @@ function parseItemTasks(document: Document): TaskItemTask[] {
             submissions = null,
             submissionsMax = null,
             submissionsWithPenalty = null,
-        ] = submissionsText
-            .split("/")
+        ] = (submissionsText?.split("/") ?? [])
             .flatMap((s) => s.split("+"))
             .map((s) => {
                 s = s.trim();
@@ -301,11 +324,16 @@ function parseItemTasks(document: Document): TaskItemTask[] {
                 return parseInt(s);
             });
 
-        const scoreText = val.querySelector(
-            "tr + tr + tr > td + td",
-        ).textContent;
-        const [score, scoreMax] = scoreText.split("/").map(parseFloat);
+        const scoreText = val.querySelector("tr + tr + tr > td + td")
+            ?.textContent;
+        const [score, scoreMax] = (scoreText?.split("/") ?? []).map(parseFloat);
 
+        if (!title || !link || !text) {
+            throw new Error(
+                "Failed to parse item task: " +
+                    JSON.stringify({ title, link, text }),
+            );
+        }
         tasks.push({
             title,
             link,

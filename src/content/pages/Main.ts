@@ -51,7 +51,7 @@ export class Main extends Logged {
             };
             orders[order] = footer;
 
-            let link = null;
+            let link: string | null = null;
             if (push !== settings) {
                 try {
                     link = subjectInfo["courses"][e[2]]["homepage"];
@@ -100,8 +100,8 @@ export class Main extends Logged {
             subjects.appendChild(header);
         }
         const cent = document.querySelector("center");
-        cent.parentNode.replaceChild(settings, cent);
-        settings.parentNode.insertBefore(subjects, settings);
+        cent?.parentNode?.replaceChild(settings, cent);
+        settings.parentNode?.insertBefore(subjects, settings);
 
         const min = Math.min(...orderNumbers);
         for (const order of orderNumbers) {
@@ -129,7 +129,7 @@ export class Main extends Logged {
             });
     }
 
-    static parseSettings(title: string): MenuItem {
+    static parseSettings(title: string): MenuItem | undefined {
         return {
             Nastavení: { order: 10001, icon: "icon-setting", text: "" },
             Překladače: { order: 10000, icon: "icon-compile" },

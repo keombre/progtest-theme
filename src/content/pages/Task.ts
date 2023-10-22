@@ -60,7 +60,7 @@ export class Task extends Logged {
         // rename element
         document
             .getElementById("countdown")
-            .setAttribute("id", "ptt-countdown");
+            ?.setAttribute("id", "ptt-countdown");
 
         // create hidden mocked element
         const hide = document.createElement("div");
@@ -69,6 +69,7 @@ export class Task extends Logged {
         document.head.appendChild(hide);
 
         const elm = document.getElementById("ptt-countdown");
+        if (!elm) return;
         if (elm.innerHTML == "&nbsp;") {
             return;
         }
@@ -117,39 +118,40 @@ export class Task extends Logged {
             )
             .forEach((e) => {
                 const node = e.previousSibling;
-                const text = node.textContent;
                 let state;
-                if (text.includes("Úspěch")) {
-                    if (
-                        e.firstElementChild.innerHTML.includes(
-                            "Dosaženo: 100.00 %",
-                        )
+                if (node && node.parentElement) {
+                    const text = node.textContent;
+                    if (text?.includes("Úspěch")) {
+                        if (
+                            e.firstElementChild?.innerHTML.includes(
+                                "Dosaženo: 100.00 %",
+                            )
+                        ) {
+                            node.parentElement.className += " testRes testOK";
+                            state = "ok";
+                        } else {
+                            node.parentElement.className += " testRes testAOK";
+                            state = "warn";
+                        }
+                    } else if (
+                        text?.includes("Neúspěch") ||
+                        text?.includes(
+                            "Program provedl neplatnou operaci a byl ukončen",
+                        ) ||
+                        text?.includes("Program překročil přidělenou maximální")
                     ) {
-                        node.parentElement.className += " testRes testOK";
-                        state = "ok";
+                        node.parentElement.className += " testRes testFailed";
+                        state = "danger";
                     } else {
-                        node.parentElement.className += " testRes testAOK";
-                        state = "warn";
+                        node.parentElement.className += " testRes testUnknown";
+                        state = "light";
                     }
-                } else if (
-                    text.includes("Neúspěch") ||
-                    text.includes(
-                        "Program provedl neplatnou operaci a byl ukončen",
-                    ) ||
-                    text.includes("Program překročil přidělenou maximální")
-                ) {
-                    node.parentElement.className += " testRes testFailed";
-                    state = "danger";
-                } else {
-                    node.parentElement.className += " testRes testUnknown";
-                    state = "light";
-                }
-
-                const testName = text.match(
-                    /Test '(.*)': (Úspěch|Neúspěch|Nebylo testováno)/,
-                );
-                if (testName != null) {
-                    node.textContent = testName[1];
+                    const testName = text?.match(
+                        /Test '(.*)': (Úspěch|Neúspěch|Nebylo testováno)/,
+                    );
+                    if (testName != null) {
+                        node.textContent = testName[1];
+                    }
                 }
 
                 const score = [
@@ -170,7 +172,7 @@ export class Task extends Logged {
                         "</b>/" +
                         parseFloat(score[0][2]).toFixed(0) +
                         "</label>";
-                    e.parentElement.insertBefore(
+                    e.parentElement?.insertBefore(
                         scoreElem,
                         e.parentElement.firstChild,
                     );
@@ -181,7 +183,7 @@ export class Task extends Logged {
                     scoreElem.classList.add(state);
                     scoreElem.innerHTML =
                         '<label title="Dosaženo / požadováno"><b>0</b></label>';
-                    e.parentElement.insertBefore(
+                    e.parentElement?.insertBefore(
                         scoreElem,
                         e.parentElement.firstChild,
                     );
@@ -189,9 +191,9 @@ export class Task extends Logged {
 
                 const badges = document.createElement("div");
                 badges.classList.add("badges");
-                e.parentElement.insertBefore(badges, e);
+                e.parentElement?.insertBefore(badges, e);
 
-                const markForRemove = [];
+                const markForRemove: HTMLElement[] = [];
 
                 e.childNodes.forEach((f) => {
                     if (!(f instanceof HTMLElement)) return;
@@ -224,7 +226,10 @@ export class Task extends Logged {
                             const testTypeElem = document.createElement("span");
                             testTypeElem.classList.add("testType");
                             testTypeElem.innerText = testType + ": ";
-                            node.parentElement.insertBefore(testTypeElem, node);
+                            node?.parentElement?.insertBefore(
+                                testTypeElem,
+                                node,
+                            );
                             markForRemove.push(f);
                         }
 
@@ -330,7 +335,7 @@ export class Task extends Logged {
         // make ref solution clickable
         const checkbox = document.querySelector('input[name="SHOW_REF"]');
         if (checkbox) {
-            const refHead = checkbox.parentNode.parentNode;
+            const refHead = checkbox.parentNode?.parentNode;
             if (!(refHead instanceof HTMLElement)) return;
             let refSib = refHead.nextElementSibling;
 
@@ -342,7 +347,7 @@ export class Task extends Logged {
             refHead.classList.add("dropDownHeader");
             refHead.addEventListener("click", toggleDropDown);
             refHead.click();
-            checkbox.parentNode.removeChild(checkbox);
+            checkbox.parentNode?.removeChild(checkbox);
         }
 
         // hide the rest
@@ -357,7 +362,7 @@ export class Task extends Logged {
             document
                 .querySelectorAll("td." + n + " > div.but1.w120")
                 .forEach((e) => {
-                    const resHead = e.parentNode.parentNode;
+                    const resHead = e.parentNode?.parentNode;
                     if (!(resHead instanceof HTMLElement)) return;
                     resHead.classList.add("dropDownHeader");
                     resHead.addEventListener("click", toggleDropDown);
@@ -419,7 +424,7 @@ export const toggleDropDown = (e: MouseEvent) => {
         return;
     }
     const header = element.closest(".dropDownHeader");
-    header.parentNode.childNodes.forEach((node) => {
+    header?.parentNode?.childNodes.forEach((node) => {
         if (!(node instanceof HTMLElement)) return;
         if (node === header) return;
         if (!node.classList.contains("dropDownHide")) {

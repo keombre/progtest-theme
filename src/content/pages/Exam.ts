@@ -19,15 +19,15 @@ export class Exam extends Logged {
                 if (!radio) {
                     return;
                 }
-                const dot = e.previousElementSibling.querySelector(".redBox");
+                const dot = e.previousElementSibling?.querySelector(".redBox");
                 if (dot) {
-                    dot.parentElement.removeChild(dot);
+                    dot.parentElement?.removeChild(dot);
                     radio.classList.add("radio-red");
                 }
                 e.classList.add("radio");
                 const label = document.createElement("span");
                 label.classList.add("radio-label");
-                const remove = [];
+                const remove: HTMLElement[] = [];
                 e.childNodes.forEach((f) => {
                     if (f.nodeName == "#text") {
                         label.innerHTML += f.textContent;

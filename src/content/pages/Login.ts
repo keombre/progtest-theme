@@ -13,7 +13,7 @@ export class Login implements Page {
             const title = document.createElement("div");
             title.className = "app_name";
             title.innerHTML = "FIT: <b>ProgTest</b>";
-            loginForm.parentElement.insertBefore(title, loginForm);
+            loginForm.parentElement?.insertBefore(title, loginForm);
             loginForm.className += " loginForm";
 
             const uniselect = document.createElement("div");
@@ -23,7 +23,7 @@ export class Login implements Page {
                 .querySelector(
                     "#main > tbody > tr:nth-child(2) > td.rtbCell > select",
                 )
-                .childNodes.forEach((e) => {
+                ?.childNodes.forEach((e) => {
                     if (!(e instanceof HTMLOptionElement)) return;
                     const uni = document.createElement("div");
                     uni.innerText = e.innerText;
@@ -40,10 +40,10 @@ export class Login implements Page {
             // add title mover
             document
                 .querySelector("#ldap1 > td.ltCell.al > b")
-                .addEventListener("click", moveInputLabel);
+                ?.addEventListener("click", moveInputLabel);
             document
                 .querySelector("#ldap2 > td.al.lbCell > b")
-                .addEventListener("click", moveInputLabel);
+                ?.addEventListener("click", moveInputLabel);
 
             const inputs = document.getElementsByTagName("input");
             inputs[0].addEventListener("focus", loginFocus);
@@ -59,7 +59,7 @@ export class Login implements Page {
             if (typeof browser !== "undefined") {
                 document
                     .querySelector<HTMLElement>("#uniSel > .uniVal")
-                    .click();
+                    ?.click();
             }
         }
     }
@@ -92,7 +92,7 @@ export const loginFocus = (event: FocusEvent) => {
 export const uniChange = (event) => {
     let c = 0,
         i;
-    document.getElementById("uniSel").childNodes.forEach((e) => {
+    document.getElementById("uniSel")?.childNodes.forEach((e) => {
         if (!(e instanceof HTMLElement)) return;
         e.removeAttribute("active");
         if (e == event.target) {
@@ -106,7 +106,9 @@ export const uniChange = (event) => {
     const select = document.querySelector<HTMLSelectElement>(
         'select[name="UID_UNIVERSITY"]',
     );
-    select.selectedIndex = i;
-    const trigger = new Event("change");
-    select.dispatchEvent(trigger);
+    if (select) {
+        select.selectedIndex = i;
+        const trigger = new Event("change");
+        select.dispatchEvent(trigger);
+    }
 };

@@ -20,7 +20,7 @@ export class Results extends Logged {
         });
 
         // mark number of columns
-        const c = [];
+        const c: number[] = [];
         let i = 0;
         const qsel = document.querySelector("tr.resHdr:nth-child(1)");
         if (qsel != null) {

@@ -67,7 +67,7 @@
                         <span class="modal-deadline-norm">
                             {data.info.deadline.toLocaleString("cs-CZ")}
                         </span>
-                        {#if data.info.lateDeadline !== null}
+                        {#if data.info.lateDeadline}
                             <span class="modal-deadline-late">
                                 {data.info.lateDeadline.toLocaleString("cs-CZ")}
                             </span>

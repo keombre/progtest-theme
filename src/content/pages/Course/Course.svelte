@@ -4,13 +4,13 @@
     import CourseGroupComponent from "./course-group.svelte";
     import TaskModal from "./task-modal.svelte";
 
-    let courseId: string = getCourseId();
+    let courseId: string | null = getCourseId();
     export let courseGroups: CourseGroup[] = [];
     let taskItem: Promise<TaskItem> | null = null;
     let showModal = false;
 
     const onTaskClick = (event: MouseEvent, item: CourseItem) => {
-        console.log(item);
+        if (!item.link) return true;
 
         taskItem = fetch(item.link)
             .then((r) => {
@@ -28,6 +28,7 @@
                 return Promise.reject(e);
             });
         showModal = true;
+
         event.preventDefault();
         return false;
     };

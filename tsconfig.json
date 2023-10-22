@@ -39,18 +39,6 @@
     "allowSyntheticDefaultImports": true,
 
     // temporary until all code is migrated
-    "noImplicitAny": false,
-    "noImplicitReturns": false,
-    "noImplicitThis": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "noImplicitOverride": false,
-    "noImplicitUseStrict": false,
-    "noPropertyAccessFromIndexSignature": false,
-    "noUncheckedIndexedAccess": false
+    "noImplicitAny": false
   }
 }
