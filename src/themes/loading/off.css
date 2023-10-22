@@ -1,0 +1,9 @@
+/* 
+* Show hidden content after page has loaded
+* This file is injected as part of end.ts content script,
+* right after the extension loads all content
+*/
+body::before {
+    display: none !important;
+    position: relative !important;
+}

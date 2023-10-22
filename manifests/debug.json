@@ -7,6 +7,7 @@
     {
       "run_at": "document_start",
       "js": ["content/start.js", "content/highlightjs/highlight.min.js"],
+      "css": ["themes/loading/on.css"],
       "matches": [
         "https://progtest.fit.cvut.cz/*",
         "http://ptmock.localhost/*"
@@ -34,7 +35,11 @@
     }
   ],
   "background": {
+    // Firefox
     "scripts": ["background.js"]
+
+    // Chrome
+    // "service_worker": "background.js"
   },
   "permissions": ["storage", "tabs"],
   "host_permissions": [
