@@ -1,4 +1,3 @@
-import { pttLoadedEvent } from "../events";
 import { MessageType } from "../messages";
 import { ExtensionSettings } from "../settings";
 
@@ -19,12 +18,7 @@ const setFavicon = () => {
 };
 
 const addLoader = () => {
-    const div = document.createElement("pttloader");
-    div.id = "ptt-loader";
-    document.documentElement.appendChild(div);
-
     const script = document.createElement("script");
-    script.id = "ptt-loader-script";
     script.setAttribute("type", "text/javascript");
     script.setAttribute("src", chrome.runtime.getURL("content/loader.js"));
     document.documentElement.appendChild(script);
@@ -39,7 +33,6 @@ chrome.runtime.sendMessage(
         }
         console.log("PTT start with settings:", settings);
         if (settings.theme == "orig" || settings.theme == "orig-dark") {
-            setTimeout(() => document.dispatchEvent(pttLoadedEvent), 0);
             return;
         }
 

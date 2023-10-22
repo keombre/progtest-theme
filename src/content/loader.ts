@@ -1,8 +1,7 @@
 import Loader from "../components/loader.svelte";
 
-const loaderElement = document.getElementById("ptt-loader");
-if (loaderElement) {
-    new Loader({
-        target: loaderElement,
-    });
-}
+const loaderElement = document.createElement("pttloader");
+document.documentElement.appendChild(loaderElement);
+new Loader({
+    target: loaderElement,
+});

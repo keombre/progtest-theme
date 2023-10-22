@@ -101,6 +101,8 @@ const main = async (settings: ExtensionSettings) => {
 };
 
 const replaceStyles = (theme: string) => {
+    if (theme === "orig") return Promise.resolve();
+
     document.head.querySelectorAll('link[href$="/css.css"]').forEach((e) => {
         e.remove();
     });
@@ -114,20 +116,22 @@ const replaceStyles = (theme: string) => {
         chrome.runtime.getURL("themes/" + theme + ".css"),
     );
     document.getElementsByTagName("head")[0].appendChild(link);
+    return new Promise((resolve) => {
+        link.onload = resolve;
+    });
 };
 
 chrome.runtime.sendMessage(
     { type: MessageType.GET_SETTINGS },
     async (settings: ExtensionSettings) => {
         console.log("PTT end with settings:", settings);
-        if (settings.theme === "orig") {
-            return;
-        }
-        replaceStyles(settings.theme);
-        if (settings.theme === "orig-dark") {
-            setTimeout(() => document.dispatchEvent(pttLoadedEvent), 0);
-            return;
-        }
-        await main(settings).then(() => document.dispatchEvent(pttLoadedEvent));
+        await Promise.all([
+            replaceStyles(settings.theme).then(() => {
+                console.log("PTT styles loaded");
+            }),
+            !["orig", "orig-dark"].includes(settings.theme) && main(settings),
+        ]);
+        console.log("PTT loaded");
+        document.dispatchEvent(pttLoadedEvent);
     },
 );
