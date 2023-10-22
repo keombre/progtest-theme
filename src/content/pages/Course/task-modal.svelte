@@ -85,9 +85,9 @@
                                 <span class="mtask-sub-max"
                                     >/ {task.submissionsMax ?? "-"}</span
                                 >
-                                {#if task.submissions !== null}
+                                {#if task.submissionsWithPenalty ?? 0 > 0}
                                     <span class="mtask-sub-pen"
-                                        >(+{task.submissions})</span
+                                        >(+{task.submissionsWithPenalty})</span
                                     >
                                 {/if}
                             </div>
