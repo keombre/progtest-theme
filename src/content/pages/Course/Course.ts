@@ -172,7 +172,7 @@ export async function GetTasks() {
     return ret;
 }
 
-export function isToday(d) {
+export function isToday(d: Date) {
     const today = new Date();
     return (
         d.getDate() == today.getDate() &&

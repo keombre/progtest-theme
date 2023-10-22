@@ -118,7 +118,7 @@ export class Task extends Logged {
             )
             .forEach((e) => {
                 const node = e.previousSibling;
-                let state;
+                let state = "";
                 if (node && node.parentElement) {
                     const text = node.textContent;
                     if (text?.includes("Úspěch")) {
@@ -159,7 +159,7 @@ export class Task extends Logged {
                         /Dosaženo: (\d{1,3}.\d{0,2}).*?požadováno: (\d{1,3}.\d{0,2})/g,
                     ),
                 ];
-                let scoreElem;
+                let scoreElem: HTMLElement;
                 if (score.length == 1 && score[0].length == 3) {
                     e.removeChild(e.childNodes[0]);
                     scoreElem = document.createElement("badge");

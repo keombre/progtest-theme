@@ -1,6 +1,13 @@
 import { ExtensionSettings } from "../../settings";
 import { Page } from "./Page";
 
+interface LoggedTask {
+    subject: string;
+    link: string;
+    name: string;
+    seen: boolean;
+}
+
 export class Logged implements Page {
     topButton = `
 <svg id="upTop" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -0.5 26 26">
@@ -134,18 +141,19 @@ export class Logged implements Page {
                 }),
             );
         } else {
-            const localTasks = JSON.parse(localStorage.tasks);
-            const notify = tasks?.filter((t) => {
-                return !localTasks.some((e) => e.link === t.link);
-            });
+            const localTasks = JSON.parse(localStorage.tasks) as LoggedTask[];
+            const notify =
+                tasks?.filter((t) => {
+                    return !localTasks.some((e) => e.link === t.link);
+                }) ?? [];
             this.displayNotifications(
-                notify?.concat(localTasks.filter((e) => e.seen == false)),
+                notify?.concat(localTasks.filter((e) => e.seen == false)) ?? [],
             );
             localStorage.tasks = JSON.stringify(localTasks.concat(notify));
         }
     }
 
-    displayNotifications(elems) {
+    displayNotifications(elems: LoggedTask[]) {
         if (!elems.length) {
             return;
         }
@@ -163,7 +171,7 @@ export class Logged implements Page {
         });
     }
 
-    static getLinksFromHTML(text, href) {
+    static getLinksFromHTML(text: string, href: string) {
         text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gim, "");
         const doc = new DOMParser().parseFromString(text, "text/html");
         const allLinks = doc.querySelectorAll<HTMLAnchorElement>(
@@ -194,12 +202,7 @@ export class Logged implements Page {
         if (!subjects) {
             return [];
         }
-        const tasks: {
-            subject: string;
-            link: string;
-            name: string;
-            seen: boolean;
-        }[] = [];
+        const tasks: LoggedTask[] = [];
 
         for (const e of subjects) {
             const course = await fetch(e.href);
@@ -238,12 +241,16 @@ export class Logged implements Page {
             .classList.toggle("notifications-hide");
     }
 
-    static notifySeen(event) {
-        const localTasks = JSON.parse(localStorage.tasks);
-        const linkNode =
-            event.target.nodeName == "A"
-                ? event.target
-                : event.target.parentElement;
+    static notifySeen(event: MouseEvent) {
+        const localTasks = JSON.parse(localStorage.tasks) as LoggedTask[];
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) {
+            return;
+        }
+        const linkNode = target.nodeName == "A" ? target : target.parentElement;
+        if (!(linkNode instanceof HTMLAnchorElement)) {
+            return;
+        }
         const link = new URL(linkNode.href);
         localTasks.map((e) => {
             if (e.link == "/" + link.search) {

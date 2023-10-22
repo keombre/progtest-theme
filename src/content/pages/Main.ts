@@ -47,7 +47,7 @@ export class Main extends Logged {
                 push = settings,
             } = Main.parseSettings(e[2]) || {
                 ...this.parseSubject(e[2], e[0]),
-                push: e[1].includes("X=Course") ? subjects : settings,
+                push: e[1]?.includes("X=Course") ? subjects : settings,
             };
             orders[order] = footer;
 
@@ -114,12 +114,18 @@ export class Main extends Logged {
         }
     }
 
-    static collapseSem(event) {
+    static collapseSem(event: MouseEvent) {
         let elm = event.target;
+        if (!(elm instanceof HTMLElement)) {
+            return;
+        }
         if (elm.nodeName == "B") {
             elm = elm.parentNode;
+            if (!(elm instanceof HTMLElement)) {
+                return;
+            }
         }
-        elm.classList.toggle("active");
+        elm?.classList.toggle("active");
         document
             .querySelectorAll(
                 '[pttorder="' + elm.getAttribute("pttcolorder") + '"]',
@@ -141,9 +147,14 @@ export class Main extends Logged {
         }[title];
     }
 
-    parseSubject(title: string, text: string) {
-        const bracketPos = text.lastIndexOf("(");
-        if (bracketPos == -1) {
+    parseSubject(title: string | undefined, text: string | undefined) {
+        const bracketPos = text?.lastIndexOf("(");
+        if (
+            bracketPos === -1 ||
+            bracketPos === undefined ||
+            title === undefined ||
+            text === undefined
+        ) {
             return {
                 order: this.orderC++,
                 icon: "icon-unknown",
@@ -165,7 +176,7 @@ export class Main extends Logged {
         }
     }
 
-    static getSubjectIcon(title) {
+    static getSubjectIcon(title: string) {
         return (
             {
                 "BI-AAG": "icon-aag",
@@ -183,12 +194,21 @@ export class Main extends Logged {
 
     static getSubjects() {
         return [
-            ...document.querySelectorAll("body > center > table > tbody > tr"),
+            ...document.querySelectorAll<HTMLTableRowElement>(
+                "body > center > table > tbody > tr",
+            ),
         ].map(Main.getSubjectNames);
     }
 
-    static getSubjectNames(e) {
+    static getSubjectNames(e: HTMLElement) {
         const ch = e.children[1].children[0].children[0].children[0];
-        return [e.children[0].innerText, ch.href, ch.innerText];
+        if (!(ch instanceof HTMLAnchorElement)) {
+            throw new Error("Subject button not found");
+        }
+        const firstChild = e.children[0];
+        if (!(firstChild instanceof HTMLElement)) {
+            throw new Error("Subject name not found");
+        }
+        return [firstChild.innerText, ch.href, ch.innerText];
     }
 }

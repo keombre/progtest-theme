@@ -39,10 +39,10 @@ export class Login implements Page {
 
             // add title mover
             document
-                .querySelector("#ldap1 > td.ltCell.al > b")
+                .querySelector<HTMLElement>("#ldap1 > td.ltCell.al > b")
                 ?.addEventListener("click", moveInputLabel);
             document
-                .querySelector("#ldap2 > td.al.lbCell > b")
+                .querySelector<HTMLElement>("#ldap2 > td.al.lbCell > b")
                 ?.addEventListener("click", moveInputLabel);
 
             const inputs = document.getElementsByTagName("input");
@@ -65,14 +65,26 @@ export class Login implements Page {
     }
 }
 
-export const moveInputLabel = (event) => {
-    event.target.setAttribute("moved", true);
-    event.target.parentNode.parentNode.children[1].children[0].focus();
+export const moveInputLabel = (event: MouseEvent) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+        return;
+    }
+    target.setAttribute("moved", "true");
+    const label = target.parentNode?.parentNode?.children[1].children[0];
+    if (!(label instanceof HTMLElement)) {
+        return;
+    }
+    label.focus();
 };
 
-export const loginFocusOut = (event) => {
-    if (event.target.value == "") {
-        event.target.parentNode.parentNode.children[0].children[0].removeAttribute(
+export const loginFocusOut = (event: FocusEvent) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+        return;
+    }
+    if (target?.value == "") {
+        target.parentNode?.parentNode?.children[0].children[0].removeAttribute(
             "moved",
         );
     }
@@ -89,19 +101,24 @@ export const loginFocus = (event: FocusEvent) => {
     }
 };
 
-export const uniChange = (event) => {
+export const uniChange = (event: MouseEvent) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+        return;
+    }
+
     let c = 0,
-        i;
+        i = 0;
     document.getElementById("uniSel")?.childNodes.forEach((e) => {
         if (!(e instanceof HTMLElement)) return;
         e.removeAttribute("active");
-        if (e == event.target) {
+        if (e == target) {
             i = c;
         }
         c++;
     });
 
-    event.target.setAttribute("active", "true");
+    target?.setAttribute("active", "true");
 
     const select = document.querySelector<HTMLSelectElement>(
         'select[name="UID_UNIVERSITY"]',
