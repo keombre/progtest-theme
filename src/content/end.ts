@@ -29,7 +29,7 @@ const main = async (settings: ExtensionSettings) => {
     // show message for new users
     const message = getMessage(
         ["install-message"],
-        "PTT seems to be freshly installed.\nPlease force refresh the page to load the theme.\n(Ctrl+Shift+R / Cmd+Shift+R)",
+        "PTT theme couldn't load.\nTry to force refresh the page.\n(Ctrl+Shift+R / Cmd+Shift+R)",
     );
     message.style.fontSize = "40px";
     document.body.prepend(message);
@@ -128,6 +128,18 @@ const replaceStyles = (theme: string) => {
     });
 };
 
+const addLoadingOffStyle = () => {
+    const link = document.createElement("link");
+    link.setAttribute("rel", "stylesheet");
+    link.setAttribute("type", "text/css");
+
+    link.setAttribute("href", chrome.runtime.getURL("themes/loading/off.css"));
+    document.getElementsByTagName("head")[0].appendChild(link);
+    return new Promise((resolve) => {
+        link.onload = resolve;
+    });
+};
+
 chrome.runtime.sendMessage(
     { type: MessageType.GET_SETTINGS },
     async (settings: ExtensionSettings) => {
@@ -138,6 +150,7 @@ chrome.runtime.sendMessage(
             }),
             !["orig", "orig-dark"].includes(settings.theme) && main(settings),
         ]);
+        await addLoadingOffStyle();
         console.log("PTT loaded");
         document.dispatchEvent(pttLoadedEvent);
     },
