@@ -1,6 +1,6 @@
 ./vscode/ipch/*
+test_pages/
 out
 node_modules
 build
-keys.txt
-utils/github_upload.js
+.env

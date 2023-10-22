@@ -1,0 +1,41 @@
+{
+  "include": ["**/*", "./package.json"],
+  "compilerOptions": {
+    // add Bun type definitions
+    "types": [
+      "@emotion/css",
+      "archiver",
+      "bun-types",
+      "chrome",
+      "minimist",
+      "svelte",
+      "web",
+      "./src/types.d.ts"
+    ],
+
+    // enable latest features
+    "lib": ["DOM", "ESNext"],
+    "module": "esnext",
+    "target": "ES6",
+
+    "resolveJsonModule": true,
+
+    // if TS 5.x+
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    // if TS 4.x or earlier
+    // "moduleResolution": "nodenext",
+
+    "allowJs": true, // allow importing `.js` from `.ts`
+
+    // best practices
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "composite": true,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

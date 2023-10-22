@@ -10,23 +10,24 @@
 
 ## Download
 
-[Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf)
+[Chrome Web Store](https://chrome.google.com/webstore/detail/progtest-themes/eoofjghfpdplnjhbfflfnfogdjnedgjf) (supports any Chromium browser, e.g. Opera, Brave, new Microsoft Edge, etc.)
 
 [Firefox Addon](https://github.com/keombre/progtest-theme/releases/latest)
 
-[Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/knkajihkihfoadhcgjibkhlhdfdmliem)
-
 ## Building from source
 
-In order to build from source, you are going to need `npm` and `make`.
+In order to build from source, you are going to need `bun`.
 
-The current version of **ProgTest Themes** has been successfully compiled using `nodejs 12.12.0`, `npm 6.12.0` and `GNU Make 4.2.1`.
+The current version of **ProgTest Themes** has been successfully compiled using `bun 1.0.6`.
 
-1. Install all dev dependencies using `npm install`
-2. Run `make dev` to create unpacked version of the extension in `build/`
-3. Load the extension to your browser. `chrome://extensions` in Chrome or `about:addons` in Firefox. (Note: the dev version uses `manifests/debug.json`, adjust it to suite your needs)
+1. Install all dev dependencies using `bun install`
+2. Run `bun dev` to get a hot-reloading version of the extension in `build/`. Alternatively, run `bun build:chrome` or `bun build:firefox` to build it just once (and with the proper manifests; the dev version uses `manifests/debug.json`).
+3. Load the extension to your browser
+    - `chrome://extensions` in Chrome
+    - `about:addons` (if building) / `about:debugging#/runtime/this-firefox` (if developing) in Firefox
 
 ## Privacy policy
+
 In short, we don't collect any data, but you can read it in full [here](https://github.com/keombre/progtest-theme/blob/stable/privacy_policy.md).
 
 ## Creating new theme

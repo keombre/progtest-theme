@@ -1,44 +1,62 @@
 {
-    "name": "ProgTest Themes",
-    "version": "100.0.32",
-    "description": "Theme manager for ProgTest",
-    "manifest_version": 2,
-    "content_scripts": [
-        {
-            "run_at": "document_start",
-            "js": ["content/start.js", "content/highlightjs/highlight.pack.js"],
-            "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
-            "all_frames": true
-        },
-        {
-            "run_at": "document_end",
-            "js": ["content/end.js"],
-            "matches": ["*://progtest.fit.cvut.cz/*", "*://ptmock.localhost/*"],
-            "all_frames": true
-        }
-    ],
-    "background": {
-        "scripts": ["background.js", "reloader.js"],
-        "persistent": true
+  "name": "ProgTest Themes",
+  "version": "101.0.0",
+  "description": "Theme manager for ProgTest",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "js": ["content/start.js", "content/highlightjs/highlight.min.js"],
+      "css": ["themes/loading/on.css"],
+      "matches": [
+        "https://progtest.fit.cvut.cz/*",
+        "http://ptmock.localhost/*"
+      ],
+      "all_frames": true
     },
-    "permissions": [
-        "webRequest",
-        "webRequestBlocking",
-        "*://progtest.fit.cvut.cz/*",
-        "*://ptmock.localhost/*",
-        "*://courses.fit.cvut.cz/*",
-        "storage",
-        "tabs"
-    ],
-    "browser_action": {
-        "default_title": "",
-        "default_icon": "icon.png",
-        "default_popup": "options/options.html"
+    {
+      "run_at": "document_end",
+      "js": ["content/end.js"],
+      "matches": [
+        "https://progtest.fit.cvut.cz/*",
+        "http://ptmock.localhost/*"
+      ],
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/loader.js"],
+      "matches": ["https://progtest.fit.cvut.cz/*", "http://ptmock.localhost/*"]
     },
-    "icons": {
-        "128": "icon.png"
-    },
-    "web_accessible_resources": [
-        "themes/*"
-    ]
+    {
+      "resources": ["themes/*"],
+      "matches": ["https://progtest.fit.cvut.cz/*", "http://ptmock.localhost/*"]
+    }
+  ],
+  "background": {
+    // Firefox
+    "scripts": ["background.js"]
+
+    // Chrome
+    // "service_worker": "background.js"
+  },
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://progtest.fit.cvut.cz/*",
+    "http://ptmock.localhost/",
+    "https://courses.fit.cvut.cz/data/courses-all.json"
+  ],
+  "action": {
+    "default_title": "",
+    "default_icon": "icon.png",
+    "default_popup": "settings/index.html"
+  },
+  "icons": { "128": "icon.png" },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "progtest-themes@debug.dev",
+      "update_url": "https://raw.githubusercontent.com/keombre/progtest-theme/stable/update.json"
+    }
+  }
 }
